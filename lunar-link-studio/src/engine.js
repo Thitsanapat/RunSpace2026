@@ -2,11 +2,13 @@ import { RAD, DEG, clamp, attitude, rotate, qInv, direction, angles, separation,
 import {packaging,visibility,thermalRates} from './mission.js';
 import {ANTENNA_PROFILES} from './research.js';
 import {SURFACE,surfaceAssessment} from './surface-payload.js';
+import {DESIGN_DEFAULTS,DESIGN_BOUNDS} from './payload-design.js';
 import {RF_DEFAULTS,RF_BOUNDS,validateGrid,validateResponse,directionalGain,rfState,antennaCoordinates} from './antenna-rf.js';
 
-export const MODEL_VERSION = '1.3.0';
+export const MODEL_VERSION = '1.4.0';
 export const DEFAULTS = Object.freeze({
   ...RF_DEFAULTS,
+  ...DESIGN_DEFAULTS,
   scenario: 'tilt', duration: 18, eventTime: 2, rampTime: 1.5,
   roll: 12, pitch: -65, yaw: 8, jitter: 1, jitterHz: 3, jitterDuration:3, jitterDecay:0.7, restRate:0.5, restHold:0.5, landingLock:1,
   targetAz: 12, targetEl: 25, distanceKm: 384400, horizon: 0,
@@ -48,6 +50,7 @@ export const PRESETS = {
 
 export const BOUNDS = {
   ...RF_BOUNDS,
+  ...DESIGN_BOUNDS,
   payloadMassKg:[0.01,10],
   duration: [5,120], eventTime: [0,10], rampTime:[0.2,10], roll:[-180,180], pitch:[-180,180], yaw:[-180,180], jitter:[0,10], jitterHz:[0.1,20],jitterDuration:[0.1,10],jitterDecay:[0.05,5],restRate:[0.05,5],restHold:[0.1,3],landingLock:[0,1],
   targetAz:[-180,180], targetEl:[-10,90], distanceKm:[100,500000], horizon:[0,30], azLimit:[10,180], elMin:[-90,0], elMax:[5,90], speedLimit:[5,360],
@@ -82,6 +85,8 @@ export function validateConfig(input) {
   if(input.antennaProfile!==undefined && !['anser','tigrisat','custom'].includes(input.antennaProfile))errors.push('Invalid antenna profile');else c.antennaProfile=input.antennaProfile||c.antennaProfile;
   for (const key of ['encoderBits','controlHz','seed','landingLock','heaterConnected','hostPower','hostRadio','modulationBits']) if (!Number.isInteger(c[key])) errors.push(`${key}: expected an integer`);
   if (c.eventTime >= c.duration) errors.push('Event must occur before simulation ends');
+  if(c.busMinV>c.busMaxV)errors.push('Bus minimum must not exceed bus maximum');
+  if(c.brownoutV>=c.busMinV)errors.push('Brownout threshold must be below minimum bus voltage');
   if (errors.length) throw new Error(errors.join('\n'));
   return c;
 }

@@ -1,12 +1,12 @@
 # Lunar Link engineering study
 
-Model 1.3.0; generated 2026-09-20T11:15:21.221Z
+Model 1.4.0; generated 2026-09-20T18:29:50.826Z
 
 ## Scope
 Entire payload including gimbal: 100 × 100 × 200 mm. Reduced-order simulation; not flight qualification. Antenna anser: 82.44° is an analytical approximation using the 6.5 dBi gain and assumed 65% efficiency; NOT a beamwidth measured in this paper.
 
 ## Results
-- Gimbal / fixed availability: 16.94 / 16.94% of complete run
+- Gimbal / fixed availability: 16.49 / 16.49% of complete run
 - Final gimbal / fixed margin: — / — dB
 - Final pointing error: 0.0926 deg
 - Obstruction: LANDER HULL
@@ -25,7 +25,7 @@ Symmetric-cosine reference only (not a fit to imported 3D / elliptical patterns)
 Two nodes: payload and lander. Heater deposits heat only in lander; conduction K(Tlander-Tpayload) exchanges equal/opposite heat. Each node radiates to ground/deep space and absorbs sunlight. Requested +/-170 C is a ground boundary, not prescribed payload temperature. Host heater/RF and payload allocation are separately tracked. No solar battery recharge or full lander power model. Fixed baseline shares the host availability from this paired study.
 
 ## Limits and proposal corrections
-Gimbal locks during impact and releases after rest confirmation. Body motion is prescribed, not a rigid-body contact/impact solver. Plate corner envelope does not validate cables/yokes/motors. Full swept rotation may exceed 2U. Hull is a box and ground is a plane; rocks, panels and terrain meshes do not enter obstruction. Buried antenna and lost power cannot be repaired by repointing. No shock strength, full-wave EM, complete CAD mass or lunar thermal qualification.
+Gimbal locks during impact and releases after rest confirmation. Body motion is prescribed, not a rigid-body contact/impact solver. Plate corner envelope does not validate cables/yokes/motors. Full swept rotation may exceed 2U. Hull is a box and ground is a plane; rocks, equipment panels, illustrated service blocks and terrain meshes do not enter obstruction. Buried antenna and lost power cannot be repaired by repointing. No shock strength, full-wave EM, complete CAD mass or lunar thermal qualification.
 Known input attitude is used with bias/noise; star-tracker/IMU absolute attitude estimation is not implemented. IMU alone cannot establish absolute yaw at rest. Spring return does not make a patch omnidirectional. 50 ms command response is separate from motor settling. RF PA input is additional to the proposal's controller/motor power budget.
 
 ## Numerical method
@@ -65,6 +65,19 @@ Semi-implicit Euler 2 ms; sampled PID 100 Hz; telemetry every 40 ms. Coordinates
     "rfReferenceTemp": 20,
     "patternGrid": null,
     "frequencyResponse": null,
+    "wallMm": 2,
+    "pitchMotorWidthMm": 6,
+    "rfBendRadiusMm": 8,
+    "cableTwistLimitDeg": 90,
+    "busMinV": 22,
+    "busMaxV": 32,
+    "busCurrentLimitA": 0.5,
+    "harnessOhm": 0.5,
+    "inrushA": 0.8,
+    "inrushMs": 20,
+    "holdCapUf": 470,
+    "brownoutV": 18,
+    "outageMs": 100,
     "scenario": "tilt",
     "duration": 18,
     "eventTime": 2,
@@ -121,9 +134,9 @@ Semi-implicit Euler 2 ms; sampled PID 100 Hz; telemetry every 40 ms. Coordinates
     "antennaThicknessMm": 6.53,
     "antennaMassG": 30,
     "clearanceMm": 2,
-    "mountX": 0.65,
+    "mountX": 0.92,
     "mountY": 0.76,
-    "mountZ": 0.45,
+    "mountZ": 0.62,
     "burialDepth": 0,
     "payloadMassKg": 1.5,
     "initialTemp": 15,
@@ -183,14 +196,14 @@ Semi-implicit Euler 2 ms; sampled PID 100 Hz; telemetry every 40 ms. Coordinates
     "peakError": 66.81782244988193,
     "peakTorque": 0.012,
     "peakCurrent": 0.48,
-    "goodTime": 3.0499999999998857,
-    "fixedGoodTime": 3.0499999999998857,
+    "goodTime": 2.9679999999998947,
+    "fixedGoodTime": 2.9679999999998947,
     "saturationTime": 0.5600000000000004,
-    "dataKbit": 12.199999999999543,
-    "fixedDataKbit": 12.199999999999543,
+    "dataKbit": 11.871999999999579,
+    "fixedDataKbit": 11.871999999999579,
     "rmsError": 20.13144480953583,
-    "availability": 16.94444444444381,
-    "fixedAvailability": 16.94444444444381,
+    "availability": 16.488888888888305,
+    "fixedAvailability": 16.488888888888305,
     "energyWh": 0.005068966491651558,
     "surfaceInterface": {
       "service": "ispace-top-concept",
@@ -229,9 +242,9 @@ Semi-implicit Euler 2 ms; sampled PID 100 Hz; telemetry every 40 ms. Coordinates
 ## Surface payload interface
 Basis: User-provided ispace Lunar Transportation Service leaflet photo, as of July 2026. Top green zone: approximately 4 kg, 200 x 200 x 200 mm. Candidate remains attached to the lander; no deployment mechanism.
 Entered total mass 1.5 kg; project limit 1.5 kg (pass: true); service mass margin 2.5 kg. Moving mass 0.15 kg is a subset, not the total. Mass hierarchy consistent: true.
-2U lateral fit: true; on assumed deck: true; vertical allowance: 0 mm. External adapters/connectors need their own allocation. Concept mount [0.65, 0.76, 0.45] m.
+2U lateral fit: true; on assumed deck: true; vertical allowance: 0 mm. External adapters/connectors need their own allocation. Concept mount [0.92, 0.76, 0.62] m.
 Lunar weight m*1.62 = 2.430 N. Peak interface force m*shockG*9.80665 = 0.000 N; not stress, strength, modal response or qualification.
-Lander geometry is reconstructed conceptually from the photograph. Hull LOS/contact retains the conservative box/foot proxy; solar panels, legs, other payloads and labels are not RF obstacles. A nominal clear field of view is not guaranteed after tipping. Host electrical/thermal parameters remain assumptions pending an interface control document.
+Lander geometry is reconstructed conceptually from the photograph. Hull LOS/contact retains the conservative box/foot proxy; equipment panels, legs, illustrated payload allocations and labels are not RF obstacles. A nominal clear field of view is not guaranteed after tipping. Host electrical/thermal parameters remain assumptions pending an interface control document.
 
 ```json
 {
@@ -258,3 +271,7 @@ Lander geometry is reconstructed conceptually from the photograph. Hull LOS/cont
   "hardwareVerified": false
 }
 ```
+
+## 2U assembly and host bus screening
+3 concept PCBs, no local battery/heater. Assembly grid step 5 deg; sampled pass 3.05%; minimum signed clearance -10.66 mm. This is not continuous CAD clearance or mission reliability. Plate-only solver limits remain separate.
+Worst payload branch 5.31 W; minimum terminal 21.88 V; entered inrush 0.8 A; current allocation pass false; ideal capacitor hold-up 6.85 ms; outage pass false. No circuit transient validation.

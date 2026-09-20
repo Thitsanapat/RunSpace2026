@@ -25,7 +25,7 @@ try {
   assert.ok(Math.abs(await page.evaluate(()=>window.lunarLink.result.summary.surfaceInterface.peakInterfaceForceN)-1.4*12*9.80665)<1e-9);
   await param('mountZ',0.73);assert.match(await page.locator('#surface-summary').textContent(),/OUTSIDE/);
   await page.locator('#surface-mount').click();await page.waitForFunction(()=>window.lunarLink.result.summary.surfaceInterface.candidateFit);
-  assert.equal(await page.evaluate(()=>window.lunarLink.config.mountZ),0.45);
+  assert.equal(await page.evaluate(()=>window.lunarLink.config.mountZ),0.62);
   await page.locator('.export-menu summary').click();const downloaded=page.waitForEvent('download');await page.locator('[data-export="report"]').click();
   const report=await readFile(await(await downloaded).path(),'utf8');assert.match(report,/Surface payload interface/);assert.match(report,/Entered total mass 1.4 kg/);
   await page.locator('.export-menu summary').click();const jsonDownload=page.waitForEvent('download');await page.locator('[data-export="json"]').click();

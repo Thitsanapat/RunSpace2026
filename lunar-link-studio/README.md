@@ -1,4 +1,4 @@
-# Lunar Link Studio 1.3.0
+# Lunar Link Studio 1.4.0
 
 โปรแกรมจำลองเสาอากาศบน lunar lander พร้อม 3D และการคำนวณ เปิดใช้งานในเครื่องได้ มี source code และ production build ครบ
 
@@ -6,11 +6,27 @@
 
 ดับเบิลคลิก `START.cmd` (ต้องมี Node.js 22 ขึ้นไป) แล้วเปิด http://127.0.0.1:4173 หากมี server เปิดอยู่แล้ว ใช้หน้าต่างเดิมและ refresh ได้เลย ไม่ต้องติดตั้ง dependencies เพื่อเปิด production build ที่ให้มา
 
+## ใหม่ในรุ่น 1.4: สัดส่วนจากภาพล่าสุดและวงจรภายใน 2U
+
+ขยายสัดส่วนดาดฟ้า/ลดความสูงแผงข้างตามภาพที่ส่งเพิ่ม และย้ายโมดูล cyan ไป **แทน green surface-payload block หนึ่งตำแหน่ง**. เพิ่ม PCB 3 ชั้น (power protection/DC-DC, motor drivers, MCU/sensor interfaces), connectors, thermal strap และสายประกอบภาพ. ใช้ไฟ/ความร้อนจาก lander ไม่มีแบตเตอรี่หรือฮีตเตอร์ในโมดูล. นี่คือ component allocation ไม่ใช่วงจร ECAD ที่ออกแบบหรือผ่าน qualification แล้ว.
+
+กด **Payload 2U**, ปิด **Payload cover**, เปิด **Exploded view** เพื่อดูภายใน. ด้านล่างมี **2U assembly screening**: แผนที่ azimuth/elevation รวมกรอบ มอเตอร์ หัวต่อและพื้นที่โค้งสาย; **Lander bus interface**: current/inrush allocation, harness drop และ capacitor hold-up. ปรับพารามิเตอร์ใน sidebar และส่งออกด้วย **Export design study**.
+
+**2U รวม gimbal ยังไม่ผ่านการยืนยัน:** แผ่น 80 × 80 mm มี diagonal 113.33 mm; cavity หลังเผื่อผนัง/ระยะห่าง 92 × 89 × 92 mm และมอเตอร์ concept ยังชนกรอบบางมุม. ตาราง 60/70/80 mm เป็นการเทียบพื้นที่ ไม่ได้ยืนยัน RF เมื่อย่อเสา. อ่าน [PAYLOAD-DESIGN.md](PAYLOAD-DESIGN.md) สำหรับสมการ ข้อจำกัด และรายการซิม/ทดสอบที่ต้องเพิ่ม.
+
+## โมเดลจากรูปขยายสองมุม
+
+ปรับตามภาพ oblique และ underside ที่ผู้ใช้ส่งเพิ่ม: กล่องแดงด้านบน, โซนเขียว, กล่องน้ำเงิน/เหลืองด้านล่าง, แผงสีเทาและหน้าช่องกลมหกช่อง, โครงใต้ยานวงกลมพร้อม lattice/ชิ้นส่วนกลมสามตำแหน่ง, ขาค้ำและฐานรองสี่ขา. **โมดูลของเราใช้สีฟ้าอมเขียว** ในโซนเขียว. กล่องสีน้ำเงินเป็น service payload blocks ตาม legend ในแผ่นข้อมูล; แก้การตีความเป็นแผงโซลาร์ในรุ่นก่อน.
+
+แสดงทุกกลุ่ม payload ตั้งแต่เปิดซิม. กด **Underside** เพื่อดูใต้ยานโดยซ่อนพื้นและเพิ่มแสงสำหรับตรวจโมเดล; กลับ Orbit เพื่อคืนฉาก. ปุ่ม **Download 3D .glb** ส่งออก mesh หน่วยเมตรสำหรับเปิดในโปรแกรม 3D. มีไฟล์ตัวอย่าง [ispace-photo-concept-with-our-2u.glb](examples/ispace-photo-concept-with-our-2u.glb).
+
+ภาพนี้เป็นการสร้างรูปทรงจากภาพถ่าย ไม่ใช่ ispace CAD. ส่วนที่บังใช้รูปทรงสมมาตร/ตำแหน่งสมมติ และกล่องสีต่าง ๆ แสดงบริการทางเลือกพร้อมกันเพื่อเทียบภาพ ไม่ใช่ manifest ภารกิจจริง. ซิมมวล/LOS/contact ใช้ข้อกำหนด 2U ของเราและ hull/foot proxy; v1.4 ปรับ hull กับ mount ให้ตรงสัดส่วนใหม่ แต่ไม่เพิ่มผลของกล่องที่วาดโดยอัตโนมัติ. [รายละเอียด](SURFACE-MODEL.md)
+
 ## ใหม่ในรุ่น 1.3: Top-mounted surface payload
 
-โมเดล lander ทรงหลายเหลี่ยม แผงโซลาร์เอียง และโซน payload ตามภาพแผ่นข้อมูล ispace ที่ผู้ใช้ส่งมา (ก.ค. 2026). เลือก **Surface Payload ด้านบนโซนสีเขียว**: service limit ≈4 kg / 200 mm cube; งานเราคงกรอบรวม **2U และ ≤1.5 kg**. เพิ่ม total mass, service/project margin, mount/envelope check และแรงกระแทกที่ interface. ดู [SURFACE-MODEL.md](SURFACE-MODEL.md) สำหรับสมมติฐานและผลที่เปลี่ยน.
+โมเดล lander ทรงหลายเหลี่ยม แผงอุปกรณ์และกล่องบริการตามภาพ และโซน payload ตามภาพแผ่นข้อมูล ispace ที่ผู้ใช้ส่งมา (ก.ค. 2026). เลือก **Surface Payload ด้านบนโซนสีเขียว**: service limit ≈4 kg / 200 mm cube; งานเราคงกรอบรวม **2U และ ≤1.5 kg**. เพิ่ม total mass, service/project margin, mount/envelope check และแรงกระแทกที่ interface. ดู [SURFACE-MODEL.md](SURFACE-MODEL.md) สำหรับสมมติฐานและผลที่เปลี่ยน.
 
-กด **Mount** เพื่อดูโมดูลบนยาน หรือ **Payload 2U** เพื่อแยกดูโมดูล. **Other service envelopes** แสดงกรอบทางเลือกสีแดง/น้ำเงิน/เหลือง. ค่าเดิมที่บันทึกไว้ยังโหลดได้; กด **Restore top-zone mount** เพื่อใช้ตำแหน่งใหม่โดยคง RF และค่าที่แก้เองไว้.
+กด **Mount** เพื่อดูโมดูลบนยาน หรือ **Payload 2U** เพื่อแยกดูโมดูล. **Brochure payloads · visual only** เปิด/ปิดกล่องบริการตามแผ่นข้อมูล. ค่าเดิมที่บันทึกไว้ยังโหลดได้; กด **Restore top-zone mount** เพื่อใช้ตำแหน่งใหม่โดยคง RF และค่าที่แก้เองไว้.
 
 ตำแหน่งใหม่ในกรณีเอียง 65° ถูก hull proxy บังสัญญาณ แม้ pointing error <0.5°. ผลนี้ตั้งใจแสดงตาม geometry ไม่ใช่ทำให้ทุกกรณีผ่าน. เปิด preset Nominal เพื่อดูตำแหน่งก่อนยานเอียง.
 
@@ -56,7 +72,7 @@
 
 ## ขอบเขต
 
-เป็น reduced-order engineering simulator ไม่ใช่ electromagnetic solver, CAD/FEA หรือ flight qualification. ภาพ 3D เป็น concept geometry; การตรวจขอบเขตครอบคลุมแผ่นเสาเท่านั้น ยังไม่ได้พิสูจน์สาย RF, bearing, yoke และ actuator ทั้งชุด. ท่าของ lander เป็น input trajectory ไม่ได้คำนวณ rigid-body impact/contact. ตรวจ obstruction ด้วย hull box + ground plane + horizon mask; แผงโซลาร์/ก้อนหินในฉากยังไม่เข้าการคำนวณ
+เป็น reduced-order engineering simulator ไม่ใช่ electromagnetic solver, CAD/FEA หรือ flight qualification. ภาพ 3D เป็น concept geometry; การตรวจขอบเขตครอบคลุมแผ่นเสาเท่านั้น ยังไม่ได้พิสูจน์สาย RF, bearing, yoke และ actuator ทั้งชุด. ท่าของ lander เป็น input trajectory ไม่ได้คำนวณ rigid-body impact/contact. ตรวจ obstruction ด้วย hull box + ground plane + horizon mask; แผงอุปกรณ์ส่วนบน กล่องบริการ และก้อนหินในฉากยังไม่เข้าการคำนวณ
 
 ระบบรับ attitude ที่ทราบแล้วและเติม bias/noise; ยังไม่มี star tracker, ephemeris หรือ IMU fusion จริง. ช่วงชี้เป้า, ±0.5°, พลังงาน, และ link reserve เป็นคนละเกณฑ์. Link ผ่านไม่ได้แปลว่าผ่านทุกข้อ
 

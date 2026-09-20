@@ -26,8 +26,8 @@ test('ray-box obstruction distinguishes outward and inward rays',()=>{
   assert.equal(rayBox([0,2,0],[0,1,0],[-1,-1,-1],[1,1,1]),false);
 });
 test('edge-mount comparison starts aligned and recovers when the tilted hull leaves LOS clear',()=>{
-  // v1.2 edge mount remains a regression case; it is outside the new top-zone allocation.
-  const r=runSimulation({...DEFAULTS,mountZ:0.73,jitter:0});const first=r.frames[0],last=r.frames.at(-1);
+  // Independent clear-path case just beyond the photo-proportion hull, outside the selected bay.
+  const r=runSimulation({...DEFAULTS,mountZ:1.01,jitter:0});const first=r.frames[0],last=r.frames.at(-1);
   assert.ok(first.error<1e-5);assert.ok(first.fixedError<1e-5);
   assert.equal(last.link.available,true);assert.equal(last.fixedLink.available,false);
   assert.ok(last.error<1);assert.ok(last.fixedError>30);assert.ok(r.summary.availability>r.summary.fixedAvailability);

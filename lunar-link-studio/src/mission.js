@@ -1,9 +1,10 @@
 import {RAD,DEG,rotate,qInv,attitude,rayBox} from './math.js';
 
 export const PAYLOAD = Object.freeze({width:0.1,height:0.2,depth:0.1,electronicsHeight:0.105,pivotHeight:0.1525,cavityHeight:0.095});
-export const HULL = Object.freeze({min:[-0.86,-0.55,-0.76],max:[0.86,0.76,0.76]});
+// Photo-proportion approximation; shared by rendering, contact and LOS checks.
+export const HULL = Object.freeze({min:[-1.10,-0.30,-1.0],max:[1.10,0.76,1.0]});
 export const CONTACT_POINTS=[];
-for(const x of [-0.86,0.86])for(const y of [-0.55,0.76])for(const z of [-0.76,0.76])CONTACT_POINTS.push([x,y,z]);
+for(const x of [HULL.min[0],HULL.max[0]])for(const y of [HULL.min[1],HULL.max[1]])for(const z of [HULL.min[2],HULL.max[2]])CONTACT_POINTS.push([x,y,z]);
 for(const x of [-1.8,1.8])for(const z of [-1.65,1.65])CONTACT_POINTS.push([x,-1.155,z]);
 
 export function antennaCorners(az,el,c) {
