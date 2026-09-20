@@ -1,19 +1,19 @@
 # Lunar Link engineering study
 
-Model 1.2.1; generated 2026-09-19T17:47:00.316Z
+Model 1.3.0; generated 2026-09-20T11:15:21.221Z
 
 ## Scope
 Entire payload including gimbal: 100 × 100 × 200 mm. Reduced-order simulation; not flight qualification. Antenna anser: 82.44° is an analytical approximation using the 6.5 dBi gain and assumed 65% efficiency; NOT a beamwidth measured in this paper.
 
 ## Results
-- Gimbal / fixed availability: 92.23 / 17.09% of complete run
-- Final gimbal / fixed margin: 8.56 / -1.28 dB
+- Gimbal / fixed availability: 16.94 / 16.94% of complete run
+- Final gimbal / fixed margin: — / — dB
 - Final pointing error: 0.0926 deg
-- Obstruction: clear
+- Obstruction: LANDER HULL
 - Final plate fits: true; target fits: true
 - Full swept diameter: 113.33 mm
 - Landing lock release: 4.340 s
-- First link after release: 0.140 s; not sustained acquisition
+- First link after release: — s; not sustained acquisition
 - Sampled command latency bound: 20.00 ms; does not measure motor settling or full sensor/computation delay
 - Payload / host / heater energy: 0.00507 / 0.07650 / 0.00000 Wh. Host includes payload; heater is a subset.
 
@@ -123,8 +123,9 @@ Semi-implicit Euler 2 ms; sampled PID 100 Hz; telemetry every 40 ms. Coordinates
     "clearanceMm": 2,
     "mountX": 0.65,
     "mountY": 0.76,
-    "mountZ": 0.73,
+    "mountZ": 0.45,
     "burialDepth": 0,
+    "payloadMassKg": 1.5,
     "initialTemp": 15,
     "baseTemp": 15,
     "groundTemp": -40,
@@ -182,22 +183,78 @@ Semi-implicit Euler 2 ms; sampled PID 100 Hz; telemetry every 40 ms. Coordinates
     "peakError": 66.81782244988193,
     "peakTorque": 0.012,
     "peakCurrent": 0.48,
-    "goodTime": 16.602000000000775,
-    "fixedGoodTime": 3.075999999999883,
+    "goodTime": 3.0499999999998857,
+    "fixedGoodTime": 3.0499999999998857,
     "saturationTime": 0.5600000000000004,
-    "dataKbit": 66.4080000000031,
-    "fixedDataKbit": 12.303999999999531,
+    "dataKbit": 12.199999999999543,
+    "fixedDataKbit": 12.199999999999543,
     "rmsError": 20.13144480953583,
-    "availability": 92.23333333333764,
-    "fixedAvailability": 17.08888888888824,
+    "availability": 16.94444444444381,
+    "fixedAvailability": 16.94444444444381,
     "energyWh": 0.005068966491651558,
+    "surfaceInterface": {
+      "service": "ispace-top-concept",
+      "source": "User-provided ispace Lunar Transportation Service leaflet photo, as of July 2026",
+      "massKg": 1.5,
+      "projectLimitKg": 1.5,
+      "serviceLimitKg": 4,
+      "projectMarginKg": 0,
+      "serviceMarginKg": 2.5,
+      "projectMassPass": true,
+      "serviceMassPass": true,
+      "massConsistent": true,
+      "envelopeFits": true,
+      "mountOnDeck": true,
+      "candidateFit": true,
+      "lateralClearanceMm": [
+        50,
+        50
+      ],
+      "verticalAllowanceMm": 0,
+      "lunarWeightN": 2.43,
+      "peakInterfaceForceN": 0,
+      "hardwareVerified": false
+    },
     "tailRms": 0.12099712122750662,
     "settlingMs": null,
     "releaseTime": 4.339999999999744,
-    "acquisitionAfterRelease": 0.13999999999998458,
+    "acquisitionAfterRelease": null,
     "landerEnergyWh": 0.07649753792021871,
     "heaterEnergyWh": 0,
     "commandLatencyBoundMs": 20
   }
+}
+```
+
+## Surface payload interface
+Basis: User-provided ispace Lunar Transportation Service leaflet photo, as of July 2026. Top green zone: approximately 4 kg, 200 x 200 x 200 mm. Candidate remains attached to the lander; no deployment mechanism.
+Entered total mass 1.5 kg; project limit 1.5 kg (pass: true); service mass margin 2.5 kg. Moving mass 0.15 kg is a subset, not the total. Mass hierarchy consistent: true.
+2U lateral fit: true; on assumed deck: true; vertical allowance: 0 mm. External adapters/connectors need their own allocation. Concept mount [0.65, 0.76, 0.45] m.
+Lunar weight m*1.62 = 2.430 N. Peak interface force m*shockG*9.80665 = 0.000 N; not stress, strength, modal response or qualification.
+Lander geometry is reconstructed conceptually from the photograph. Hull LOS/contact retains the conservative box/foot proxy; solar panels, legs, other payloads and labels are not RF obstacles. A nominal clear field of view is not guaranteed after tipping. Host electrical/thermal parameters remain assumptions pending an interface control document.
+
+```json
+{
+  "service": "ispace-top-concept",
+  "source": "User-provided ispace Lunar Transportation Service leaflet photo, as of July 2026",
+  "massKg": 1.5,
+  "projectLimitKg": 1.5,
+  "serviceLimitKg": 4,
+  "projectMarginKg": 0,
+  "serviceMarginKg": 2.5,
+  "projectMassPass": true,
+  "serviceMassPass": true,
+  "massConsistent": true,
+  "envelopeFits": true,
+  "mountOnDeck": true,
+  "candidateFit": true,
+  "lateralClearanceMm": [
+    50,
+    50
+  ],
+  "verticalAllowanceMm": 0,
+  "lunarWeightN": 2.43,
+  "peakInterfaceForceN": 0,
+  "hardwareVerified": false
 }
 ```

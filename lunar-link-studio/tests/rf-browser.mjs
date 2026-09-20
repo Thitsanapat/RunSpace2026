@@ -21,7 +21,8 @@ try{
  assert.match(await page.locator('#rf-source').textContent(),/IMPORTED/);
  await param('frequencyGHz',2.4);assert.equal(await page.evaluate(()=>window.lunarLink.result.frames.at(-1).link.margin),null);assert.match(await page.locator('#rf-metrics').textContent(),/UNSUPPORTED/);assert.match(await page.locator('#rf-scale').textContent(),/No supported pattern/);
  await page.locator('#rf-export-grid').click();assert.match(await page.locator('#toast').textContent(),/Cannot export/);
- await page.locator('[data-preset="tilt"]').click();await param('receiverBandwidthKHz',1);
+ // Use a clear-LOS case to isolate bandwidth failure from the top mount's hull blockage.
+ await page.locator('[data-preset="nominal"]').click();await param('receiverBandwidthKHz',1);
  assert.ok(await page.evaluate(()=>{const l=window.lunarLink.result.frames.at(-1).link;return l.margin>3&&!l.available&&!l.bandwidthPass;}));
  await page.locator('[data-preset="tilt"]').click();
  // Export synchronously after an edit: it must flush the 150 ms recalculation delay.

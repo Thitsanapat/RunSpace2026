@@ -14,7 +14,8 @@ try {
   assert.equal(await page.locator('#scene canvas').count(),1);
   await page.locator('#timeline').fill('12');await page.locator('#timeline').dispatchEvent('input');
   await page.waitForTimeout(150);
-  assert.match(await page.locator('#insight b').textContent(),/maintains communication/);
+  assert.match(await page.locator('#insight b').textContent(),/No clear line of sight/);
+  assert.match(await page.locator('#live-los').textContent(),/LANDER HULL/);
   await mkdir('test-results',{recursive:true});
   await page.screenshot({path:'test-results/desktop.png',fullPage:true});
   await page.locator('#play').click();await page.waitForTimeout(300);await page.locator('#play').click();

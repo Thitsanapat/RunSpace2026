@@ -1,9 +1,10 @@
 import { RAD, DEG, clamp, attitude, rotate, qInv, direction, angles, separation, cross, dot, rayBox, seededRandom } from './math.js';
 import {packaging,visibility,thermalRates} from './mission.js';
 import {ANTENNA_PROFILES} from './research.js';
+import {SURFACE,surfaceAssessment} from './surface-payload.js';
 import {RF_DEFAULTS,RF_BOUNDS,validateGrid,validateResponse,directionalGain,rfState,antennaCoordinates} from './antenna-rf.js';
 
-export const MODEL_VERSION = '1.2.1';
+export const MODEL_VERSION = '1.3.0';
 export const DEFAULTS = Object.freeze({
   ...RF_DEFAULTS,
   scenario: 'tilt', duration: 18, eventTime: 2, rampTime: 1.5,
@@ -18,7 +19,7 @@ export const DEFAULTS = Object.freeze({
   cableLoss: 1, polLoss: 0.5, otherLoss: 1, receiverGT: 22,
   bitrateKbps: 4, requiredEbNo: 4.5, implementationLoss: 1.5, reserveDb: 3,
   antennaProfile:'anser',antennaWidthMm:80,antennaHeightMm:80,antennaThicknessMm:6.53,antennaMassG:30,clearanceMm:2,
-  mountX:0.65,mountY:0.76,mountZ:0.73,burialDepth:0,
+  mountX:SURFACE.mount[0],mountY:SURFACE.mount[1],mountZ:SURFACE.mount[2],burialDepth:0,payloadMassKg:1.5,
   initialTemp: 15, baseTemp: 15, groundTemp: -40, sunlight: 0.65,
   solarIncidence: 0.5, emissivity: 0.65, absorptivity: 0.3, thermalArea: 0.018,
   heatCapacity: 240, conductance: 0.2, groundView: 0.25,
@@ -47,6 +48,7 @@ export const PRESETS = {
 
 export const BOUNDS = {
   ...RF_BOUNDS,
+  payloadMassKg:[0.01,10],
   duration: [5,120], eventTime: [0,10], rampTime:[0.2,10], roll:[-180,180], pitch:[-180,180], yaw:[-180,180], jitter:[0,10], jitterHz:[0.1,20],jitterDuration:[0.1,10],jitterDecay:[0.05,5],restRate:[0.05,5],restHold:[0.1,3],landingLock:[0,1],
   targetAz:[-180,180], targetEl:[-10,90], distanceKm:[100,500000], horizon:[0,30], azLimit:[10,180], elMin:[-90,0], elMax:[5,90], speedLimit:[5,360],
   inertia:[0.00001,0.2], movingMass:[0.01,3], cgOffset:[0,0.2], torqueLimit:[0.001,2], kp:[0.001,20], ki:[0,5], kd:[0.0001,2], friction:[0,0.1], damping:[0,0.2],
@@ -256,7 +258,7 @@ export function runSimulation(config, sampleInterval=0.04) {
     if(post.length && lastBad<post.length-1) settlingMs=Math.max(0,(post[lastBad+1].t-end)*1000);
   }
   const acquired=sim.releaseTime===null?null:frames.find(f=>f.t>=sim.releaseTime&&f.link.available);
-  return {frames,summary:{...sim.summary(),tailRms:Math.sqrt(tail.reduce((s,f)=>s+f.error**2,0)/Math.max(tail.length,1)),settlingMs,releaseTime:sim.releaseTime,acquisitionAfterRelease:acquired?acquired.t-sim.releaseTime:null,landerEnergyWh:sim.landerEnergy,heaterEnergyWh:sim.heaterEnergy,commandLatencyBoundMs:(Math.ceil(sim.c.delayMs/1000*sim.c.controlHz)+1)/sim.c.controlHz*1000},config:sim.c,modelVersion:MODEL_VERSION};
+  return {frames,summary:{...sim.summary(),surfaceInterface:surfaceAssessment(sim.c),tailRms:Math.sqrt(tail.reduce((s,f)=>s+f.error**2,0)/Math.max(tail.length,1)),settlingMs,releaseTime:sim.releaseTime,acquisitionAfterRelease:acquired?acquired.t-sim.releaseTime:null,landerEnergyWh:sim.landerEnergy,heaterEnergyWh:sim.heaterEnergy,commandLatencyBoundMs:(Math.ceil(sim.c.delayMs/1000*sim.c.controlHz)+1)/sim.c.controlHz*1000},config:sim.c,modelVersion:MODEL_VERSION};
 }
 
 export function patchEstimate(fGHz,er,hMm) {

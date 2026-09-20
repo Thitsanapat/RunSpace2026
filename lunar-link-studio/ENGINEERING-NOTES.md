@@ -1,5 +1,7 @@
 # ข้อเสนอปรับ Ultra Smooth Landing — รอบแก้ไข
 
+อัปเดต v1.3: ใช้ top green surface payload ตามภาพแผ่นข้อมูลที่ส่งภายหลัง โดยคง 2U รวม gimbal และมวลรวม ≤1.5 kg. ดู [SURFACE-MODEL.md](SURFACE-MODEL.md) สำหรับ service envelope, ตำแหน่งใหม่ และผล hull blockage ที่เปลี่ยนไป. ตารางที่กล่าวถึงสไลด์ด้านล่างเป็นบริบทเดิม ไม่ใช่ข้อกำหนด interface ของ ispace.
+
 อ้างอิงสไลด์ `Ultra Smooth Landing - Proposal (1).pdf` และข้อกำหนดล่าสุด: **payload รวม antenna และ gimbal ทั้งหมดอยู่ใน 2U**. เลขหน้านับตามหน้า PDF. เอกสารนี้เป็นข้อเสนอและผลจำลอง ไม่ใช่หลักฐานว่าฮาร์ดแวร์ผ่านการรับรองแล้ว
 
 ## สิ่งที่ควรแก้ในสไลด์

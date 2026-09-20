@@ -1,10 +1,18 @@
-# Lunar Link Studio 1.2.1
+# Lunar Link Studio 1.3.0
 
 โปรแกรมจำลองเสาอากาศบน lunar lander พร้อม 3D และการคำนวณ เปิดใช้งานในเครื่องได้ มี source code และ production build ครบ
 
 ## เปิดโปรแกรม
 
 ดับเบิลคลิก `START.cmd` (ต้องมี Node.js 22 ขึ้นไป) แล้วเปิด http://127.0.0.1:4173 หากมี server เปิดอยู่แล้ว ใช้หน้าต่างเดิมและ refresh ได้เลย ไม่ต้องติดตั้ง dependencies เพื่อเปิด production build ที่ให้มา
+
+## ใหม่ในรุ่น 1.3: Top-mounted surface payload
+
+โมเดล lander ทรงหลายเหลี่ยม แผงโซลาร์เอียง และโซน payload ตามภาพแผ่นข้อมูล ispace ที่ผู้ใช้ส่งมา (ก.ค. 2026). เลือก **Surface Payload ด้านบนโซนสีเขียว**: service limit ≈4 kg / 200 mm cube; งานเราคงกรอบรวม **2U และ ≤1.5 kg**. เพิ่ม total mass, service/project margin, mount/envelope check และแรงกระแทกที่ interface. ดู [SURFACE-MODEL.md](SURFACE-MODEL.md) สำหรับสมมติฐานและผลที่เปลี่ยน.
+
+กด **Mount** เพื่อดูโมดูลบนยาน หรือ **Payload 2U** เพื่อแยกดูโมดูล. **Other service envelopes** แสดงกรอบทางเลือกสีแดง/น้ำเงิน/เหลือง. ค่าเดิมที่บันทึกไว้ยังโหลดได้; กด **Restore top-zone mount** เพื่อใช้ตำแหน่งใหม่โดยคง RF และค่าที่แก้เองไว้.
+
+ตำแหน่งใหม่ในกรณีเอียง 65° ถูก hull proxy บังสัญญาณ แม้ pointing error <0.5°. ผลนี้ตั้งใจแสดงตาม geometry ไม่ใช่ทำให้ทุกกรณีผ่าน. เปิด preset Nominal เพื่อดูตำแหน่งก่อนยานเอียง.
 
 ## แก้ไขในรุ่น 1.2.1
 

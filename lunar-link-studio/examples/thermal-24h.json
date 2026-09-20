@@ -1,5 +1,5 @@
 {
-  "modelVersion": "1.2.1",
+  "modelVersion": "1.3.0",
   "defaults": {
     "patternShape": "symmetric",
     "beamwidthV": 82.44,
@@ -76,8 +76,9 @@
     "clearanceMm": 2,
     "mountX": 0.65,
     "mountY": 0.76,
-    "mountZ": 0.73,
+    "mountZ": 0.45,
     "burialDepth": 0,
+    "payloadMassKg": 1.5,
     "initialTemp": 15,
     "baseTemp": 15,
     "groundTemp": -40,

@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {seededRandom} from './math.js';
 import {radiationGeometry} from './radiation-scene.js';
+import {buildSurfaceLander} from './lander-model.js';
 
 export class MissionScene {
   constructor(container) {
@@ -45,30 +46,7 @@ export class MissionScene {
   }
   makeLander() {
     this.lander=new THREE.Group();this.scene.add(this.lander);
-    this.box([1.6,1.1,1.4],'gold',this.lander,[0,0.1,0]);
-    this.box([1.72,0.12,1.52],'white',this.lander,[0,0.7,0]);
-    this.box([1.65,0.12,1.45],'dark',this.lander,[0,-0.49,0]);
-    for(const x of [-0.81,0.81]) for(const z of [-0.71,0.71]) this.rod([x,-0.45,z],[x,0.71,z],0.035,'white',this.lander);
-    // Thermal blanket seam and equipment details.
-    for(let i=0;i<5;i++) this.box([0.015,0.95,0.013],'dark',this.lander,[-0.6+i*0.3,0.08,0.707]);
-    this.box([0.64,0.42,0.07],'white',this.lander,[0.2,0.1,0.75]);
-    for(let i=0;i<6;i++) this.box([0.5,0.018,0.015],'dark',this.lander,[0.2,-0.04+i*0.056,0.794]);
-    this.feet=[];
-    for(const sx of [-1,1]) for(const sz of [-1,1]) {
-      const foot=[sx*1.8,-1.12,sz*1.65];this.feet.push(new THREE.Vector3(...foot));
-      this.rod([sx*0.74,0.38,sz*0.6],foot,0.048,'white',this.lander);
-      this.rod([sx*0.6,-0.36,sz*0.55],foot,0.027,'dark',this.lander);
-      this.rod([sx*0.95,0.06,sz*0.85],[sx*1.38,-0.58,sz*1.25],0.073,'gold',this.lander);
-      this.mesh(new THREE.CylinderGeometry(0.24,0.28,0.07,24),'dark',this.lander,foot);
-    }
-    this.mesh(new THREE.ConeGeometry(0.25,0.4,24,1,true),'dark',this.lander,[0,-0.66,0]).rotation.x=Math.PI;
-    for(const side of [-1,1]) {
-      const panel=this.box([0.85,0.045,1.2],'blue',this.lander,[side*1.32,0.74,0]);
-      for(let i=0;i<4;i++)for(let j=0;j<5;j++)this.box([0.18,0.008,0.2],'blue',panel,[-0.32+i*0.21,0.03,-0.46+j*0.23]);
-      for(let j=0;j<6;j++)this.box([0.82,0.009,0.008],'white',panel,[0,0.037,-0.56+j*0.225]);
-    }
-    this.rod([-0.5,0.7,-0.4],[-0.5,1.22,-0.4],0.025,'white',this.lander);
-    this.mesh(new THREE.SphereGeometry(0.065,12,8),'dark',this.lander,[-0.5,1.24,-0.4]);
+    buildSurfaceLander(this);
     this.hostParts=[...this.lander.children];
     this.base=new THREE.Group();this.lander.add(this.base);
     this.box([0.094,0.105,0.094],'dark',this.base,[0,0.0525,0]);
@@ -103,7 +81,7 @@ export class MissionScene {
     this.envelope.material.color.set(frame.packaging.fits&&!frame.packagingLimited?'#8ebcf1':'#df896f');
     this.lander.updateMatrixWorld(true);
     const origin=new THREE.Vector3(0,0,0);this.pitchGroup.getWorldPosition(origin);
-    if(this.detail){const center=this.base.localToWorld(new THREE.Vector3(0,0.1,0)),delta=center.clone().sub(this.controls.target);this.camera.position.add(delta);this.controls.target.copy(center);}
+    if(this.detail||this.mountView){const center=this.base.localToWorld(new THREE.Vector3(0,0.1,0)),delta=center.clone().sub(this.controls.target);this.camera.position.add(delta);this.controls.target.copy(center);}
     for(const [name,vector] of [['target',frame.target],['gimbal',frame.bore],['fixed',frame.fixedBore]]) {
       const endpoint=origin.clone().add(new THREE.Vector3(...vector).multiplyScalar(name==='target'?4.5:3.5));
       const line=this.guides[name];line.geometry.attributes.position.setXYZ(0,...origin.toArray());line.geometry.attributes.position.setXYZ(1,...endpoint.toArray());line.geometry.attributes.position.needsUpdate=true;line.geometry.computeBoundingSphere();line.computeLineDistances();
@@ -114,9 +92,11 @@ export class MissionScene {
     this.lastFrame=frame;
   }
   setView(view) {
-    this.detail=view==='detail';this.controls.minDistance=this.detail?0.12:2;this.controls.maxPolarAngle=this.detail?Math.PI:Math.PI*0.49;
+    this.surfaceLabels.visible=view!=='mount'&&view!=='detail';
+    this.detail=view==='detail';this.mountView=view==='mount';this.controls.minDistance=this.detail?0.12:this.mountView?0.25:2;this.controls.maxPolarAngle=this.detail||this.mountView?Math.PI:Math.PI*0.49;
     this.hostParts.forEach(p=>p.visible=!this.detail);
     if(this.detail){const origin=this.base.localToWorld(new THREE.Vector3(0,0.1,0));this.controls.target.copy(origin);this.camera.position.copy(origin).add(new THREE.Vector3(0.28,0.17,0.32));this.controls.update();return;}
+    if(this.mountView){const origin=this.base.localToWorld(new THREE.Vector3(0,0.1,0));this.controls.target.copy(origin);this.camera.position.copy(origin).add(new THREE.Vector3(0.64,0.52,0.7));this.controls.update();return;}
     const poses={orbit:[6,4.2,7.5],front:[0,3,9],top:[0.05,11,0.05],detail:[2.1,3.7,3.2]};
     this.camera.position.set(...poses[view]);this.controls.target.set(0,view==='detail'?2.7:1.9,0);this.controls.update();
   }

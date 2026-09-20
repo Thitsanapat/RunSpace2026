@@ -1,4 +1,6 @@
-# Antenna & RF laboratory — v1.2.1
+# Antenna & RF laboratory — v1.3.0
+
+รุ่น 1.3 เปลี่ยนตำแหน่งติดตั้งเป็น top green surface payload ตาม [SURFACE-MODEL.md](SURFACE-MODEL.md). สมการ RF เดิมยังใช้ แต่ default 65° tip ที่ตำแหน่งใหม่ถูก hull proxy บัง จึงไม่ผ่าน actual link แม้ on-axis clear-path budget ด้านล่างยังมี margin 8.557 dB.
 
 ขอบเขตงาน: เพิ่มซิมและหลักฐานคำนวณตาม `Ultra Smooth Landing - Proposal (2).pdf`; ไม่ได้แก้หรือสร้างสไลด์. Payload รวมเสาและ gimbal ยังคง2U ตามข้อกำหนดล่าสุด
 
