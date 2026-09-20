@@ -1,0 +1,7 @@
+# Local dependencies and generated logs
+node_modules/
+*.log
+
+# Source reference material is intentionally kept outside this repository
+*.pdf
+.pdf-tools/

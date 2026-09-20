@@ -1,0 +1,8 @@
+# SYNTHETIC DEMONSTRATION ONLY. NOT MEASURED AND NOT DIGITIZED FROM A PAPER.
+# Gain column is total realized gain. Use realized convention and avoid duplicate mismatch loss.
+frequency_ghz,s11_db,gain_dbi,axial_ratio_db
+2.0,-5,3,8
+2.1,-12,5.5,4
+2.205,-20,6.5,2
+2.25,-12,5.5,4
+2.3,-5,3,8
