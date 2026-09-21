@@ -1,6 +1,14 @@
-# Lunar Link Studio 1.4.0
+# Lunar Link Studio 1.4.1
 
 โปรแกรมจำลองเสาอากาศบน lunar lander พร้อม 3D และการคำนวณ เปิดใช้งานในเครื่องได้ มี source code และ production build ครบ
+
+## Multi-view reference และ GitHub Pages
+
+รุ่น 1.4.1 เพิ่ม folded equipment panels พร้อมช่องทะลุ 6 ช่อง, side X-braces, deck access plates, น็อตและปลอกขา ตามภาพหลายมุมล่าสุด. Payload cyan ยังแทน green bay เดิมพร้อมวงจร 3 ชั้น; ไม่เปลี่ยน numerical hull/mount/2U constraints. รูปทรงที่ไม่เห็นยังประมาณ ไม่ใช่ ispace CAD.
+
+เปิด **White studio** เพื่อดูพื้นขาวแบบภาพอ้างอิง. **Side / Top / Bottom** ใช้ orthographic projection; **Isometric** เป็นมุม perspective ที่หมุนตรวจได้. ภาพ `test-results/reference-*.png` และ GLB ใน `examples` อัปเดตจากโมเดลนี้.
+
+GitHub Pages: https://Thitsanapat.github.io/RunSpace2026/ — workflow build/test/deploy เมื่อ push `main`. ดู [PAGES.md](PAGES.md) สำหรับการตั้งค่าและการทดสอบ project subpath.
 
 ## เปิดโปรแกรม
 

@@ -11,7 +11,8 @@ export class MissionScene {
   constructor(container) {
     this.container=container; this.scene=new THREE.Scene(); this.scene.background=new THREE.Color('#111923');
     this.scene.fog=new THREE.FogExp2('#111923',0.024);
-    this.camera=new THREE.PerspectiveCamera(40,1,0.001,120);this.camera.position.set(5.4,4.3,6.6);
+    this.camera=new THREE.PerspectiveCamera(40,1,0.001,120);this.camera.position.set(5.28,4.69,-6.6);
+    this.perspectiveCamera=this.camera;this.orthographicCamera=new THREE.OrthographicCamera(-3,3,3,-3,0.001,120);this.orthographicCamera.zoom=1;this.view='orbit';this.studio=false;
     this.renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio,2)); this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;
     this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.25;
@@ -32,6 +33,7 @@ export class MissionScene {
       ours:new THREE.MeshStandardMaterial({color:'#14babf',emissive:'#08696d',emissiveIntensity:0.25,metalness:0.25,roughness:0.45})
     };
     const beforeGround=new Set(this.scene.children);this.makeGround();this.groundParts=this.scene.children.filter(c=>!beforeGround.has(c));
+    this.studioFloor=this.mesh(new THREE.PlaneGeometry(80,80),new THREE.MeshStandardMaterial({color:'#f7f7f4',roughness:1}),this.scene,[0,-0.002,0]);this.studioFloor.rotation.x=-Math.PI/2;this.studioFloor.castShadow=false;this.studioFloor.visible=false;
     this.makeLander();this.makeGuides();this.exploded=false;this.beamVisible=false;this.brochureVisible=true;
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(container);this.resize();
   }
@@ -99,17 +101,19 @@ export class MissionScene {
     this.lastFrame=frame;
   }
   setView(view) {
+    this.view=view;this.camera=['front','top','underside'].includes(view)?this.orthographicCamera:this.perspectiveCamera;this.controls.object=this.camera;this.orthographicCamera.zoom=1;
     this.surfaceLabels.visible=!['mount','detail','underside'].includes(view);
-    this.groundParts.forEach(p=>p.visible=view!=='underside');
+    this.groundParts.forEach(p=>p.visible=!this.studio&&view!=='underside');this.studioFloor.visible=this.studio&&view!=='underside';
     this.undersideLight.visible=view==='underside';
     this.detail=view==='detail';this.mountView=view==='mount';this.controls.minDistance=this.detail?0.12:this.mountView?0.25:2;this.controls.maxPolarAngle=this.detail||this.mountView||view==='underside'?Math.PI:Math.PI*0.49;
     this.hostParts.forEach(p=>p.visible=!this.detail&&(p!==this.otherZones||this.brochureVisible));
-    if(this.detail){const origin=this.base.localToWorld(new THREE.Vector3(0,this.exploded?0.15:0.1,0));this.controls.target.copy(origin);this.camera.position.copy(origin).add(new THREE.Vector3(0.28,0.17,0.32).multiplyScalar(this.exploded?1.35:1));this.controls.update();return;}
-    if(this.mountView){const origin=this.base.localToWorld(new THREE.Vector3(0,0.1,0));this.controls.target.copy(origin);this.camera.position.copy(origin).add(new THREE.Vector3(0.64,0.52,0.7));this.controls.update();return;}
-    const poses={orbit:[5.4,4.3,6.6],front:[0,3,8.5],top:[0.05,10,0.05],underside:[1.2,-8.2,1.8],detail:[2.1,3.7,3.2]};
-    this.camera.position.set(...poses[view]);this.controls.target.set(0,view==='underside'?1.1:1.5,0);this.controls.update();
+    if(this.detail){const origin=this.base.localToWorld(new THREE.Vector3(0,this.exploded?0.15:0.1,0));this.controls.target.copy(origin);this.camera.position.copy(origin).add(new THREE.Vector3(0.28,0.17,0.32).multiplyScalar(this.exploded?1.35:1));this.resize();this.controls.update();return;}
+    if(this.mountView){const origin=this.base.localToWorld(new THREE.Vector3(0,0.1,0));this.controls.target.copy(origin);this.camera.position.copy(origin).add(new THREE.Vector3(0.64,0.52,0.7));this.resize();this.controls.update();return;}
+    const poses={orbit:[5.28,4.69,-6.6],front:[0,1.5,8.5],top:[0,10,0.001],underside:[0,-8.2,0.001],detail:[2.1,3.7,3.2]};
+    this.camera.position.set(...poses[view]);this.controls.target.set(0,view==='underside'?1.1:1.5,0);this.resize();this.controls.update();
   }
-  resize() {const w=this.container.clientWidth,h=this.container.clientHeight;if(!w||!h)return;this.camera.aspect=w/h;this.camera.fov=2*Math.atan(Math.tan(20*Math.PI/180)/Math.min(1,Math.max(0.4,w/h)))*180/Math.PI;this.camera.updateProjectionMatrix();this.renderer.setSize(w,h);}
+  resize() {const w=this.container.clientWidth,h=this.container.clientHeight;if(!w||!h)return;const aspect=w/h;if(this.camera.isOrthographicCamera){const size=(this.view==='front'?4.5:6.1)/Math.min(1,aspect);this.camera.left=-size*aspect/2;this.camera.right=size*aspect/2;this.camera.top=size/2;this.camera.bottom=-size/2;}else{this.camera.aspect=aspect;this.camera.fov=2*Math.atan(Math.tan(20*Math.PI/180)/Math.min(1,Math.max(0.4,aspect)))*180/Math.PI;}this.camera.updateProjectionMatrix();this.renderer.setSize(w,h);}
+  setStudio(enabled){this.studio=enabled;this.scene.background.set(enabled?'#f7f7f4':'#111923');this.scene.fog=enabled?null:new THREE.FogExp2('#111923',0.024);this.groundParts.forEach(p=>p.visible=!enabled&&this.view!=='underside');this.studioFloor.visible=enabled&&this.view!=='underside';Object.values(this.guides).forEach(p=>p.visible=!enabled);this.targetMarker.visible=!enabled;}
   render() {this.controls.update();this.renderer.render(this.scene,this.camera);}
   capture() {this.render();return this.renderer.domElement.toDataURL('image/png');}
   setBrochureVisible(visible){this.brochureVisible=visible;this.otherZones.visible=visible&&!this.detail;}
@@ -119,7 +123,7 @@ export class MissionScene {
     for(let i=0;i<this.hostParts.length;i++)model.children[i].visible=this.hostParts[i]===this.otherZones?this.brochureVisible:true;
     const remove=[];model.traverse(o=>{if(o.isLine||o.isSprite||o.userData.visualHelper)remove.push(o);});remove.forEach(o=>o.removeFromParent());
     model.name='ispace brochure reconstruction with cyan team payload';
-    model.userData={units:'metres',basis:'Two user-provided brochure crops; approximate geometry, not ispace CAD',payloadAllocations:this.payloadInventory,allocationsVisible:this.brochureVisible,numericalModel:'Conservative hull/foot proxy; illustrated allocations excluded',bodyPose:'Normalized; antenna/exploded transforms reflect current view'};
+    model.userData={units:'metres',basis:'User brochure photos and multi-view reference sheet; approximate geometry, not ispace CAD',payloadAllocations:this.payloadInventory,allocationsVisible:this.brochureVisible,numericalModel:'Hull/foot proxy; illustrated equipment and allocations excluded',bodyPose:'Normalized; antenna/exploded transforms reflect current view'};
     model.updateMatrixWorld(true);return new GLTFExporter().parseAsync(model,{binary:true,onlyVisible:true});
   }
 }

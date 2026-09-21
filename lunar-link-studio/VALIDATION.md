@@ -1,4 +1,11 @@
-# Validation — v1.4.0 — 2026-09-21
+# Validation — v1.4.1 — 2026-09-21
+
+## Multi-view model / Pages revision (v1.4.1)
+
+- 41/41 unit tests and production build pass. Geometry/detail/camera changes only; numerical hull/mount and payload constraints stay at v1.4 values. Historical numeric examples retain their recorded version.
+- Brochure browser workflow passes with two real perforated equipment faces, external X braces, White studio, orthographic Side/Top/Bottom, perspective Isometric, mobile and GLB export.
+- `node tests/pages-browser.mjs` passes: assets under `/RunSpace2026/`, mission and RF WebGL, model version and a 50-trial module worker. This local path test does not by itself prove the public deployment is live.
+- Reference screenshots: `test-results/reference-isometric.png`, `reference-top.png`, `reference-side.png`, `reference-bottom.png`. These are views of the same mesh, not independent AI images.
 
 Windows / Node.js22.17.1 / Chrome headless. ผลทั้งหมดคือผลจำลอง ไม่ใช่การวัด flight hardware
 

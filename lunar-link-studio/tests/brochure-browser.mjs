@@ -17,6 +17,12 @@ try{
   await page.locator('.viewport-card').screenshot({path:'test-results/brochure-underside.png'});
   await page.locator('[data-view="top"]').click();await page.waitForTimeout(300);
   await page.locator('.viewport-card').screenshot({path:'test-results/brochure-top.png'});
+  await page.locator('#studio-view').check();
+  for(const [view,label] of [['orbit','isometric'],['top','top'],['front','side'],['underside','bottom']]){
+    await page.locator(`[data-view="${view}"]`).click();await page.waitForTimeout(250);
+    await page.locator('.viewport-card').screenshot({path:`test-results/reference-${label}.png`});
+  }
+  await page.locator('#studio-view').uncheck();
   await page.locator('[data-view="mount"]').click();await page.waitForTimeout(300);
   await page.locator('.viewport-card').screenshot({path:'test-results/brochure-our-payload.png'});
   // Complete export must work even while the host is hidden in isolated 2U view.
@@ -24,6 +30,8 @@ try{
   const download=page.waitForEvent('download');await page.locator('#export-model').click();const model=await download;
   await model.saveAs('examples/ispace-photo-concept-with-our-2u.glb');
   const full=glbJSON(await readFile(await model.path()));
+  assert.equal(full.nodes.filter(n=>n.name==='Six through-hole equipment face').length,2);
+  assert.equal(full.nodes.filter(n=>n.name==='External X brace').length,2);
   await page.locator('#toast').evaluate(e=>e.style.display='none');
   for(const name of ['Power input / DC-DC','Motor drivers / current sense','MCU / attitude / encoder interface','Thermal strap to lander interface','Lander power / data input'])assert.ok(full.nodes.some(n=>n.name===name),name);
   await page.locator('#payload-cover').uncheck();await page.waitForTimeout(200);
@@ -36,7 +44,7 @@ try{
   const studyDownload=page.waitForEvent('download');await page.locator('#export-design').click();const studyFile=await studyDownload;
   await studyFile.saveAs('examples/payload-design-study.json');
   const study=JSON.parse(await readFile(await studyFile.path(),'utf8'));
-  assert.equal(study.modelVersion,'1.4.0');assert.equal(study.assembly.allSampledFit,false);assert.equal(study.electrical.outagePass,false);
+  assert.equal(study.modelVersion,'1.4.1');assert.equal(study.assembly.allSampledFit,false);assert.equal(study.electrical.outagePass,false);
   assert.equal(study.config.mountX,0.92);assert.equal(study.config.mountZ,0.62);
   await page.locator('.design-card').first().screenshot({path:'test-results/payload-assembly-study.png'});
   await page.locator('.design-card').last().screenshot({path:'test-results/payload-power-study.png'});
