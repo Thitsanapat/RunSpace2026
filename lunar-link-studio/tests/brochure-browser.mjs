@@ -4,9 +4,11 @@ import {mkdir,readFile} from 'node:fs/promises';
 const browser=await chromium.launch({channel:'chrome',headless:true,args:['--enable-unsafe-swiftshader']});
 const page=await browser.newPage({viewport:{width:1700,height:1200}}),errors=[];
 page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
+await page.addInitScript(()=>localStorage.setItem('lunar-link-config-v1.2',JSON.stringify({mountX:0.65,mountY:0.76,mountZ:0.45})));
 const glbJSON=buffer=>{assert.equal(buffer.toString('ascii',0,4),'glTF');assert.equal(buffer.readUInt32LE(4),2);assert.equal(buffer.readUInt32LE(8),buffer.length);assert.equal(buffer.readUInt32LE(16),0x4e4f534a);return JSON.parse(buffer.toString('utf8',20,20+buffer.readUInt32LE(12)));};
 try{
   await page.goto(process.env.TEST_URL||'http://127.0.0.1:4173',{waitUntil:'networkidle'});await page.waitForFunction(()=>window.lunarLink?.webgl);
+  assert.deepEqual(await page.evaluate(()=>[window.lunarLink.config.mountX,window.lunarLink.config.mountY,window.lunarLink.config.mountZ]),[0.92,0.76,0.62]);
   await page.locator('[data-preset="nominal"]').click();await page.locator('#rewind').click();
   assert.equal(await page.locator('#show-zones').isChecked(),true);
   await mkdir('test-results',{recursive:true});await mkdir('examples',{recursive:true});
@@ -44,7 +46,7 @@ try{
   const studyDownload=page.waitForEvent('download');await page.locator('#export-design').click();const studyFile=await studyDownload;
   await studyFile.saveAs('examples/payload-design-study.json');
   const study=JSON.parse(await readFile(await studyFile.path(),'utf8'));
-  assert.equal(study.modelVersion,'1.4.1');assert.equal(study.assembly.allSampledFit,false);assert.equal(study.electrical.outagePass,false);
+  assert.equal(study.modelVersion,'1.4.2');assert.equal(study.assembly.allSampledFit,false);assert.equal(study.electrical.outagePass,false);
   assert.equal(study.config.mountX,0.92);assert.equal(study.config.mountZ,0.62);
   await page.locator('.design-card').first().screenshot({path:'test-results/payload-assembly-study.png'});
   await page.locator('.design-card').last().screenshot({path:'test-results/payload-power-study.png'});

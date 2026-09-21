@@ -1,4 +1,6 @@
-# Validation — v1.4.1 — 2026-09-21
+# Validation — v1.4.2 — 2026-09-21
+
+v1.4.2 เพิ่ม browser regression สำหรับ migration จาก mount รุ่นเก่าไป `[0.92, 0.76, 0.62]` และซ่อน selected green envelope รวมถึงแผ่น placeholder ที่ถูก cyan payload ครอบครองแล้ว เพื่อไม่แสดงเป็น payload สองก้อน.
 
 ## Multi-view model / Pages revision (v1.4.1)
 

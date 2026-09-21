@@ -15,7 +15,7 @@ try{
   const page=await browser.newPage();page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});
   await page.goto(process.env.LIVE_URL||`http://127.0.0.1:${server.address().port}${prefix}`,{waitUntil:'networkidle'});
   await page.waitForFunction(()=>window.lunarLink?.webgl);
-  assert.equal(await page.evaluate(()=>window.lunarLink.result.modelVersion),'1.4.1');
+  assert.equal(await page.evaluate(()=>window.lunarLink.result.modelVersion),'1.4.2');
   await page.locator('[data-tab="radio"]').click();await page.waitForFunction(()=>window.lunarLink.rfWebgl);
   await page.locator('[data-tab="analysis"]').click();await page.locator('#batch-count').selectOption('50');await page.locator('#run-batch').click();
   await page.waitForFunction(()=>window.lunarLink.batch?.rows.length===50,null,{timeout:120000});

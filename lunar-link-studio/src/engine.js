@@ -5,7 +5,7 @@ import {SURFACE,surfaceAssessment} from './surface-payload.js';
 import {DESIGN_DEFAULTS,DESIGN_BOUNDS} from './payload-design.js';
 import {RF_DEFAULTS,RF_BOUNDS,validateGrid,validateResponse,directionalGain,rfState,antennaCoordinates} from './antenna-rf.js';
 
-export const MODEL_VERSION = '1.4.1';
+export const MODEL_VERSION = '1.4.2';
 export const DEFAULTS = Object.freeze({
   ...RF_DEFAULTS,
   ...DESIGN_DEFAULTS,

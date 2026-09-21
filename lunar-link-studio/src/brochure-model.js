@@ -124,9 +124,11 @@ export function buildSurfaceLander(view) {
   }
   allocation('Top green spare',[0.2,0.2,0.2],[-SURFACE.mount[0],top+0.1,-SURFACE.mount[2]],green);
   view.zones=new THREE.Group();lander.add(view.zones);
-  const mount=SURFACE.mount;box([0.2,0.008,0.2],green,lander,[mount[0],top-0.004,mount[2]]);
+  // The cyan flight article occupies this allocation. Leaving a green pad
+  // beneath it reads as a second payload in close-up, so omit the placeholder.
+  const mount=SURFACE.mount;
   const geometry=new THREE.BoxGeometry(0.2,0.2,0.2);
-  view.surfaceZone=new THREE.LineSegments(new THREE.EdgesGeometry(geometry),new THREE.LineBasicMaterial({color:'#70e138'}));view.surfaceZone.position.set(mount[0],top+0.1,mount[2]);view.zones.add(view.surfaceZone);
+  view.surfaceZone=new THREE.LineSegments(new THREE.EdgesGeometry(geometry),new THREE.LineBasicMaterial({color:'#70e138'}));view.surfaceZone.position.set(mount[0],top+0.1,mount[2]);view.surfaceZone.visible=false;view.surfaceZone.name='Selected green service envelope (occupied by cyan payload; hidden)';view.zones.add(view.surfaceZone);
   view.surfaceLabels=new THREE.Group();view.zones.add(view.surfaceLabels);
   const canvas=document.createElement('canvas');canvas.width=640;canvas.height=112;const ctx=canvas.getContext('2d');
   ctx.fillStyle='#103137';ctx.fillRect(0,0,640,112);ctx.strokeStyle='#43e6e3';ctx.lineWidth=4;ctx.strokeRect(2,2,636,108);ctx.fillStyle='#72ffff';ctx.font='bold 30px sans-serif';ctx.fillText('OUR PAYLOAD · 2U',20,44);ctx.fillStyle='#e0eeee';ctx.font='23px sans-serif';ctx.fillText('Cyan module / green service bay',20,82);
