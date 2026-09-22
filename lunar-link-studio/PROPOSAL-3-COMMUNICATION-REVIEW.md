@@ -2,6 +2,8 @@
 
 ตรวจเมื่อ 22 กันยายน 2026 จาก `Ultra Smooth Landing - Proposal (3).pdf` และ Lunar Link Studio v1.4.2
 
+ภาพพร้อมวางสไลด์ คำบรรยาย และตำแหน่งใช้งานอยู่ที่ [`slide-assets/README.md`](slide-assets/README.md) โดยมีภาพสรุปหน้า 16 ที่จัดสัดส่วนสำหรับพื้นที่ว่างด้านขวาไว้แล้ว
+
 ## ข้อสรุปที่ควรใช้เป็นแกนเรื่อง
 
 ผลิตภัณฑ์ควรถูกนิยามเป็น **secondary, independently pointed S-band antenna front-end** สำหรับกู้ลิงก์หลังยานเอียง โดยใช้ power, heater, attitude/ephemeris, data interface และ RF transponder/PA ของ lander ตาม interface ที่ตกลงกัน ไม่ควรเรียกว่า independent communication system จนกว่าจะรวม modem, receiver, transmitter, PA, diplexer, RF switch และ autonomous acquisition chain ไว้ใน 2U จริง
@@ -170,4 +172,3 @@ Ground station sensitivity ต้องอยู่ข้างผลหลั�
 - [NASA NTRS: electronically steered antenna design factors](https://ntrs.nasa.gov/api/citations/19690011734/downloads/19690011734.pdf) — scan gain decrease, spacing, grating lobes, mutual coupling and polarization effects
 - [NASA Lunar Surface Propagation](https://www.nasa.gov/glenn/glenn-expertise-space-exploration/scan/lunar-surface-propagation/) — south-pole horizon, terrain reflection and DTE limitations
 - [NASA LunaNet Interoperability Specification](https://www.nasa.gov/directorates/somd/space-communications-navigation-program/lunanet-interoperability-specification/) — distinguish DTE and lunar relay service concepts
-

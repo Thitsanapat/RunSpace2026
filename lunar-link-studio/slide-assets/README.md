@@ -1,0 +1,92 @@
+# Slide-ready simulation evidence
+
+ชุดนี้ export จาก Lunar Link Studio v1.4.2 สำหรับ `Ultra Smooth Landing - Proposal (3).pdf` โดยใช้เลขหน้าตาม PDF ปัจจุบัน ภาพ PNG พร้อมวางในสไลด์ ส่วน SVG ใช้เมื่อต้องการแก้สี ข้อความ หรือส่งออกความละเอียดสูง
+
+## ชุดขั้นต่ำสำหรับรอบนำเสนอ
+
+| หน้า | ไฟล์หลัก | ตำแหน่ง/ขนาดที่แนะนำ | คำบรรยายใต้ภาพ |
+|---|---|---|---|
+| 8 — 3D prototype | `p08-green-zone-installed-payload.png` | แทนภาพโมเดลเดิมหรือวางเต็มครึ่งขวา | **Concept installation:** โมดูล 2U ติดตั้งแทน top surface payload allocation สีเขียว; รูปร่าง lander สร้างจากภาพอ้างอิงและไม่ใช่ CAD/ICD ของผู้ให้บริการ |
+| 10 — Mass & power | `p10-power-and-rf-boundary.png` | เต็มความกว้างใต้ตาราง หรือแทนตาราง power เดิม | **Power boundary:** payload motion branch สูงสุด 5.31 W ในซิม; 5 W RF เป็นกำลังขาออกของ host PA และเทียบเป็นประมาณ 14.29 W DC เมื่อสมมติประสิทธิภาพ 35% |
+| 14 — Control/Dynamics | `p14-controller-step-response.png` + `p14-pointing-error-time-history.png` | วางคู่กัน โดยให้ step response ใหญ่กว่า | **Current controller result:** settling 154 ms, rise 124 ms, overshoot 0.61%; ยังไม่ผ่านเป้าหมาย 50 ms. หลัง transient ช่วง 3 s สุดท้ายมี RMS error ประมาณ 0.12° |
+| 16 — Antenna & Earth–Moon link | `p16-right-column-summary.png` | ใส่ในพื้นที่ว่างครึ่งขวาของหน้าปัจจุบัน; คงภาพ antenna/pattern จาก paper ไว้ฝั่งซ้ายเพียงชุดเดียว | **Reference-based DTE study:** 2.205 GHz, 5 W RF, 6.5 dBic, 384,400 km, 4 kbps และ assumed ground G/T 22 dB/K ให้ headroom +5.56 dB หลัง reserve 3 dB ภายใต้ clear LOS และ host services พร้อมใช้งาน |
+| 17 — Verification/Risks | `p17-monte-carlo-attitude-map.png` + `p17-link-failure-gates.png` | แผนที่ 60% ของหน้า; failure gates 40% | **Seeded reduced-order screening:** gimbal 53/100 เทียบ fixed antenna 18/100 สำหรับตัวอย่าง uniform Euler-angle attitudes; ใช้เปรียบเทียบสถาปัตยกรรม ไม่ใช่ค่าความน่าเชื่อถือของภารกิจ |
+
+## หน้า 8 — Packaging และตำแหน่งติดตั้ง
+
+- `p08-complete-2u-payload.png` — ภาพ 2U พร้อม antenna, gimbal และ electronics. ใช้เป็นภาพรวมก่อนแสดงการติดตั้ง
+- `p08-green-zone-installed-payload.png` — ภาพหลักที่ตอบว่า payload แทนบล็อกเขียวตรงไหน
+- `p08-electronics-exploded-view.png` — ใส่ appendix เมื่อถูกถามว่าภายใน 2U มีอะไรบ้าง
+- `p08-assembly-clearance-study.png` — ใส่หน้า risk/appendix พร้อมระบุว่า **current sampled full sweep ยังไม่ผ่าน**: sampled fit 3.1% และ worst signed clearance −10.66 mm. ห้ามใช้ภาพนี้อ้างว่า mechanism fit แล้ว
+
+ข้อความพูดประกอบ: envelope 100 × 100 × 181 mm และ mass ≤1.5 kg เป็น design target. การยืนยันต้องใช้ host CAD/keep-out, fastener interface, harness routing, coax bend radius และ swept-volume check ที่ละเอียดกว่า geometry proxy ปัจจุบัน
+
+## หน้า 10 — Power
+
+- `p10-power-and-rf-boundary.png` — ภาพหลัก
+- แก้แถว transmission เดิมที่ประมาณ 1.67 W เพราะไม่สามารถแทน 5 W RF output ได้
+- ระบุให้ชัดว่า lander ต้องให้บริการอะไร: DC bus, heater, radio/modem/PA, attitude/ephemeris, data interface และ RF coax/port
+- ค่าที่ยังไม่ผ่านใน model ปัจจุบัน: entered inrush 0.8 A สูงกว่า allocation 0.5 A และ ideal hold-up 6.85 ms ต่ำกว่า requirement 100 ms
+
+## หน้า 14 — Control และ pointing
+
+- `p14-controller-step-response.png` — หลักฐานหลัก; เปลี่ยนข้อความเดิมที่อ้างประมาณ 47 ms เป็นผลปัจจุบัน 154 ms และติดป้าย **FAIL 50 ms target**
+- `p14-pointing-error-time-history.png` — แสดง recovery หลัง initial disturbance
+- ห้ามพูดว่า error อยู่ใน ±0.5° ตลอดการ landing. ค่า whole-run RMS สูงเพราะ initial transient; ค่า 0.12° เป็น final-window RMS เท่านั้น
+- แยก acquisition time, command latency, motor settling และ Earth ephemeris accuracy ออกจากกันในการตอบกรรมการ
+
+## หน้า 15 — 100 km relay
+
+**ยังไม่มีภาพที่พร้อมใช้.** Model ปัจจุบันเป็น Earth–Moon DTE และยังไม่มี relay preset ที่กำหนด relay G/T, frequency, data rate, antenna orientation, visibility และ ephemeris ครบ ห้ามนำรูป DTE หน้า 16 ไปติดป้ายว่าเป็นผล 100 km relay
+
+## หน้า 16 — Antenna และ link budget
+
+### สำหรับหน้าหลัก
+
+- `p16-right-column-summary.png` / `.svg` — ภาพรวมที่ออกแบบให้ลงพื้นที่ครึ่งขวาของสไลด์ปัจจุบัน
+- ให้ภาพ paper ฝั่งซ้ายเหลือเพียงรูป antenna และ measured/simulated pattern ที่อ่านได้ พร้อม citation เต็ม
+- หัวเรื่องที่เสนอ: **Why a gimballed S-band CP patch, and does the DTE link close?**
+
+### เมื่อแยกเป็นสองหน้าหรือใส่ appendix
+
+- `p16-antenna-research-vs-our-concept.png` — แยก literature evidence ออกจากค่าของทีม
+- `p16-link-budget-chain.png` — calculation chain ที่ตรวจย้อนกลับได้
+- `p16-fixed-vs-gimbal-clear-los.png` — เหตุผลเชิงตัวเลขว่าทำไม gimbal ช่วยเมื่อ lander เอียง
+- `p16-radiation-pattern-3d.png` — แสดงทิศทาง beam; ต้องคงป้าย **ASSUMED COSINE MODEL**
+- `p16-principal-plane-cuts.png` — plane cuts สำหรับ appendix; รูปทรงสมมาตรเพราะใช้ reduced-order cosine model
+- `p16-rf-operating-point.png` — รายละเอียด S11, axial ratio, gain, beamwidth, frequency และ margin สำหรับกรรมการสาย RF
+
+ค่าที่ต้องอยู่ใน caption ทุกครั้ง: frequency 2.205 GHz, range 384,400 km, rate 4 kbps, RF output 5 W, realized gain 6.5 dBic, feed loss 1 dB, ground G/T 22 dB/K **assumed**, threshold 4.5 dB, implementation loss 1.5 dB และ reserve 3 dB
+
+ที่ tilt 65° fixed antenna เหลือ −3.55 dB หลัง reserve ขณะที่ gimbal on-axis มี +5.56 dB ในกรณี clear LOS. แต่ตำแหน่งติดตั้ง green-zone ปัจจุบันถูก lander hull บัง จึงต้องเรียกกราฟนี้ว่า **clear-LOS potential** ไม่ใช่ installed-case success
+
+## หน้า 17 — Verification และ failure conditions
+
+- `p17-monte-carlo-attitude-map.png` — ภาพหลักสำหรับเห็น attitude ที่ผ่าน/ไม่ผ่าน
+- `p17-monte-carlo-results.png` — summary card: gimbal 53/100, fixed 18/100; Wilson 95% interval 43.3–62.5% และ 11.7–26.7%
+- `p17-link-failure-gates.png` — ใช้ปิดท้ายว่า pointing เป็นเพียงหนึ่ง gate; current 65° installed case fail เพราะ hull blockage
+
+Monte Carlo ชุดนี้ใช้ random seed คงที่และ uniform Euler-angle sampling 100 ครั้ง. distribution นี้ไม่ใช่ landing probability distribution และ 100 trials ยังไม่ใช่ reliability evidence
+
+## หน้า 20–21 — Gimbal เทียบ phased array
+
+ยังไม่มี validated phased-array EM/thermal/power simulation ในชุดนี้ จึงควรใช้ตาราง architecture trade จาก `PROPOSAL-3-COMMUNICATION-REVIEW.md` แทนกราฟที่ทำให้เข้าใจว่าได้จำลอง array แล้ว ประเด็นหลักคือ array steering ได้โดยไม่ใช้ moving parts แต่ยังต้องจ่าย scan loss, element/RF-chain/DC power, thermal load, calibration, radome/deck interaction และ aperture area ภายใน 2U
+
+## Sources ที่ควรใส่ใน slide notes
+
+- Rashid/Gadhafi et al., *Sensors* 2024, DOI: <https://doi.org/10.3390/s24165361>
+- Sánchez-Sevilleja et al., *Sensors* 2025, DOI: <https://doi.org/10.3390/s25041237>
+- Jirawattanaphol et al., *Technologies* 2026, DOI: <https://doi.org/10.3390/technologies14050263>
+- NASA SmallSat Institute, Ground Data Systems: <https://www.nasa.gov/smallsat-institute/sst-soa/ground-data-systems-and-mission-operations/>
+- NASA lunar surface propagation: <https://www.nasa.gov/glenn/glenn-expertise-space-exploration/scan/lunar-surface-propagation/>
+- Astrobotic Lunar Landers PUG: <https://science.nasa.gov/wp-content/uploads/2023/11/astrobotic-lunar-landers-pug.pdf>
+
+## Reproduce
+
+เปิด local app ที่ `http://127.0.0.1:4173` แล้วรัน:
+
+```powershell
+node scripts/export-slide-assets.mjs
+```
+
+สคริปต์คำนวณ SVG จาก `src/engine.js`, เปิดหน้าเว็บด้วย Playwright, รัน step response และ seeded 100-case batch จากนั้นบันทึก PNG ทั้งหมดในโฟลเดอร์นี้
