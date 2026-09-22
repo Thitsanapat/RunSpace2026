@@ -47,6 +47,8 @@
 
 ### สำหรับพื้นที่กรอบม่วงด้านขวา
 
+- `p14-patch-dimension-detail.png` / `.svg` — dimensioned concept ของ stacked dual-CP patch: board, patch radii, notch sizes, probe offset และ multilayer stack; ใช้เมื่อต้องตอบว่า antenna เป็นแบบไหนและขนาดเท่าไร
+- `p14-s11-reference-vs-frequency.png` / `.svg` — S11/S22 simulation และ measurement ของ ANSER reference จาก Figure 10 พร้อม operating bands และเส้น requirement −12 dB; เป็น visual digitization จาก paper ไม่ใช่ผลวัดบน lander ของทีม
 - `p14-paper-comparable-rf.png` / `.svg` — เวอร์ชันแนะนำเมื่อจะเทียบกับ Figure 18 ของ Gadhafi et al. โดยตรง: จัดรูปแบบเป็น (a) S11–frequency, (b) XZ polar cut, (c) YZ polar cut และยังเก็บ link-headroom-vs-tilt ไว้ในภาพเดียวกัน
 - `p14-rf-evidence-final.png` / `.svg` — เวอร์ชันสุดท้ายสำหรับแทนกรอบม่วงโดยตรง มี Earth–Moon FSPL, EIRP, fixed/gimballed result และ link-margin-vs-tilt ในภาพเดียว
 - `p14-compact-link-margin-vs-tilt.png` / `.svg` — เวอร์ชันก่อนหน้าที่มีกราฟใหญ่กว่า แต่ไม่มี FSPL card
