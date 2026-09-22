@@ -47,6 +47,7 @@
 
 ### สำหรับพื้นที่กรอบม่วงด้านขวา
 
+- `p14-paper-comparable-rf.png` / `.svg` — เวอร์ชันแนะนำเมื่อจะเทียบกับ Figure 18 ของ Gadhafi et al. โดยตรง: จัดรูปแบบเป็น (a) S11–frequency, (b) XZ polar cut, (c) YZ polar cut และยังเก็บ link-headroom-vs-tilt ไว้ในภาพเดียวกัน
 - `p14-rf-evidence-final.png` / `.svg` — เวอร์ชันสุดท้ายสำหรับแทนกรอบม่วงโดยตรง มี Earth–Moon FSPL, EIRP, fixed/gimballed result และ link-margin-vs-tilt ในภาพเดียว
 - `p14-compact-link-margin-vs-tilt.png` / `.svg` — เวอร์ชันก่อนหน้าที่มีกราฟใหญ่กว่า แต่ไม่มี FSPL card
 - ให้ภาพ paper ฝั่งซ้ายเหลือเพียงรูป antenna และ measured/simulated pattern ที่อ่านได้ พร้อม citation เต็ม
@@ -65,6 +66,8 @@
 ค่าที่ต้องอยู่ใน caption ทุกครั้ง: frequency 2.205 GHz, range 384,400 km, rate 4 kbps, RF output 5 W, realized gain 6.5 dBic, feed loss 1 dB, ground G/T 22 dB/K **assumed**, threshold 4.5 dB, implementation loss 1.5 dB และ reserve 3 dB
 
 ที่ tilt 65° fixed antenna เหลือ −3.55 dB หลัง reserve ขณะที่ gimbal on-axis มี +5.56 dB ในกรณี clear LOS. แต่ตำแหน่งติดตั้ง green-zone ปัจจุบันถูก lander hull บัง จึงต้องเรียกกราฟนี้ว่า **clear-LOS potential** ไม่ใช่ installed-case success
+
+กราฟแบบเทียบ paper ตั้งใจไม่สร้างเส้น S11 ปลอม: จุด −15 dB ที่ 2.205 GHz เป็น scalar input ของ link budget เท่านั้น ส่วน Figure 18 ของ Gadhafi et al. เป็น CST ที่ 2.42 GHz และรวม rover/regolith แล้ว จึงเทียบได้เฉพาะชนิดของหลักฐานและรูปแบบกราฟ ยังใช้จัดอันดับ performance โดยตรงไม่ได้
 
 ## หน้า 17 — Verification และ failure conditions
 

@@ -151,6 +151,8 @@ Ground station sensitivity ต้องอยู่ข้างผลหลั�
 - หน้า 17: Monte Carlo roll/pitch map พร้อมสาเหตุ fail แยกสี
 - Annex: full parameter/provenance table และสมการ เพื่อให้กรรมการตรวจย้อนกลับ
 
+สำหรับสไลด์ที่พิมพ์เลข 14 เรื่อง antenna ให้ใช้ `slide-assets/p14-paper-comparable-rf.png` เมื่อต้องการเทียบกับ Gadhafi et al. Figure 18 แบบอ่านข้ามฝั่งได้ทันที ภาพของทีมใช้ลำดับ S11–frequency, XZ cut และ YZ cut เหมือน paper พร้อมแทรก link-headroom-vs-tilt ของระบบ อย่างไรก็ตาม จุด S11 ของทีมเป็น scalar assumption และ polar cuts เป็น reduced-order cosine model; ยังไม่ใช่ผล CST, mounted full-wave simulation หรือ chamber measurement
+
 อย่าใช้ screenshot ยาวทั้งหน้าเว็บ. ให้ crop เป็น panel, ใส่ชื่อ scenario/version/วันที่และ assumptions สำคัญใต้ภาพทุกครั้ง
 
 ## จุดใน PDF ที่ต้องเก็บก่อนส่ง
