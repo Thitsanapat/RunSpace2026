@@ -4,6 +4,8 @@
 
 ภาพพร้อมวางสไลด์ คำบรรยาย และตำแหน่งใช้งานอยู่ที่ [`slide-assets/README.md`](slide-assets/README.md) โดยมีภาพสรุปหน้า 16 ที่จัดสัดส่วนสำหรับพื้นที่ว่างด้านขวาไว้แล้ว
 
+ชุดกราฟข้อจำกัด thermal −170/+170°C, RF, mechanism, power, controller และ failure gates อยู่ที่ [`limitation-assets/README.md`](limitation-assets/README.md)
+
 ## ข้อสรุปที่ควรใช้เป็นแกนเรื่อง
 
 ผลิตภัณฑ์ควรถูกนิยามเป็น **secondary, independently pointed S-band antenna front-end** สำหรับกู้ลิงก์หลังยานเอียง โดยใช้ power, heater, attitude/ephemeris, data interface และ RF transponder/PA ของ lander ตาม interface ที่ตกลงกัน ไม่ควรเรียกว่า independent communication system จนกว่าจะรวม modem, receiver, transmitter, PA, diplexer, RF switch และ autonomous acquisition chain ไว้ใน 2U จริง
