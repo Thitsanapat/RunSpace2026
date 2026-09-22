@@ -6,12 +6,13 @@ import {DEFAULTS,linkBudget} from '../src/engine.js';
 import {directionalGain} from '../src/antenna-rf.js';
 import {beamMetrics} from '../src/research.js';
 
-const root=process.cwd(),out=path.join(root,'sband-evidence-assets');
+const root=process.cwd(),out=path.join(root,'sband-evidence-assets'),slideOut=path.join(root,'slide-assets');
 await mkdir(out,{recursive:true});
+await mkdir(slideOut,{recursive:true});
 const f=(x,d=2)=>Number(x).toFixed(d);
 const style=`<style>text{font-family:Arial,"Noto Sans Thai",sans-serif;fill:#17283b}.title{font-size:32px;font-weight:700}.sub{font-size:17px;fill:#526476}.h{font-size:23px;font-weight:700}.label{font-size:17px;font-weight:700}.small{font-size:14px;fill:#526476}.white{fill:#fff}.green{fill:#66a80f}.orange{fill:#e8590c}.red{fill:#c92a2a}.blue{fill:#1971c2}.grid{stroke:#dce3e8;stroke-width:1}.card{fill:#f8fafb;stroke:#d7dfe5;stroke-width:1.5}.warn{fill:#fff4e6;stroke:#ffa94d;stroke-width:1.5}</style>`;
-const svg=body=>`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700"><rect width="100%" height="100%" fill="white"/>${style}${body}</svg>`;
-const save=async(name,body)=>{const file=path.join(out,name+'.svg');await writeFile(file,svg(body));return file;};
+const svg=(body,w=1200,h=700)=>`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><rect width="100%" height="100%" fill="white"/>${style}${body}</svg>`;
+const save=async(name,body,w=1200,h=700)=>{const file=path.join(out,name+'.svg');await writeFile(file,svg(body,w,h));return file;};
 const line=(rows,x,y,xk,yk)=>rows.map((p,i)=>`${i?'L':'M'}${x(p[xk]).toFixed(1)},${y(p[yk]).toFixed(1)}`).join(' ');
 
 const on=linkBudget(0,DEFAULTS),beam=beamMetrics(DEFAULTS,on.rawMargin);
@@ -22,6 +23,24 @@ const angles=Array.from({length:181},(_,i)=>i-90).map(a=>({a,g:directionalGain(M
   for(const a of [-90,-60,-41.22,-30,0,30,41.22,60,90])grid+=`<line x1="${X(a)}" y1="180" x2="${X(a)}" y2="590" class="grid"/><text x="${X(a)}" y="618" class="small" text-anchor="middle">${f(a,a%1?1:0)}°</text>`;
   const half=DEFAULTS.peakGain-3.0103;
   await save('01-gain-vs-off-axis-angle',`<text x="38" y="50" class="title">S-band antenna gain vs off-axis angle</text><text x="38" y="80" class="sub">2.205 GHz · 6.5 dBic peak input · analytical axisymmetric cosine pattern · not measured mounted data</text><rect x="38" y="110" width="1124" height="540" rx="12" class="card"/><rect x="${X(-beam.halfAngle)}" y="180" width="${X(beam.halfAngle)-X(-beam.halfAngle)}" height="410" fill="#ebfbee" opacity=".65"/>${grid}<line x1="90" y1="${Y(half)}" x2="1130" y2="${Y(half)}" stroke="#66a80f" stroke-width="2" stroke-dasharray="8 6"/><path d="${line(angles,X,Y,'a','g')}" fill="none" stroke="#1971c2" stroke-width="6"/><circle cx="${X(0)}" cy="${Y(DEFAULTS.peakGain)}" r="7" fill="#1971c2"/><circle cx="${X(-beam.halfAngle)}" cy="${Y(half)}" r="7" fill="#66a80f"/><circle cx="${X(beam.halfAngle)}" cy="${Y(half)}" r="7" fill="#66a80f"/><text x="${X(0)-15}" y="${Y(DEFAULTS.peakGain)-15}" class="label blue" text-anchor="end">Peak 6.5 dBic</text><text x="${X(beam.halfAngle)+12}" y="${Y(half)-12}" class="label green">−3 dB at ±${f(beam.halfAngle,2)}°</text><rect x="695" y="126" width="430" height="76" rx="10" class="warn"/><text x="715" y="157" class="label orange">HPBW ≈ ${f(DEFAULTS.beamwidth,2)}°</text><text x="715" y="184" class="small">±0.5° control error → ≈${f(beam.lossAtHalfDegree,4)} dB loss</text><text x="610" y="686" class="label" text-anchor="middle">Signed off-axis angle from boresight (deg)</text><text x="25" y="410" class="label" text-anchor="middle" transform="rotate(-90 25 410)">Realized gain input model (dBic)</text>`);
+}
+
+{
+  const rows=[];for(let a=0;a<=80;a+=2){const fixed=linkBudget(a,DEFAULTS);rows.push({a,f:fixed.rawMargin-DEFAULTS.reserveDb,g:on.rawMargin-DEFAULTS.reserveDb});}
+  const X=a=>76+a/80*744,Y=m=>452-(m+14)/22*292;let grid='';
+  for(const m of [-12,-6,0,6])grid+=`<line x1="76" y1="${Y(m)}" x2="820" y2="${Y(m)}" class="grid"/><text x="61" y="${Y(m)+5}" class="small" text-anchor="end">${m}</text>`;
+  for(const a of [0,20,40,60,80])grid+=`<line x1="${X(a)}" y1="160" x2="${X(a)}" y2="452" class="grid"/><text x="${X(a)}" y="478" class="small" text-anchor="middle">${a}°</text>`;
+  const fixed65=linkBudget(65,DEFAULTS).rawMargin-DEFAULTS.reserveDb,gimbal=on.rawMargin-DEFAULTS.reserveDb;
+  const body=`<text x="34" y="39" class="title">OUR ANALYSIS · EARTH–MOON RF EVIDENCE</text><text x="34" y="68" class="sub">S-band 2.205 GHz · 384,400 km · 5 W RF · 6.5 dBic · 4 kbps · G/T 22 dB/K assumed</text>
+  <rect x="34" y="88" width="250" height="56" rx="9" class="card"/><text x="51" y="111" class="small">EARTH–MOON FSPL</text><text x="266" y="128" class="h" text-anchor="end">211.01 dB</text>
+  <rect x="296" y="88" width="250" height="56" rx="9" class="card"/><text x="313" y="111" class="small">EIRP</text><text x="528" y="128" class="h" text-anchor="end">12.49 dBW</text>
+  <rect x="558" y="88" width="262" height="56" rx="9" class="card"/><text x="575" y="111" class="small">PASS BOUNDARY</text><text x="802" y="128" class="h" text-anchor="end">0 dB after reserve</text>
+  ${grid}<line x1="76" y1="${Y(0)}" x2="820" y2="${Y(0)}" stroke="#c92a2a" stroke-width="2" stroke-dasharray="8 6"/><path d="${line(rows,X,Y,'a','f')}" fill="none" stroke="#e8590c" stroke-width="6"/><path d="${line(rows,X,Y,'a','g')}" fill="none" stroke="#66a80f" stroke-width="6"/><circle cx="${X(65)}" cy="${Y(fixed65)}" r="7" fill="#e8590c"/><circle cx="${X(65)}" cy="${Y(gimbal)}" r="7" fill="#66a80f"/><text x="85" y="181" class="small">Headroom after 3 dB reserve (dB)</text><text x="448" y="512" class="small" text-anchor="middle">Lander tilt / fixed-antenna mispointing</text>
+  <rect x="850" y="88" width="316" height="424" rx="12" class="card"/><text x="876" y="128" class="h">FIXED vs GIMBALLED</text><text x="876" y="158" class="small">Concept comparison at 65° tilt</text><line x1="876" y1="181" x2="1140" y2="181" class="grid"/>
+  <text x="876" y="219" class="label orange">FIXED PATCH</text><text x="876" y="260" class="h orange">−3.55 dB</text><text x="876" y="287" class="small">after reserve · FAIL</text><line x1="876" y1="311" x2="1140" y2="311" class="grid"/>
+  <text x="876" y="350" class="label green">GIMBAL ON-AXIS</text><text x="876" y="391" class="h green">+5.56 dB</text><text x="876" y="418" class="small">after reserve · PASS*</text><text x="876" y="458" class="small">Recovered headroom: +9.11 dB</text><text x="876" y="488" class="small">*Clear-path RF budget only</text>
+  <rect x="34" y="530" width="1132" height="38" rx="8" class="warn"/><text x="600" y="555" class="small" text-anchor="middle">Installed 65° green-zone case is HULL-BLOCKED · mount/FOV optimization is still required.</text>`;
+  await writeFile(path.join(slideOut,'p14-rf-evidence-final.svg'),svg(body,1200,580));
 }
 
 {
@@ -48,5 +67,8 @@ const evidence=[
 
 const browser=await chromium.launch({channel:'chrome',headless:true});
 for(const name of ['01-gain-vs-off-axis-angle','02-sband-frequency-evidence','03-rf-evidence-gap-matrix']){const page=await browser.newPage({viewport:{width:1200,height:720},deviceScaleFactor:2});await page.goto(pathToFileURL(path.join(out,name+'.svg')).href);await page.locator('svg').screenshot({path:path.join(out,name+'.png')});await page.close();}
+{
+  const page=await browser.newPage({viewport:{width:1200,height:620},deviceScaleFactor:2});await page.goto(pathToFileURL(path.join(slideOut,'p14-rf-evidence-final.svg')).href);await page.locator('svg').screenshot({path:path.join(slideOut,'p14-rf-evidence-final.png')});await page.close();
+}
 await browser.close();
 console.log(`Exported S-band evidence assets to ${out}`);

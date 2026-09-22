@@ -13,7 +13,7 @@
 | 8 — 3D prototype | `p08-green-zone-installed-payload.png` | แทนภาพโมเดลเดิมหรือวางเต็มครึ่งขวา | **Concept installation:** โมดูล 2U ติดตั้งแทน top surface payload allocation สีเขียว; รูปร่าง lander สร้างจากภาพอ้างอิงและไม่ใช่ CAD/ICD ของผู้ให้บริการ |
 | 10 — Mass & power | `p10-power-and-rf-boundary.png` | เต็มความกว้างใต้ตาราง หรือแทนตาราง power เดิม | **Power boundary:** payload motion branch สูงสุด 5.31 W ในซิม; 5 W RF เป็นกำลังขาออกของ host PA และเทียบเป็นประมาณ 14.29 W DC เมื่อสมมติประสิทธิภาพ 35% |
 | 14 — Control/Dynamics | `p14-controller-step-response.png` + `p14-pointing-error-time-history.png` | วางคู่กัน โดยให้ step response ใหญ่กว่า | **Current controller result:** settling 154 ms, rise 124 ms, overshoot 0.61%; ยังไม่ผ่านเป้าหมาย 50 ms. หลัง transient ช่วง 3 s สุดท้ายมี RMS error ประมาณ 0.12° |
-| สไลด์ 14 / PDF 16 — Antenna & Earth–Moon link | `p14-compact-link-margin-vs-tilt.png` | แทนกรอบม่วงด้านขวาตามภาพล่าสุด; ไม่ต้องใส่ภาพสรุปขนาดใหญ่ | **Clear-LOS DTE study:** ที่ lander tilt 65° fixed patch เหลือ −3.55 dB ขณะที่ gimbal on-axis มี +5.56 dB หลัง reserve 3 dB; installed green-zone case ปัจจุบันยังถูก hull บัง |
+| สไลด์ 14 / PDF 16 — Antenna & Earth–Moon link | `p14-rf-evidence-final.png` | แทนกรอบม่วงด้านขวาตามภาพล่าสุด; จัดลำดับ Our Analysis → FSPL → fixed/gimballed → margin-vs-tilt ไว้แล้ว | **Clear-LOS DTE study:** ที่ lander tilt 65° fixed patch เหลือ −3.55 dB ขณะที่ gimbal on-axis มี +5.56 dB หลัง reserve 3 dB; installed green-zone case ปัจจุบันยังถูก hull บัง |
 | 17 — Verification/Risks | `p17-monte-carlo-attitude-map.png` + `p17-link-failure-gates.png` | แผนที่ 60% ของหน้า; failure gates 40% | **Seeded reduced-order screening:** gimbal 53/100 เทียบ fixed antenna 18/100 สำหรับตัวอย่าง uniform Euler-angle attitudes; ใช้เปรียบเทียบสถาปัตยกรรม ไม่ใช่ค่าความน่าเชื่อถือของภารกิจ |
 
 ## หน้า 8 — Packaging และตำแหน่งติดตั้ง
@@ -47,7 +47,8 @@
 
 ### สำหรับพื้นที่กรอบม่วงด้านขวา
 
-- `p14-compact-link-margin-vs-tilt.png` / `.svg` — เวอร์ชันสัดส่วนกว้างสำหรับแทนกรอบม่วงโดยตรง มีเฉพาะหลักฐานที่จำเป็นและอ่านได้เมื่อย่อ
+- `p14-rf-evidence-final.png` / `.svg` — เวอร์ชันสุดท้ายสำหรับแทนกรอบม่วงโดยตรง มี Earth–Moon FSPL, EIRP, fixed/gimballed result และ link-margin-vs-tilt ในภาพเดียว
+- `p14-compact-link-margin-vs-tilt.png` / `.svg` — เวอร์ชันก่อนหน้าที่มีกราฟใหญ่กว่า แต่ไม่มี FSPL card
 - ให้ภาพ paper ฝั่งซ้ายเหลือเพียงรูป antenna และ measured/simulated pattern ที่อ่านได้ พร้อม citation เต็ม
 - คงหัวเรื่องด้านขวาเดิม **Fixed Antenna vs Gimballed Antenna — Link Margin vs Lander Tilt**
 - `p16-right-column-summary.png` / `.svg` เป็นทางเลือกเมื่อมีพื้นที่มากกว่ากรอบในภาพล่าสุด
