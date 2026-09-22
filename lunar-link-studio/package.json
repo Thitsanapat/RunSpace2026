@@ -13,7 +13,8 @@
     "test:rf-browser": "node tests/rf-browser.mjs",
     "test:surface-browser": "node tests/surface-browser.mjs",
     "test:brochure-browser": "node tests/brochure-browser.mjs",
-    "export:limitations": "node scripts/export-limitation-assets.mjs"
+    "export:limitations": "node scripts/export-limitation-assets.mjs",
+    "export:sband-evidence": "node scripts/export-sband-evidence.mjs"
   },
   "dependencies": {
     "three": "^0.180.0"

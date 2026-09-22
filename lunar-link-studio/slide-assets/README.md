@@ -4,6 +4,8 @@
 
 กราฟ thermal −170/+170°C และชุดข้อจำกัดทั้งหมดแยกอยู่ที่ [`../limitation-assets/README.md`](../limitation-assets/README.md)
 
+กราฟ S-band gain, frequency evidence และรายการ RF test gaps แยกอยู่ที่ [`../sband-evidence-assets/README.md`](../sband-evidence-assets/README.md)
+
 ## ชุดขั้นต่ำสำหรับรอบนำเสนอ
 
 | หน้า | ไฟล์หลัก | ตำแหน่ง/ขนาดที่แนะนำ | คำบรรยายใต้ภาพ |
