@@ -117,6 +117,26 @@ await saveSvg('p16-right-column-summary',`
 <rect x="470" y="548" width="646" height="55" rx="8" fill="#fff4e6" opacity="0.96"/><text x="488" y="571" class="small">Installed 65° green-zone case is hull-blocked.</text><text x="488" y="592" class="small">Graph shows clear-LOS potential; mount/FOV optimization is required.</text>
 <text x="605" y="680" class="small" text-anchor="middle">Source tags: Sánchez-Sevilleja et al. (2025) antenna benchmark · team reduced-order simulation</text>`);
 
+const CX=a=>78+a/80*790,CY=v=>445-(v+14)/22*300;
+const cropPath=k=>pts.map((p,i)=>`${i?'L':'M'}${CX(p.a).toFixed(1)},${CY(p[k]).toFixed(1)}`).join(' ');
+let cropGrid='';
+for(const y of [-12,-6,0,6])cropGrid+=`<line x1="78" y1="${CY(y)}" x2="868" y2="${CY(y)}" class="grid"/><text x="62" y="${CY(y)+5}" class="small" text-anchor="end">${y}</text>`;
+for(const x of [0,20,40,60,80])cropGrid+=`<line x1="${CX(x)}" y1="145" x2="${CX(x)}" y2="445" class="grid"/><text x="${CX(x)}" y="472" class="small" text-anchor="middle">${x}°</text>`;
+await saveSvg('p14-compact-link-margin-vs-tilt',`
+<rect x="28" y="24" width="1144" height="512" rx="14" class="card"/>
+<text x="52" y="64" class="label">OUR ANALYSIS · CLEAR LINE OF SIGHT</text>
+<text x="52" y="95" class="small">2.205 GHz · 384,400 km · 4 kbps · 5 W RF · 6.5 dBic · G/T 22 dB/K assumed · 3 dB reserve</text>
+${cropGrid}<line x1="78" y1="${CY(0)}" x2="868" y2="${CY(0)}" stroke="#c92a2a" stroke-width="2" stroke-dasharray="8 6"/>
+<path d="${cropPath('f')}" fill="none" stroke="#e8590c" stroke-width="6"/><path d="${cropPath('g')}" fill="none" stroke="#66a80f" stroke-width="6"/>
+<circle cx="${CX(65)}" cy="${CY(fixed65.rawMargin-c.reserveDb)}" r="7" fill="#e8590c"/><circle cx="${CX(65)}" cy="${CY(on.rawMargin-c.reserveDb)}" r="7" fill="#66a80f"/>
+<text x="720" y="130" class="small" text-anchor="end">Headroom after reserve (dB)</text><text x="473" y="503" class="small" text-anchor="middle">Lander tilt / fixed-antenna mispointing</text>
+<rect x="900" y="119" width="240" height="326" rx="10" fill="#fff" stroke="#d7dfe5" stroke-width="1.5"/>
+<text x="922" y="160" class="label orange">FIXED PATCH</text><text x="922" y="199" class="value orange">−3.55 dB</text><text x="922" y="226" class="small">at 65° · FAIL</text>
+<line x1="922" y1="254" x2="1118" y2="254" class="grid"/>
+<text x="922" y="294" class="label green">GIMBAL ON-AXIS</text><text x="922" y="333" class="value green">+5.56 dB</text><text x="922" y="360" class="small">at 65° · PASS*</text>
+<text x="922" y="405" class="small">*RF budget only</text><text x="922" y="429" class="small">with clear LOS</text>
+<rect x="28" y="552" width="1144" height="90" rx="12" class="warn"/><text x="52" y="588" class="label orange">Installed 65° green-zone case: hull-blocked</text><text x="52" y="617" class="small">Gimbal restores pointing gain, but cannot see through the lander. Mount/FOV optimization remains required.</text>`,1200,670);
+
 await saveSvg('p10-power-and-rf-boundary',`
 <text x="38" y="52" class="title">Power boundary · payload motion vs host RF service</text>
 <text x="38" y="83" class="sub">Do not mix RF output watts with DC input watts in the proposal table</text>
@@ -131,8 +151,8 @@ ${[['1','Earth visible','Above local horizon'],['2','Line of sight','No hull / t
 <rect x="38" y="444" width="1124" height="145" rx="12" class="warn"/><text x="62" y="486" class="value orange">Current 65° installed case: FAIL at Gate 2 — LANDER HULL</text><text x="62" y="526" class="label">The gimbal reaches the target and the clear-path RF budget closes, but the current green-zone mount has no clear ray.</text><text x="62" y="560" class="small">Use on page 17 · This is a design finding: optimize mount/FOV or add another aperture; do not hide the obstruction result.</text><text x="38" y="645" class="small">Reduced-order geometry and RF model; not terrain propagation, EM, mechanism or qualification evidence.</text>`);
 
 const browser=await chromium.launch({channel:'chrome',headless:true,args:['--enable-unsafe-swiftshader']});
-async function svgToPng(file){const page=await browser.newPage({viewport:{width:1200,height:700},deviceScaleFactor:2});await page.goto(pathToFileURL(file).href);await page.screenshot({path:file.replace(/\.svg$/,'.png')});await page.close();}
-for(const name of ['p16-antenna-research-vs-our-concept','p16-link-budget-chain','p16-fixed-vs-gimbal-clear-los','p16-right-column-summary','p10-power-and-rf-boundary','p17-link-failure-gates'])await svgToPng(path.join(out,name+'.svg'));
+async function svgToPng(file){const page=await browser.newPage({viewport:{width:1200,height:700},deviceScaleFactor:2});await page.goto(pathToFileURL(file).href);await page.locator('svg').screenshot({path:file.replace(/\.svg$/,'.png')});await page.close();}
+for(const name of ['p14-compact-link-margin-vs-tilt','p16-antenna-research-vs-our-concept','p16-link-budget-chain','p16-fixed-vs-gimbal-clear-los','p16-right-column-summary','p10-power-and-rf-boundary','p17-link-failure-gates'])await svgToPng(path.join(out,name+'.svg'));
 
 const page=await browser.newPage({viewport:{width:1600,height:1100},deviceScaleFactor:2});
 await page.goto(process.env.TEST_URL||'http://127.0.0.1:4173',{waitUntil:'networkidle'});

@@ -1,6 +1,6 @@
 # Slide-ready simulation evidence
 
-ชุดนี้ export จาก Lunar Link Studio v1.4.2 สำหรับ `Ultra Smooth Landing - Proposal (3).pdf` โดยใช้เลขหน้าตาม PDF ปัจจุบัน ภาพ PNG พร้อมวางในสไลด์ ส่วน SVG ใช้เมื่อต้องการแก้สี ข้อความ หรือส่งออกความละเอียดสูง
+ชุดนี้ export จาก Lunar Link Studio v1.4.2 สำหรับ `Ultra Smooth Landing - Proposal (3).pdf` โดยใช้เลขหน้าตาม PDF ปัจจุบัน ภาพ PNG พร้อมวางในสไลด์ ส่วน SVG ใช้เมื่อต้องการแก้สี ข้อความ หรือส่งออกความละเอียดสูง หน้า antenna ที่พิมพ์เลข **14** บนสไลด์ตรงกับหน้า **16** ของไฟล์ PDF เพราะมีหน้าปก/สารบัญนำหน้า
 
 ## ชุดขั้นต่ำสำหรับรอบนำเสนอ
 
@@ -9,7 +9,7 @@
 | 8 — 3D prototype | `p08-green-zone-installed-payload.png` | แทนภาพโมเดลเดิมหรือวางเต็มครึ่งขวา | **Concept installation:** โมดูล 2U ติดตั้งแทน top surface payload allocation สีเขียว; รูปร่าง lander สร้างจากภาพอ้างอิงและไม่ใช่ CAD/ICD ของผู้ให้บริการ |
 | 10 — Mass & power | `p10-power-and-rf-boundary.png` | เต็มความกว้างใต้ตาราง หรือแทนตาราง power เดิม | **Power boundary:** payload motion branch สูงสุด 5.31 W ในซิม; 5 W RF เป็นกำลังขาออกของ host PA และเทียบเป็นประมาณ 14.29 W DC เมื่อสมมติประสิทธิภาพ 35% |
 | 14 — Control/Dynamics | `p14-controller-step-response.png` + `p14-pointing-error-time-history.png` | วางคู่กัน โดยให้ step response ใหญ่กว่า | **Current controller result:** settling 154 ms, rise 124 ms, overshoot 0.61%; ยังไม่ผ่านเป้าหมาย 50 ms. หลัง transient ช่วง 3 s สุดท้ายมี RMS error ประมาณ 0.12° |
-| 16 — Antenna & Earth–Moon link | `p16-right-column-summary.png` | ใส่ในพื้นที่ว่างครึ่งขวาของหน้าปัจจุบัน; คงภาพ antenna/pattern จาก paper ไว้ฝั่งซ้ายเพียงชุดเดียว | **Reference-based DTE study:** 2.205 GHz, 5 W RF, 6.5 dBic, 384,400 km, 4 kbps และ assumed ground G/T 22 dB/K ให้ headroom +5.56 dB หลัง reserve 3 dB ภายใต้ clear LOS และ host services พร้อมใช้งาน |
+| สไลด์ 14 / PDF 16 — Antenna & Earth–Moon link | `p14-compact-link-margin-vs-tilt.png` | แทนกรอบม่วงด้านขวาตามภาพล่าสุด; ไม่ต้องใส่ภาพสรุปขนาดใหญ่ | **Clear-LOS DTE study:** ที่ lander tilt 65° fixed patch เหลือ −3.55 dB ขณะที่ gimbal on-axis มี +5.56 dB หลัง reserve 3 dB; installed green-zone case ปัจจุบันยังถูก hull บัง |
 | 17 — Verification/Risks | `p17-monte-carlo-attitude-map.png` + `p17-link-failure-gates.png` | แผนที่ 60% ของหน้า; failure gates 40% | **Seeded reduced-order screening:** gimbal 53/100 เทียบ fixed antenna 18/100 สำหรับตัวอย่าง uniform Euler-angle attitudes; ใช้เปรียบเทียบสถาปัตยกรรม ไม่ใช่ค่าความน่าเชื่อถือของภารกิจ |
 
 ## หน้า 8 — Packaging และตำแหน่งติดตั้ง
@@ -39,13 +39,14 @@
 
 **ยังไม่มีภาพที่พร้อมใช้.** Model ปัจจุบันเป็น Earth–Moon DTE และยังไม่มี relay preset ที่กำหนด relay G/T, frequency, data rate, antenna orientation, visibility และ ephemeris ครบ ห้ามนำรูป DTE หน้า 16 ไปติดป้ายว่าเป็นผล 100 km relay
 
-## หน้า 16 — Antenna และ link budget
+## สไลด์ 14 / หน้า PDF 16 — Antenna และ link budget
 
-### สำหรับหน้าหลัก
+### สำหรับพื้นที่กรอบม่วงด้านขวา
 
-- `p16-right-column-summary.png` / `.svg` — ภาพรวมที่ออกแบบให้ลงพื้นที่ครึ่งขวาของสไลด์ปัจจุบัน
+- `p14-compact-link-margin-vs-tilt.png` / `.svg` — เวอร์ชันสัดส่วนกว้างสำหรับแทนกรอบม่วงโดยตรง มีเฉพาะหลักฐานที่จำเป็นและอ่านได้เมื่อย่อ
 - ให้ภาพ paper ฝั่งซ้ายเหลือเพียงรูป antenna และ measured/simulated pattern ที่อ่านได้ พร้อม citation เต็ม
-- หัวเรื่องที่เสนอ: **Why a gimballed S-band CP patch, and does the DTE link close?**
+- คงหัวเรื่องด้านขวาเดิม **Fixed Antenna vs Gimballed Antenna — Link Margin vs Lander Tilt**
+- `p16-right-column-summary.png` / `.svg` เป็นทางเลือกเมื่อมีพื้นที่มากกว่ากรอบในภาพล่าสุด
 
 ### เมื่อแยกเป็นสองหน้าหรือใส่ appendix
 
