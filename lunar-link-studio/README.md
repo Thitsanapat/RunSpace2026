@@ -76,6 +76,7 @@ GitHub Pages: https://Thitsanapat.github.io/RunSpace2026/ — workflow build/tes
 ## เอกสารประกอบ
 
 - [ENGINEERING-NOTES.md](ENGINEERING-NOTES.md): ข้อแก้ไขจาก proposal, คำนวณ antenna/beam/RF, thermal และแผนพิสูจน์ด้วยฮาร์ดแวร์
+- [POWER-THERMAL-COMMS.md](POWER-THERMAL-COMMS.md): เงื่อนไข Earth link, power modes จาก lander และแผนจัดการ RF/thermal ในเคสร้อน
 - [VALIDATION.md](VALIDATION.md): ผลทดสอบซอฟต์แวร์และตัวเลขที่ทำซ้ำได้
 - `src/research.js`: แหล่งอ้างอิงและ provenance ของ antenna profiles
 - `public/example-pattern.csv`: ตัวอย่างข้อมูลสังเคราะห์ ไม่ใช่ pattern วัดจริง
