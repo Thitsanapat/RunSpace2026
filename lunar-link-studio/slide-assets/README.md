@@ -1,10 +1,22 @@
 # Slide-ready simulation evidence
 
-ชุดนี้ export เดิมจาก Lunar Link Studio v1.4.2 สำหรับ `Ultra Smooth Landing - Proposal (3).pdf` โดยใช้เลขหน้าตาม PDF ปัจจุบัน ภาพ PNG พร้อมวางในสไลด์ ส่วน SVG ใช้เมื่อต้องการแก้สี ข้อความ หรือส่งออกความละเอียดสูง หน้า antenna ที่พิมพ์เลข **14** บนสไลด์ตรงกับหน้า **16** ของไฟล์ PDF เพราะมีหน้าปก/สารบัญนำหน้า. ซิม v1.5.0 ใช้ compact 5.2 dBic mission baseline แล้ว ดังนั้นภาพเก่าที่ระบุ 6.5 dBic ต้องติดป้าย **ANSER research benchmark** หรือ export ใหม่ก่อนใช้เป็นผล baseline.
+ชุดนี้ export จาก Lunar Link Studio v1.5.0 สำหรับ `Ultra Smooth Landing - Proposal (3).pdf` โดยใช้เลขหน้าตาม PDF ปัจจุบัน ภาพ PNG พร้อมวางในสไลด์ ส่วน SVG ใช้เมื่อต้องการแก้สี ข้อความ หรือส่งออกความละเอียดสูง หน้า antenna ที่พิมพ์เลข **14** บนสไลด์ตรงกับหน้า **16** ของไฟล์ PDF เพราะมีหน้าปก/สารบัญนำหน้า. ผลของทีมใช้ proposed compact target 5.2 dBic; ค่า 6.5–7 dBi ใช้ได้เฉพาะเมื่อระบุว่าเป็น ANSER research benchmark.
 
 กราฟ thermal −170/+170°C และชุดข้อจำกัดทั้งหมดแยกอยู่ที่ [`../limitation-assets/README.md`](../limitation-assets/README.md)
 
 กราฟ S-band gain, frequency evidence และรายการ RF test gaps แยกอยู่ที่ [`../sband-evidence-assets/README.md`](../sband-evidence-assets/README.md)
+
+## รูป antenna ที่ใช้ในสไลด์ 14
+
+ใช้ **`p14-anser-reference-antenna-figure5d.png`** เป็นรูปหลักฝั่งงานวิจัย เพราะเห็น assembled stacked dual-CP patch ชัดและไม่แน่นเกินไป. ใต้ภาพใช้ข้อความ:
+
+> Literature reference — assembled dual-circular-polarized stacked S-band patch, 80 × 80 × 6.53 mm nominal stack; adapted from Sánchez-Sevilleja et al. [1], Fig. 5(d). The proposed 60 × 60 × 7 mm payload antenna is a packaging target and requires a new full-wave EM design and measurement.
+
+ใช้ `p14-anser-reference-antenna-figure5.png` เมื่ออยากแสดงชิ้นส่วนครบ และ `p14-anser-reference-stackup-figure3.png` เป็น inset/appendix. ฝั่งแบบของทีมให้ใช้ `p08-complete-2u-payload.png` หรือ `p08-green-zone-installed-payload.png` พร้อม label **Our proposed integration · EM unverified**. รายละเอียดคำอ้างอิงพร้อมคัดลอกอยู่ที่ [`ANTENNA-IMAGE-CITATION.md`](ANTENNA-IMAGE-CITATION.md).
+
+อ้างอิงท้ายสไลด์:
+
+> [1] S. Sánchez-Sevilleja, D. Poyatos-Martínez, J. L. Masa-Campos, and A. Santiago, “Design, Development, and Qualification of a Broadband Compact S-Band Antenna for a CubeSat Constellation,” *Sensors*, vol. 25, no. 4, Art. no. 1237, 2025, doi: 10.3390/s25041237.
 
 ## ชุดขั้นต่ำสำหรับรอบนำเสนอ
 
@@ -13,7 +25,7 @@
 | 8 — 3D prototype | `p08-green-zone-installed-payload.png` | แทนภาพโมเดลเดิมหรือวางเต็มครึ่งขวา | **Concept installation:** โมดูล 2U ติดตั้งแทน top surface payload allocation สีเขียว; รูปร่าง lander สร้างจากภาพอ้างอิงและไม่ใช่ CAD/ICD ของผู้ให้บริการ |
 | 10 — Mass & power | `p10-power-and-rf-boundary.png` | เต็มความกว้างใต้ตาราง หรือแทนตาราง power เดิม | **Power boundary:** payload motion branch สูงสุด 5.31 W ในซิม; 5 W RF เป็นกำลังขาออกของ host PA และเทียบเป็นประมาณ 14.29 W DC เมื่อสมมติประสิทธิภาพ 35% |
 | 14 — Control/Dynamics | `p14-controller-step-response.png` + `p14-pointing-error-time-history.png` | วางคู่กัน โดยให้ step response ใหญ่กว่า | **Current controller result:** settling 154 ms, rise 124 ms, overshoot 0.61%; ยังไม่ผ่านเป้าหมาย 50 ms. หลัง transient ช่วง 3 s สุดท้ายมี RMS error ประมาณ 0.12° |
-| สไลด์ 14 / PDF 16 — Antenna & Earth–Moon link | `p14-rf-evidence-final.png` | แทนกรอบม่วงด้านขวาตามภาพล่าสุด; จัดลำดับ Our Analysis → FSPL → fixed/gimballed → margin-vs-tilt ไว้แล้ว | **Clear-LOS DTE study:** ที่ lander tilt 65° fixed patch เหลือ −3.55 dB ขณะที่ gimbal on-axis มี +5.56 dB หลัง reserve 3 dB; installed green-zone case ปัจจุบันยังถูก hull บัง |
+| สไลด์ 14 / PDF 16 — Antenna & Earth–Moon link | `p14-rf-evidence-final.png` | แทนกรอบม่วงด้านขวาตามภาพล่าสุด; จัดลำดับ Our Analysis → FSPL → fixed/gimballed → margin-vs-tilt ไว้แล้ว | **Clear-LOS DTE study:** ที่ lander tilt 65° fixed patch เหลือ −3.22 dB ขณะที่ gimbal on-axisมี +4.26 dB หลัง reserve 3 dB; installed green-zone case ปัจจุบันยังถูก hull บัง |
 | 17 — Verification/Risks | `p17-monte-carlo-attitude-map.png` + `p17-link-failure-gates.png` | แผนที่ 60% ของหน้า; failure gates 40% | **Seeded reduced-order screening:** gimbal 53/100 เทียบ fixed antenna 18/100 สำหรับตัวอย่าง uniform Euler-angle attitudes; ใช้เปรียบเทียบสถาปัตยกรรม ไม่ใช่ค่าความน่าเชื่อถือของภารกิจ |
 
 ## หน้า 8 — Packaging และตำแหน่งติดตั้ง
@@ -65,9 +77,9 @@
 - `p16-principal-plane-cuts.png` — plane cuts สำหรับ appendix; รูปทรงสมมาตรเพราะใช้ reduced-order cosine model
 - `p16-rf-operating-point.png` — รายละเอียด S11, axial ratio, gain, beamwidth, frequency และ margin สำหรับกรรมการสาย RF
 
-ค่าที่ต้องอยู่ใน caption ทุกครั้ง: frequency 2.205 GHz, range 384,400 km, rate 4 kbps, RF output 5 W, realized gain 6.5 dBic, feed loss 1 dB, ground G/T 22 dB/K **assumed**, threshold 4.5 dB, implementation loss 1.5 dB และ reserve 3 dB
+ค่าที่ต้องอยู่ใน caption ทุกครั้ง: frequency 2.205 GHz, range 384,400 km, rate 4 kbps, RF output 5 W, realized gain **target** 5.2 dBic, feed loss 1 dB, ground G/T 22 dB/K **assumed**, threshold 4.5 dB, implementation loss 1.5 dB และ reserve 3 dB
 
-ที่ tilt 65° fixed antenna เหลือ −3.55 dB หลัง reserve ขณะที่ gimbal on-axis มี +5.56 dB ในกรณี clear LOS. แต่ตำแหน่งติดตั้ง green-zone ปัจจุบันถูก lander hull บัง จึงต้องเรียกกราฟนี้ว่า **clear-LOS potential** ไม่ใช่ installed-case success
+ที่ tilt 65° fixed antenna เหลือ −3.22 dB หลัง reserve ขณะที่ gimbal on-axis มี +4.26 dB ในกรณี clear LOS. แต่ตำแหน่งติดตั้ง green-zone ปัจจุบันถูก lander hull บัง จึงต้องเรียกกราฟนี้ว่า **clear-LOS potential** ไม่ใช่ installed-case success
 
 กราฟแบบเทียบ paper ตั้งใจไม่สร้างเส้น S11 ปลอม: จุด −15 dB ที่ 2.205 GHz เป็น scalar input ของ link budget เท่านั้น ส่วน Figure 18 ของ Gadhafi et al. เป็น CST ที่ 2.42 GHz และรวม rover/regolith แล้ว จึงเทียบได้เฉพาะชนิดของหลักฐานและรูปแบบกราฟ ยังใช้จัดอันดับ performance โดยตรงไม่ได้
 

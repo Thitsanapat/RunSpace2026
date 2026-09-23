@@ -35,18 +35,18 @@
 ### Design baseline
 
 - Study frequency: **2.205 GHz downlink**, อยู่ในช่วง S-band return 2200–2290 MHz ที่ NASA รวบรวมไว้ แต่ยังไม่ใช่ mission frequency assignment
-- Mission-fit antenna profile: **AC-2000 compact circularly polarized S-band patch**, ขนาดที่ผู้ผลิตระบุแบบประมาณ 2 × 2 in หรือ **50.8 × 50.8 mm**, มวลประมาณ **100 g**, gain สูงสุดทั่วไป **5.2 dBic**, bandwidth 2.0–2.3 GHz และ VSWR 1.5:1
-- Mechanical model จองความหนา **15 mm** สำหรับ antenna/connector interface; ตัวเลขนี้เป็น project allocation เพราะ public datasheet ไม่ให้ความหนา ต้องแทนด้วย vendor ICD/CAD ก่อน CDR
-- Pattern ในซิมใช้ค่าที่ต่ำที่สุดจาก phi cuts สามระนาบใน datasheet ที่แต่ละมุม เพื่อเป็น conservative 1D cut; ไม่ใช่ mounted 3D pattern ของ lander
+- Mission geometry: **proposed compact stacked circularly polarized S-band patch target 60 × 60 × 7 mm**, มวลจัดสรร **100 g**, gain target **5.2 dBic**, analytical HPBW **90°** และ S11 target **≤−10 dB** ที่ 2.205 GHz
+- ตัวเลขข้างต้นเป็น packaging/RF requirements และ sensitivity inputs; ยังไม่มี full-wave installed EM, VNA, axial-ratio หรือ chamber pattern ของฮาร์ดแวร์ทีม
+- Pattern ในซิมเป็น analytical cosine pattern สำหรับ trade study ไม่ใช่ measured mounted 3D pattern
 - Research benchmark: **ANSER 2025 dual-CP stacked patch, 80 × 80 × 7 mm physical, 30 g, 6.5–7 dBi** ที่ 2.205 GHz พร้อม vibration/shock/TVAC evidence แต่ไม่ผ่าน full gimbal sweep ภายใน cavity ปัจจุบัน
-- Current matching input ของ mission profile: S11 ≈ **−13.98 dB** ซึ่งคำนวณจาก VSWR 1.5:1; axial ratio = 3 dB ยังเป็น assumption เพราะ public AC-2000 datasheet ไม่ให้ค่าตัวเลข AR
+- Current matching target ของ mission profile: S11 **−10 dB** และ axial ratio **≤3 dB**; ทั้งคู่เป็น requirements จนกว่าจะมีผล EM/measurement
 - Polarization: CP ลด sensitivity ต่อ rotation รอบแนว LOS แต่ต้องกำหนด RHCP/LHCP ให้ตรงกับ ground station
 - Mechanical pointing target ±0.5° เป็น control target ไม่ใช่ข้อบังคับจาก beamwidth; เหตุผลหลักคือ acquisition repeatability, keep-out และ interface margin
 
 ### เหตุผลที่เลือก S-band CP patch + gimbal
 
 - S-band มี component และ ground-segment ecosystem สำหรับ small spacecraft; NASA รวบรวม return band 2200–2290 MHz และ ground-station G/T หลายระดับ
-- Patch แบน เบา และเข้ากับหน้ากว้าง 100 mm; mission-fit profile มี footprint ประมาณ 50.8 mm และใช้ RF chain เดียว ส่วน ANSER ยืนยันว่ารูปแบบ stacked patch ที่ 2.205 GHz สามารถผ่าน qualification ได้
+- Patch แบนและใช้ RF chain เดียว; target 60 mm ผ่าน concept packaging ขณะที่ ANSER ยืนยันว่ารูปแบบ stacked patch ที่ 2.205 GHz สามารถสร้าง วัด และผ่าน qualification ได้ แม้ geometry 80 mm ของ paper จะนำมาใส่กลไกเราโดยตรงไม่ได้
 - CP ลด polarization mismatch จากการหมุนของ lander เมื่อเทียบกับ linear polarization
 - Gimbal หมุน aperture เดิมให้คง gain ใกล้ boresight จึงรักษา EIRP ได้ในมุมที่ planar array เริ่มเสีย scan gain
 - กลไกหนึ่งชุดกับ RF chain หนึ่งทางตรวจ bench test ได้ตรงไปตรงมากว่าสถาปัตยกรรมหลาย element/หลาย channel ใน PoC
@@ -55,7 +55,7 @@
 
 - moving parts มีความเสี่ยงจาก shock, cold welding/lubrication, regolith, cable wrap, bearing play และ single-point jam
 - gimbal ไม่ทะลุ lander hull/terrain และไม่แก้ Earth below local horizon
-- Mission-fit 50.8 mm profile ผ่าน sampled bounding-box sweep 100% ที่ step 5° ใน model ปัจจุบันและมี minimum concept clearance มากกว่า 5 mm; ผลนี้ยังไม่แทน exact CAD collision, tolerance stack หรือ cable-stress analysis
+- Proposed 60 mm profile ผ่าน sampled bounding-box sweep 100% ที่ step 5° ใน model ปัจจุบันและมี minimum concept clearance **3.08 mm**; ผลนี้ยังไม่แทน exact CAD collision, tolerance stack หรือ cable-stress analysis
 - mounted radiation pattern อาจต่างจาก isolated antenna เพราะ deck, red payload, frame, cable และ lander structure
 - S11, axial ratio, gain และ resonance ต้องวัดหลังติดตั้งและหลัง thermal-vacuum; temperature coefficient ในซิมยังเป็น user assumption
 - final channel, RF port power, ground service, coding, BER/FER requirement และ availability ต้องอยู่ใน ICD/ground-service agreement

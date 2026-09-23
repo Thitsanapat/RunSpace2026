@@ -13,16 +13,8 @@ export const REFERENCES=[
   {id:'astrobotic',title:'Astrobotic — Lunar Landers Payload User’s Guide',url:'https://science.nasa.gov/wp-content/uploads/2023/11/astrobotic-lunar-landers-pug.pdf',facts:'PDF p.20 describes actuated medium/high-gain antennas after touchdown; p.46 describes payload power interfaces. Steerable lander antennas are not an unprecedented invention.'}
 ];
 
-// Conservative absolute-gain cut made from the lowest value in each of the
-// three published AC-2000 phi cuts. Interpolation is a simulation input, not
-// a new antenna measurement.
-export const AC2000_CONSERVATIVE_PATTERN=Object.freeze([
-  {angle:0,gain:5.2},{angle:22.5,gain:4.2},{angle:45,gain:2.1},
-  {angle:67.5,gain:-0.8},{angle:90,gain:-1.9},{angle:112.5,gain:-6.1},
-  {angle:135,gain:-24.8},{angle:157.5,gain:-24.8},{angle:180,gain:-24.8}
-]);
 export const ANTENNA_PROFILES={
-  ac2000:{label:'Mission-fit compact patch · AC-2000 evidence',source:'ac2000',values:{frequencyGHz:2.205,peakGain:5.2,beamwidth:90,antennaWidthMm:50.8,antennaHeightMm:50.8,antennaThicknessMm:15,antennaMassG:100,s11Db:-13.98,pattern:AC2000_CONSERVATIVE_PATTERN,cableTwistLimitDeg:180},beamEvidence:'The simulator uses the worst of the three published relative-gain cuts at each sampled angle. 50.8 mm is the nominal conversion of the datasheet’s approximate 2-inch size; 15 mm thickness is a project mechanical allocation because the public datasheet does not state thickness. Obtain the vendor ICD/CAD before CDR.'},
+  compact:{label:'Proposed compact stacked CP patch target · EM unverified',source:'anser2025',values:{frequencyGHz:2.205,peakGain:5.2,beamwidth:90,antennaWidthMm:60,antennaHeightMm:60,antennaThicknessMm:7,antennaMassG:100,s11Db:-10,cableTwistLimitDeg:180},beamEvidence:'Mission packaging target, not a published antenna: 60 × 60 × 7 mm stacked CP patch topology informed by ANSER. Gain 5.2 dBic, 90° analytical HPBW and S11 −10 dB are system requirements/sensitivity inputs, not transferred measurements. Full-wave installed EM and hardware measurements are required.'},
   anser:{label:'INTA / ANSER research benchmark · 2.205 GHz',source:'anser2025',values:{frequencyGHz:2.205,peakGain:6.5,beamwidth:82.44,antennaWidthMm:80,antennaHeightMm:80,antennaThicknessMm:7,antennaMassG:30,s11Db:-12,cableTwistLimitDeg:90},beamEvidence:'The qualification article reports a 7 mm physical height; 6.53 mm is the nominal stack. 82.44° remains an analytical approximation from 6.5 dBi and assumed 65% efficiency, not a measured HPBW. This profile is an RF/qualification benchmark and fails the current full 2U gimbal sweep.'},
   tigrisat:{label:'Tigrisat reference · 2.45 GHz',source:'tigrisat2015',values:{frequencyGHz:2.45,peakGain:7.3,beamwidth:60,antennaWidthMm:96,antennaHeightMm:96,antennaThicknessMm:7,antennaMassG:50},beamEvidence:'60° measured HPBW; 7.3 dBi simulated gain. 96 × 96 × 7 mm overall size is tabulated by Sánchez-Sevilleja (2025), Table 3, replacing the earlier layer-only 2.1 mm allowance. Mass 50 g remains an assumption. 2.45 GHz is a comparison reference, not the proposed 2.2–2.3 GHz downlink.'}
 };

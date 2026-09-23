@@ -1,5 +1,6 @@
 candidate,evidence_class,frequency_ghz,peak_gain_dbic,width_mm,height_mm,thickness_mm,mass_g,mission_decision,reason
-AC-2000,flight-proven manufacturer datasheet,2.0-2.3,5.2,50.8,50.8,not_public,100,baseline,"Fits concept sweep; exact ICD and RF power rating required"
+Proposed compact stacked CP patch,project target informed by ANSER,2.205,5.2_target,60,60,7,100_allocation,mission_geometry,"Packaging and link target only; full-wave EM and measurements required"
+AC-2000,flight-proven manufacturer datasheet,2.0-2.3,5.2,50.8,50.8,not_public,100,commercial_comparator,"Actual radiator architecture differs from proposed planar stacked patch"
 ANSER 2025,peer-reviewed measured qualified and flown,2.205,6.5-7.0,80,80,7,30,research_benchmark,"Exact frequency and strong evidence; fails current full gimbal sweep"
 SLSP 2026,peer-reviewed measured mounted and qualified,2.0-2.34,7.24,100,100,15,not_reported,reject_packaging,"Strong RF evidence; enclosure consumes 2U cross-section"
 Tigrisat,peer-reviewed mixed measured and simulated,2.45,7.3,96,96,7,50_assumed,reject_frequency,"Wrong study frequency and full sweep fails"

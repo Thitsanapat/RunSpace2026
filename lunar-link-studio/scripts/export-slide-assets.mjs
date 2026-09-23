@@ -15,6 +15,8 @@ async function saveSvg(name,body,w=1200,h=700){const file=path.join(out,name+'.s
 const c={...DEFAULTS};
 const on=linkBudget(0,c,false,true,0,c.initialTemp);
 const fixed65=linkBudget(65,c,false,true,0,c.initialTemp);
+const headroom=on.rawMargin-c.reserveDb,fixedHeadroom=fixed65.rawMargin-c.reserveDb;
+const signed=v=>`${v>=0?'+':''}${v.toFixed(2)}`;
 
 await saveSvg('p16-antenna-research-vs-our-concept',`
 <text x="38" y="52" class="title">Antenna evidence: literature benchmark vs our 2U concept</text>
@@ -35,8 +37,8 @@ await saveSvg('p16-antenna-research-vs-our-concept',`
 <rect x="642" y="132" width="142" height="28" rx="14" fill="#d3f9d8"/><text x="664" y="152" class="tag">OUR CONCEPT</text>
 <text x="642" y="198" class="value">2U gimballed CP patch</text>
 <text x="642" y="236" class="label">Study frequency</text><text x="1125" y="236" class="label" text-anchor="end">2.205 GHz</text>
-<text x="642" y="275" class="label">Realized gain input</text><text x="1125" y="275" class="label" text-anchor="end">6.5 dBic</text>
-<text x="642" y="314" class="label">Analytical HPBW</text><text x="1125" y="314" class="label" text-anchor="end">82.44°</text>
+<text x="642" y="275" class="label">Realized gain target</text><text x="1125" y="275" class="label" text-anchor="end">${c.peakGain.toFixed(1)} dBic</text>
+<text x="642" y="314" class="label">Analytical HPBW</text><text x="1125" y="314" class="label" text-anchor="end">${c.beamwidth.toFixed(0)}°</text>
 <text x="642" y="353" class="label">Pointing</text><text x="1125" y="353" class="label" text-anchor="end">2-axis gimbal</text>
 <text x="642" y="392" class="label">Payload envelope</text><text x="1125" y="392" class="label" text-anchor="end">100 × 100 × 181 mm</text>
 <text x="642" y="431" class="label">Payload mass target</text><text x="1125" y="431" class="label" text-anchor="end">≤1.5 kg</text>
@@ -52,25 +54,25 @@ await saveSvg('p16-link-budget-chain',`
 <rect x="38" y="115" width="340" height="410" rx="12" class="card"/><rect x="430" y="115" width="340" height="410" rx="12" class="card"/><rect x="822" y="115" width="340" height="410" rx="12" class="card"/>
 <text x="62" y="157" class="value">1 · Transmitter</text>
 <text x="62" y="205" class="label">RF output</text><text x="350" y="205" class="label" text-anchor="end">+6.99 dBW</text>
-<text x="62" y="245" class="label">Realized antenna gain</text><text x="350" y="245" class="label" text-anchor="end">+6.50 dBic</text>
+<text x="62" y="245" class="label">Realized antenna gain target</text><text x="350" y="245" class="label" text-anchor="end">+${c.peakGain.toFixed(2)} dBic</text>
 <text x="62" y="285" class="label">Feed loss</text><text x="350" y="285" class="label" text-anchor="end">−1.00 dB</text>
-<line x1="62" y1="315" x2="350" y2="315" class="grid"/><text x="62" y="363" class="value">EIRP</text><text x="350" y="363" class="value" text-anchor="end">12.49 dBW</text>
+<line x1="62" y1="315" x2="350" y2="315" class="grid"/><text x="62" y="363" class="value">EIRP</text><text x="350" y="363" class="value" text-anchor="end">${on.eirp.toFixed(2)} dBW</text>
 <text x="62" y="410" class="small">5 W is RF output, not DC input.</text><text x="62" y="440" class="small">At 35% PA efficiency: ≈14.29 W DC.</text>
 <text x="454" y="157" class="value">2 · Channel / receiver</text>
 <text x="454" y="205" class="label">Free-space path loss</text><text x="746" y="205" class="label" text-anchor="end">−211.01 dB</text>
 <text x="454" y="245" class="label">Polarization + other</text><text x="746" y="245" class="label" text-anchor="end">−1.50 dB</text>
 <text x="454" y="285" class="label">Receiver G/T</text><text x="746" y="285" class="label" text-anchor="end">+22.00 dB/K</text>
 <text x="454" y="325" class="label">Boltzmann term</text><text x="746" y="325" class="label" text-anchor="end">+228.60 dB</text>
-<line x1="454" y1="355" x2="746" y2="355" class="grid"/><text x="454" y="403" class="value">C/N₀</text><text x="746" y="403" class="value" text-anchor="end">50.58 dB-Hz</text>
+<line x1="454" y1="355" x2="746" y2="355" class="grid"/><text x="454" y="403" class="value">C/N₀</text><text x="746" y="403" class="value" text-anchor="end">${on.cn0.toFixed(2)} dB-Hz</text>
 <text x="454" y="450" class="small">Station availability and frequency assignment</text><text x="454" y="478" class="small">remain mission/service constraints.</text>
 <text x="846" y="157" class="value">3 · Service result</text>
-<text x="846" y="205" class="label">Eb/N₀ @ 4 kbps</text><text x="1138" y="205" class="label" text-anchor="end">14.56 dB</text>
+<text x="846" y="205" class="label">Eb/N₀ @ 4 kbps</text><text x="1138" y="205" class="label" text-anchor="end">${on.ebno.toFixed(2)} dB</text>
 <text x="846" y="245" class="label">Threshold + impl. loss</text><text x="1138" y="245" class="label" text-anchor="end">−6.00 dB</text>
-<text x="846" y="285" class="label">Raw margin</text><text x="1138" y="285" class="label" text-anchor="end">8.56 dB</text>
+<text x="846" y="285" class="label">Raw margin</text><text x="1138" y="285" class="label" text-anchor="end">${on.rawMargin.toFixed(2)} dB</text>
 <text x="846" y="325" class="label">Required reserve</text><text x="1138" y="325" class="label" text-anchor="end">−3.00 dB</text>
-<line x1="846" y1="355" x2="1138" y2="355" class="grid"/><text x="846" y="397" class="value">HEADROOM</text><text x="1138" y="397" class="value green" text-anchor="end">+5.56 dB</text>
+<line x1="846" y1="355" x2="1138" y2="355" class="grid"/><text x="846" y="397" class="value">HEADROOM</text><text x="1138" y="397" class="value green" text-anchor="end">${signed(headroom)} dB</text>
 <text x="846" y="446" class="small">PASS only under the stated clear-LOS, powered</text><text x="846" y="474" class="small">host-radio and ground-station assumptions.</text>
-<rect x="38" y="555" width="1124" height="112" rx="10" class="warn"/><text x="58" y="591" class="label">Ground-station sensitivity at 4 kbps:</text><text x="58" y="626" class="small">G/T 12.8 → FAIL (−3.64 dB after reserve) · 17 → +0.56 dB · 21 → +4.56 dB · 22 → +5.56 dB</text><text x="58" y="653" class="small">Use on page 16 · Caption every result with frequency, range, rate, RF power, G/T and reserve.</text>`);
+<rect x="38" y="555" width="1124" height="112" rx="10" class="warn"/><text x="58" y="591" class="label">Ground-station sensitivity at 4 kbps:</text><text x="58" y="626" class="small">G/T 12.8 → −4.94 dB · 17 → −0.74 dB · 21 → +3.26 dB · 22 → +4.26 dB after reserve</text><text x="58" y="653" class="small">Use on page 16 · Caption every result with frequency, range, rate, RF power, G/T and reserve.</text>`);
 
 const pts=[];for(let a=0;a<=80;a+=2){const l=linkBudget(a,c,false,true,0,c.initialTemp);pts.push({a,f:l.rawMargin-c.reserveDb,g:on.rawMargin-c.reserveDb});}
 const X=a=>95+a/80*1035,Y=v=>615-(v+14)/22*420;
@@ -84,7 +86,7 @@ await saveSvg('p16-fixed-vs-gimbal-clear-los',`
 <path d="${pathFor('f')}" fill="none" stroke="#e8590c" stroke-width="6"/><path d="${pathFor('g')}" fill="none" stroke="#66a80f" stroke-width="6"/>
 <circle cx="${X(65)}" cy="${Y(fixed65.rawMargin-c.reserveDb)}" r="7" fill="#e8590c"/><circle cx="${X(65)}" cy="${Y(on.rawMargin-c.reserveDb)}" r="7" fill="#66a80f"/>
 <text x="790" y="147" class="label orange">● Fixed patch</text><text x="965" y="147" class="label green">● Gimballed, on-axis</text>
-<text x="${X(65)-18}" y="${Y(on.rawMargin-c.reserveDb)-18}" class="label green" text-anchor="end">65°: +5.56 dB</text><text x="${X(65)+15}" y="${Y(fixed65.rawMargin-c.reserveDb)+26}" class="label orange">65°: −3.55 dB</text>
+<text x="${X(65)-18}" y="${Y(headroom)-18}" class="label green" text-anchor="end">65°: ${signed(headroom)} dB</text><text x="${X(65)+15}" y="${Y(fixedHeadroom)+26}" class="label orange">65°: ${signed(fixedHeadroom)} dB</text>
 <text x="612" y="684" class="label" text-anchor="middle">Lander tilt represented as fixed-antenna mispointing (deg)</text><text x="24" y="407" class="label" text-anchor="middle" transform="rotate(-90 24 407)">Headroom after reserve (dB)</text>
 <rect x="113" y="535" width="620" height="62" rx="8" fill="#fff4e6" opacity="0.95"/><text x="132" y="560" class="small">Current installed 65° green-zone case is hull-blocked in the geometry proxy.</text><text x="132" y="584" class="small">Use this plot as clear-LOS potential; mount/FOV optimization is still required.</text>`);
 
@@ -99,21 +101,21 @@ await saveSvg('p16-right-column-summary',`
 <rect x="38" y="102" width="548" height="238" rx="12" class="card"/><rect x="614" y="102" width="548" height="238" rx="12" class="card"/>
 <text x="60" y="143" class="value">Antenna / packaging</text>
 <text x="60" y="181" class="label">Study frequency</text><text x="560" y="181" class="label" text-anchor="end">2.205 GHz</text>
-<text x="60" y="215" class="label">Realized gain input</text><text x="560" y="215" class="label" text-anchor="end">6.5 dBic</text>
-<text x="60" y="249" class="label">HPBW / pointing</text><text x="560" y="249" class="label" text-anchor="end">82.44° / 2-axis gimbal</text>
+<text x="60" y="215" class="label">Realized gain target</text><text x="560" y="215" class="label" text-anchor="end">${c.peakGain.toFixed(1)} dBic</text>
+<text x="60" y="249" class="label">HPBW / pointing</text><text x="560" y="249" class="label" text-anchor="end">${c.beamwidth.toFixed(0)}° / 2-axis gimbal</text>
 <text x="60" y="283" class="label">Envelope / mass target</text><text x="560" y="283" class="label" text-anchor="end">100×100×181 mm / ≤1.5 kg</text>
 <text x="60" y="316" class="small">Mounted S11, axial ratio and pattern remain test items.</text>
 <text x="636" y="143" class="value">Earth–Moon link @ 4 kbps</text>
-<text x="636" y="181" class="label">EIRP / FSPL</text><text x="1136" y="181" class="label" text-anchor="end">12.49 / 211.01 dB</text>
+<text x="636" y="181" class="label">EIRP / FSPL</text><text x="1136" y="181" class="label" text-anchor="end">${on.eirp.toFixed(2)} / ${on.pathLoss.toFixed(2)} dB</text>
 <text x="636" y="215" class="label">Ground G/T</text><text x="1136" y="215" class="label" text-anchor="end">22 dB/K · assumed</text>
-<text x="636" y="249" class="label">C/N₀ / Eb/N₀</text><text x="1136" y="249" class="label" text-anchor="end">50.58 dB-Hz / 14.56 dB</text>
-<text x="636" y="283" class="label">After 3 dB reserve</text><text x="1136" y="283" class="value green" text-anchor="end">+5.56 dB</text>
+<text x="636" y="249" class="label">C/N₀ / Eb/N₀</text><text x="1136" y="249" class="label" text-anchor="end">${on.cn0.toFixed(2)} dB-Hz / ${on.ebno.toFixed(2)} dB</text>
+<text x="636" y="283" class="label">After 3 dB reserve</text><text x="1136" y="283" class="value green" text-anchor="end">${signed(headroom)} dB</text>
 <text x="636" y="316" class="small">5 W RF requires ≈14.29 W PA DC at 35% efficiency.</text>
 <text x="38" y="377" class="label">CLEAR-LOS TILT SENSITIVITY · HEADROOM AFTER 3 dB RESERVE</text>${compactGrid}
 <line x1="80" y1="${SY(0)}" x2="1130" y2="${SY(0)}" stroke="#c92a2a" stroke-width="2" stroke-dasharray="8 6"/>
 <path d="${compactPath('f')}" fill="none" stroke="#e8590c" stroke-width="5"/><path d="${compactPath('g')}" fill="none" stroke="#66a80f" stroke-width="5"/>
 <circle cx="${SX(65)}" cy="${SY(fixed65.rawMargin-c.reserveDb)}" r="6" fill="#e8590c"/><circle cx="${SX(65)}" cy="${SY(on.rawMargin-c.reserveDb)}" r="6" fill="#66a80f"/>
-<text x="720" y="421" class="label orange">Fixed: 65° = −3.55 dB</text><text x="930" y="421" class="label green">Gimbal: +5.56 dB</text>
+<text x="720" y="421" class="label orange">Fixed: 65° = ${signed(fixedHeadroom)} dB</text><text x="930" y="421" class="label green">Gimbal: ${signed(headroom)} dB</text>
 <rect x="470" y="548" width="646" height="55" rx="8" fill="#fff4e6" opacity="0.96"/><text x="488" y="571" class="small">Installed 65° green-zone case is hull-blocked.</text><text x="488" y="592" class="small">Graph shows clear-LOS potential; mount/FOV optimization is required.</text>
 <text x="605" y="680" class="small" text-anchor="middle">Source tags: Sánchez-Sevilleja et al. (2025) antenna benchmark · team reduced-order simulation</text>`);
 
@@ -125,15 +127,15 @@ for(const x of [0,20,40,60,80])cropGrid+=`<line x1="${CX(x)}" y1="145" x2="${CX(
 await saveSvg('p14-compact-link-margin-vs-tilt',`
 <rect x="28" y="24" width="1144" height="512" rx="14" class="card"/>
 <text x="52" y="64" class="label">OUR ANALYSIS · CLEAR LINE OF SIGHT</text>
-<text x="52" y="95" class="small">2.205 GHz · 384,400 km · 4 kbps · 5 W RF · 6.5 dBic · G/T 22 dB/K assumed · 3 dB reserve</text>
+<text x="52" y="95" class="small">2.205 GHz · 384,400 km · 4 kbps · 5 W RF · ${c.peakGain.toFixed(1)} dBic target · G/T 22 dB/K assumed · 3 dB reserve</text>
 ${cropGrid}<line x1="78" y1="${CY(0)}" x2="868" y2="${CY(0)}" stroke="#c92a2a" stroke-width="2" stroke-dasharray="8 6"/>
 <path d="${cropPath('f')}" fill="none" stroke="#e8590c" stroke-width="6"/><path d="${cropPath('g')}" fill="none" stroke="#66a80f" stroke-width="6"/>
 <circle cx="${CX(65)}" cy="${CY(fixed65.rawMargin-c.reserveDb)}" r="7" fill="#e8590c"/><circle cx="${CX(65)}" cy="${CY(on.rawMargin-c.reserveDb)}" r="7" fill="#66a80f"/>
 <text x="720" y="130" class="small" text-anchor="end">Headroom after reserve (dB)</text><text x="473" y="503" class="small" text-anchor="middle">Lander tilt / fixed-antenna mispointing</text>
 <rect x="900" y="119" width="240" height="326" rx="10" fill="#fff" stroke="#d7dfe5" stroke-width="1.5"/>
-<text x="922" y="160" class="label orange">FIXED PATCH</text><text x="922" y="199" class="value orange">−3.55 dB</text><text x="922" y="226" class="small">at 65° · FAIL</text>
+<text x="922" y="160" class="label orange">FIXED PATCH</text><text x="922" y="199" class="value orange">${signed(fixedHeadroom)} dB</text><text x="922" y="226" class="small">at 65° · FAIL</text>
 <line x1="922" y1="254" x2="1118" y2="254" class="grid"/>
-<text x="922" y="294" class="label green">GIMBAL ON-AXIS</text><text x="922" y="333" class="value green">+5.56 dB</text><text x="922" y="360" class="small">at 65° · PASS*</text>
+<text x="922" y="294" class="label green">GIMBAL ON-AXIS</text><text x="922" y="333" class="value green">${signed(headroom)} dB</text><text x="922" y="360" class="small">at 65° · PASS*</text>
 <text x="922" y="405" class="small">*RF budget only</text><text x="922" y="429" class="small">with clear LOS</text>
 <rect x="28" y="552" width="1144" height="90" rx="12" class="warn"/><text x="52" y="588" class="label orange">Installed 65° green-zone case: hull-blocked</text><text x="52" y="617" class="small">Gimbal restores pointing gain, but cannot see through the lander. Mount/FOV optimization remains required.</text>`,1200,670);
 

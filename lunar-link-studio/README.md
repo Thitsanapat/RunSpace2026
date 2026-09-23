@@ -1,6 +1,6 @@
 # Lunar Link Studio 1.5.0
 
-รุ่น 1.5.0 เปลี่ยน antenna baseline เป็น compact S-band CP patch profile ที่ใช้ข้อมูล flight-proven AC-2000: 2.0–2.3 GHz, gain 5.2 dBic, footprint ประมาณ 50.8 × 50.8 mm และ conservative radiation cut จาก datasheet. ANSER 2025 ยังคงเป็น research benchmark ที่ 2.205 GHz สำหรับ S11/AR/gain/qualification แต่แผ่น 80 mm ไม่ผ่าน full gimbal sweep ปัจจุบัน. อ่านเหตุผลและ requirement gates ที่ [ANTENNA-BASELINE-DECISION.md](ANTENNA-BASELINE-DECISION.md).
+รุ่น 1.5.0 ใช้ **proposed compact stacked CP patch target 60 × 60 × 7 mm** เป็น geometry baseline ภายใน 2U. ค่า gain 5.2 dBic, HPBW 90° และ S11 −10 dB เป็นข้อกำหนด/ตัวแปร sensitivity ที่ยังไม่ใช่ผล EM หรือผลวัด. รูปแบบชั้นเสาอากาศอ้างอิง ANSER 2025 ซึ่งมีหลักฐานวัดและ qualification ที่ 2.205 GHz แต่ฮาร์ดแวร์อ้างอิง 80 mm ไม่ผ่าน full gimbal sweep ปัจจุบัน. AC-2000 คงไว้เป็น commercial flight comparator เท่านั้น เพราะรูปทรงผลิตภัณฑ์จริงไม่ตรงกับ planar stacked patch ที่เสนอ. อ่านเหตุผลและ requirement gates ที่ [ANTENNA-BASELINE-DECISION.md](ANTENNA-BASELINE-DECISION.md).
 
 โปรแกรมจำลองเสาอากาศบน lunar lander พร้อม 3D และการคำนวณ เปิดใช้งานในเครื่องได้ มี source code และ production build ครบ
 
@@ -22,7 +22,7 @@ GitHub Pages: https://Thitsanapat.github.io/RunSpace2026/ — workflow build/tes
 
 กด **Payload 2U**, ปิด **Payload cover**, เปิด **Exploded view** เพื่อดูภายใน. ด้านล่างมี **2U assembly screening**: แผนที่ azimuth/elevation รวมกรอบ มอเตอร์ หัวต่อและพื้นที่โค้งสาย; **Lander bus interface**: current/inrush allocation, harness drop และ capacitor hold-up. ปรับพารามิเตอร์ใน sidebar และส่งออกด้วย **Export design study**.
 
-**2U รวม gimbal ผ่านเฉพาะ concept screening:** compact baseline ผ่าน 100% ของ sampled 5° bounding-box grid โดยมี concept clearance มากกว่า 5 mm. ผลนี้ยังไม่ใช่ exact CAD/tolerance/cable qualification. เมื่อเลือก ANSER 80 × 80 × 7 mm ซิมจะแสดง interference ตามจริง. อ่าน [PAYLOAD-DESIGN.md](PAYLOAD-DESIGN.md) และ [ANTENNA-BASELINE-DECISION.md](ANTENNA-BASELINE-DECISION.md).
+**2U รวม gimbal ผ่านเฉพาะ concept screening:** compact 60 mm target ผ่าน 100% ของ sampled 5° bounding-box grid โดยมี minimum concept clearance 3.08 mm. ผลนี้ยังไม่ใช่ exact CAD/tolerance/cable qualification. เมื่อเลือก ANSER 80 × 80 × 7 mm ซิมจะแสดง interference ตามจริง. อ่าน [PAYLOAD-DESIGN.md](PAYLOAD-DESIGN.md) และ [ANTENNA-BASELINE-DECISION.md](ANTENNA-BASELINE-DECISION.md).
 
 ## โมเดลจากรูปขยายสองมุม
 

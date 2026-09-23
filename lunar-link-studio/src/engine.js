@@ -1,6 +1,6 @@
 import { RAD, DEG, clamp, attitude, rotate, qInv, direction, angles, separation, cross, dot, rayBox, seededRandom } from './math.js';
 import {packaging,visibility,thermalRates} from './mission.js';
-import {ANTENNA_PROFILES,AC2000_CONSERVATIVE_PATTERN} from './research.js';
+import {ANTENNA_PROFILES} from './research.js';
 import {SURFACE,surfaceAssessment} from './surface-payload.js';
 import {DESIGN_DEFAULTS,DESIGN_BOUNDS} from './payload-design.js';
 import {RF_DEFAULTS,RF_BOUNDS,validateGrid,validateResponse,directionalGain,rfState,antennaCoordinates} from './antenna-rf.js';
@@ -20,7 +20,7 @@ export const DEFAULTS = Object.freeze({
   frequencyGHz: 2.205, txPowerW: 5, peakGain: 5.2, beamwidth: 90,
   cableLoss: 1, polLoss: 0.5, otherLoss: 1, receiverGT: 22,
   bitrateKbps: 4, requiredEbNo: 4.5, implementationLoss: 1.5, reserveDb: 3,
-  ...ANTENNA_PROFILES.ac2000.values,antennaProfile:'ac2000',clearanceMm:2,
+  ...ANTENNA_PROFILES.compact.values,antennaProfile:'compact',clearanceMm:2,
   mountX:SURFACE.mount[0],mountY:SURFACE.mount[1],mountZ:SURFACE.mount[2],burialDepth:0,payloadMassKg:1.5,
   initialTemp: 15, baseTemp: 15, groundTemp: -40, sunlight: 0.65,
   solarIncidence: 0.5, emissivity: 0.65, absorptivity: 0.3, thermalArea: 0.018,
@@ -31,7 +31,7 @@ export const DEFAULTS = Object.freeze({
   dust: 0, sealFactor: 0.25, shockG: 0, shockMs: 30,
   batteryWh: 30, electronicsW: 0.79, rfEfficiency: 0.35,
   jamAxis: 'none', pointingRequirement: 0.5, seed: 2026,
-  pattern: AC2000_CONSERVATIVE_PATTERN
+  pattern: null
 });
 
 export const PRESETS = {

@@ -5,22 +5,22 @@ text{font-family:Arial,"Noto Sans Thai",sans-serif;fill:#17283b}.title{font-size
 <rect x="38" y="115" width="340" height="410" rx="12" class="card"/><rect x="430" y="115" width="340" height="410" rx="12" class="card"/><rect x="822" y="115" width="340" height="410" rx="12" class="card"/>
 <text x="62" y="157" class="value">1 · Transmitter</text>
 <text x="62" y="205" class="label">RF output</text><text x="350" y="205" class="label" text-anchor="end">+6.99 dBW</text>
-<text x="62" y="245" class="label">Realized antenna gain</text><text x="350" y="245" class="label" text-anchor="end">+6.50 dBic</text>
+<text x="62" y="245" class="label">Realized antenna gain target</text><text x="350" y="245" class="label" text-anchor="end">+5.20 dBic</text>
 <text x="62" y="285" class="label">Feed loss</text><text x="350" y="285" class="label" text-anchor="end">−1.00 dB</text>
-<line x1="62" y1="315" x2="350" y2="315" class="grid"/><text x="62" y="363" class="value">EIRP</text><text x="350" y="363" class="value" text-anchor="end">12.49 dBW</text>
+<line x1="62" y1="315" x2="350" y2="315" class="grid"/><text x="62" y="363" class="value">EIRP</text><text x="350" y="363" class="value" text-anchor="end">11.19 dBW</text>
 <text x="62" y="410" class="small">5 W is RF output, not DC input.</text><text x="62" y="440" class="small">At 35% PA efficiency: ≈14.29 W DC.</text>
 <text x="454" y="157" class="value">2 · Channel / receiver</text>
 <text x="454" y="205" class="label">Free-space path loss</text><text x="746" y="205" class="label" text-anchor="end">−211.01 dB</text>
 <text x="454" y="245" class="label">Polarization + other</text><text x="746" y="245" class="label" text-anchor="end">−1.50 dB</text>
 <text x="454" y="285" class="label">Receiver G/T</text><text x="746" y="285" class="label" text-anchor="end">+22.00 dB/K</text>
 <text x="454" y="325" class="label">Boltzmann term</text><text x="746" y="325" class="label" text-anchor="end">+228.60 dB</text>
-<line x1="454" y1="355" x2="746" y2="355" class="grid"/><text x="454" y="403" class="value">C/N₀</text><text x="746" y="403" class="value" text-anchor="end">50.58 dB-Hz</text>
+<line x1="454" y1="355" x2="746" y2="355" class="grid"/><text x="454" y="403" class="value">C/N₀</text><text x="746" y="403" class="value" text-anchor="end">49.28 dB-Hz</text>
 <text x="454" y="450" class="small">Station availability and frequency assignment</text><text x="454" y="478" class="small">remain mission/service constraints.</text>
 <text x="846" y="157" class="value">3 · Service result</text>
-<text x="846" y="205" class="label">Eb/N₀ @ 4 kbps</text><text x="1138" y="205" class="label" text-anchor="end">14.56 dB</text>
+<text x="846" y="205" class="label">Eb/N₀ @ 4 kbps</text><text x="1138" y="205" class="label" text-anchor="end">13.26 dB</text>
 <text x="846" y="245" class="label">Threshold + impl. loss</text><text x="1138" y="245" class="label" text-anchor="end">−6.00 dB</text>
-<text x="846" y="285" class="label">Raw margin</text><text x="1138" y="285" class="label" text-anchor="end">8.56 dB</text>
+<text x="846" y="285" class="label">Raw margin</text><text x="1138" y="285" class="label" text-anchor="end">7.26 dB</text>
 <text x="846" y="325" class="label">Required reserve</text><text x="1138" y="325" class="label" text-anchor="end">−3.00 dB</text>
-<line x1="846" y1="355" x2="1138" y2="355" class="grid"/><text x="846" y="397" class="value">HEADROOM</text><text x="1138" y="397" class="value green" text-anchor="end">+5.56 dB</text>
+<line x1="846" y1="355" x2="1138" y2="355" class="grid"/><text x="846" y="397" class="value">HEADROOM</text><text x="1138" y="397" class="value green" text-anchor="end">+4.26 dB</text>
 <text x="846" y="446" class="small">PASS only under the stated clear-LOS, powered</text><text x="846" y="474" class="small">host-radio and ground-station assumptions.</text>
-<rect x="38" y="555" width="1124" height="112" rx="10" class="warn"/><text x="58" y="591" class="label">Ground-station sensitivity at 4 kbps:</text><text x="58" y="626" class="small">G/T 12.8 → FAIL (−3.64 dB after reserve) · 17 → +0.56 dB · 21 → +4.56 dB · 22 → +5.56 dB</text><text x="58" y="653" class="small">Use on page 16 · Caption every result with frequency, range, rate, RF power, G/T and reserve.</text></svg>
+<rect x="38" y="555" width="1124" height="112" rx="10" class="warn"/><text x="58" y="591" class="label">Ground-station sensitivity at 4 kbps:</text><text x="58" y="626" class="small">G/T 12.8 → −4.94 dB · 17 → −0.74 dB · 21 → +3.26 dB · 22 → +4.26 dB after reserve</text><text x="58" y="653" class="small">Use on page 16 · Caption every result with frequency, range, rate, RF power, G/T and reserve.</text></svg>

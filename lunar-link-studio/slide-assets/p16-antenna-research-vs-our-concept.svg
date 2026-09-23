@@ -18,8 +18,8 @@ text{font-family:Arial,"Noto Sans Thai",sans-serif;fill:#17283b}.title{font-size
 <rect x="642" y="132" width="142" height="28" rx="14" fill="#d3f9d8"/><text x="664" y="152" class="tag">OUR CONCEPT</text>
 <text x="642" y="198" class="value">2U gimballed CP patch</text>
 <text x="642" y="236" class="label">Study frequency</text><text x="1125" y="236" class="label" text-anchor="end">2.205 GHz</text>
-<text x="642" y="275" class="label">Realized gain input</text><text x="1125" y="275" class="label" text-anchor="end">6.5 dBic</text>
-<text x="642" y="314" class="label">Analytical HPBW</text><text x="1125" y="314" class="label" text-anchor="end">82.44°</text>
+<text x="642" y="275" class="label">Realized gain target</text><text x="1125" y="275" class="label" text-anchor="end">5.2 dBic</text>
+<text x="642" y="314" class="label">Analytical HPBW</text><text x="1125" y="314" class="label" text-anchor="end">90°</text>
 <text x="642" y="353" class="label">Pointing</text><text x="1125" y="353" class="label" text-anchor="end">2-axis gimbal</text>
 <text x="642" y="392" class="label">Payload envelope</text><text x="1125" y="392" class="label" text-anchor="end">100 × 100 × 181 mm</text>
 <text x="642" y="431" class="label">Payload mass target</text><text x="1125" y="431" class="label" text-anchor="end">≤1.5 kg</text>

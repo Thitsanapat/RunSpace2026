@@ -62,6 +62,6 @@ test('evaluated CSV round-trip preserves directional gain and CP loss without do
 test('unsupported export and malformed snapshot metadata fail explicitly',()=>{
  assert.throws(()=>exportPatternCSV({...DEFAULTS,patternGrid:iso(),frequencyGHz:3},20),/supported/);
  const csv=exportPatternCSV(DEFAULTS,20);assert.throws(()=>parseGridCSV(csv.replace('"version":1','"version":9')),/metadata/);
- assert.throws(()=>parseGridCSV(csv.replace('"s11Db":-13.98','"s11Db":1')),/metadata/);
+ assert.throws(()=>parseGridCSV(csv.replace('"s11Db":-10','"s11Db":1')),/metadata/);
  const generic=parseGridCSV(csv.split('\n').filter(l=>!l.startsWith('# lunar-link-metadata:')).join('\n'));assert.equal(gridImportPatch(generic).gainConvention,undefined);
 });

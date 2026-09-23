@@ -13,7 +13,7 @@ test('touchdown vibration terminates exactly and lock prevents motion before rel
 test('mission-fit patch clears the plate sweep while the ANSER benchmark does not',()=>{
   const c={...DEFAULTS};assert.equal(packaging(0,0,c).fits,true);
   assert.equal(packaging(45*RAD,90*RAD,c).fits,true);
-  assert.ok(Math.abs(packaging(0,0,c).sweptDiameterMm-Math.hypot(50.8,50.8,15))<0.01);
+  assert.ok(Math.abs(packaging(0,0,c).sweptDiameterMm-Math.hypot(60,60,7))<0.01);
   const anser=applyAntennaProfile(c,'anser');assert.equal(packaging(0,0,anser).fits,true);
   assert.equal(packaging(45*RAD,90*RAD,anser).fits,false);
   assert.ok(Math.abs(packaging(0,0,anser).sweptDiameterMm-Math.hypot(80,80,7))<0.01);
@@ -39,8 +39,8 @@ test('paper profiles retain provenance and cosine approximation has physical gai
   assert.ok(b.lossAtHalfDegree<0.001);assert.ok(b.maxMispoint>c.beamwidth/2);
   const t=applyAntennaProfile(c,'tigrisat');assert.equal(t.frequencyGHz,2.45);assert.equal(t.beamwidth,60);assert.equal(packaging(0,0,t).fits,false);
 });
-test('mission profile uses published compact-pattern evidence and retains link reserve',()=>{
-  const c=applyAntennaProfile(DEFAULTS,'ac2000'),l=linkBudget(0,c);
-  assert.equal(c.frequencyGHz,2.205);assert.equal(c.antennaWidthMm,50.8);assert.equal(c.antennaMassG,100);
-  assert.equal(c.pattern.length,9);assert.ok(l.margin>=c.reserveDb);assert.equal(l.available,true);
+test('mission profile is an explicit compact patch target and retains link reserve',()=>{
+  const c=applyAntennaProfile(DEFAULTS,'compact'),l=linkBudget(0,c);
+  assert.equal(c.frequencyGHz,2.205);assert.equal(c.antennaWidthMm,60);assert.equal(c.antennaMassG,100);
+  assert.equal(c.pattern,null);assert.ok(l.margin>=c.reserveDb);assert.equal(l.available,true);
 });

@@ -1,6 +1,6 @@
 # Antenna & RF laboratory — v1.5.0
 
-รุ่น 1.5 เปลี่ยน mission baseline เป็น compact AC-2000 evidence profile ขนาดประมาณ 50.8 mm, gain 5.2 dBic และ conservative datasheet radiation cut. ที่ตำแหน่ง top green surface payload default 65° tip ยังถูก hull proxy บัง จึงไม่ผ่าน actual link แม้ on-axis clear-path budget มี raw margin 7.257 dB. ANSER 80 mm คงไว้เป็น research benchmark และจะแสดง packaging failure เมื่อเลือก profile นี้. ดู decision trace ที่ [ANTENNA-BASELINE-DECISION.md](ANTENNA-BASELINE-DECISION.md).
+รุ่น 1.5 ใช้ proposed compact stacked CP patch target ขนาด 60 × 60 × 7 mm, gain target 5.2 dBic, analytical HPBW 90° และ S11 target −10 dB. ค่าชุดนี้ใช้ทำ packaging/link sensitivity และยังไม่ใช่ผล full-wave EM หรือผลวัด. ที่ตำแหน่ง top green surface payload default 65° tip ยังถูก hull proxy บัง จึงไม่ผ่าน actual link แม้ on-axis clear-path budget มี raw margin 7.257 dB. ANSER 80 mm เป็น topology/qualification benchmark และจะแสดง packaging failure เมื่อเลือก profile นี้. ดู decision trace ที่ [ANTENNA-BASELINE-DECISION.md](ANTENNA-BASELINE-DECISION.md).
 
 ขอบเขตงาน: เพิ่มซิมและหลักฐานคำนวณตาม `Ultra Smooth Landing - Proposal (2).pdf`; ไม่ได้แก้หรือสร้างสไลด์. Payload รวมเสาและ gimbal ยังคง2U ตามข้อกำหนดล่าสุด
 
@@ -10,7 +10,8 @@
 
 | Reference | หลักฐานที่ใช้ | สิ่งที่ไม่ย้ายมาอ้าง |
 |---|---|---|
-| AAC Clyde Space AC-2000 | Flight-proven CP S-band patch; 2.0–2.3 GHz, 5.2 dBic typical, VSWR1.5:1, approx.2×2in, ≈100g และ pattern cuts สามระนาบ | public datasheet ไม่ให้ thickness, axial-ratio number หรือ RF power handling; ซิมจองความหนา15mm เป็น project allocation |
+| Proposed compact target | stacked CP patch topology 60×60×7 mm; 2.205 GHz; gain target 5.2 dBic; mass allocation 100g | เป็น requirement/sensitivity model; ยังไม่มี EM, S11/AR pattern หรือ hardware measurement |
+| AAC Clyde Space AC-2000 | Flight-proven S-band circular antenna comparator; 2.0–2.3 GHz, 5.2 dBic typical, VSWR1.5:1, approx.2×2in, ≈100g | รูปผลิตภัณฑ์จริงไม่ตรงกับ planar stacked patch ของทีม; ห้ามใช้ภาพหรือ pattern เป็นหลักฐานของ geometry ที่เสนอ |
 | Sánchez-Sevilleja et al., Sensors2025 | Dual-CP stacked patch80×80×6.53 mm,30g;2.03/2.205 GHz; isolated gain6.5–7 dBi | HPBW82.44° ในซิมเป็น approximation; ไม่ใช่ measured HPBW; ไม่ได้ digitize full pattern |
 | Jirawattanaphol et al., Technologies2026, เผยแพร่27เม.ย.2026 | Mounted prototype: measured S11 bandwidth2.00–2.34 GHz, AR bandwidth2.04–2.25 GHz; gainสูงสุด7.24 dBic ที่2.18 GHz; มี measured cuts ที่2.05/2.15/2.25 GHz | ห้ามใช้7.24 dBic ที่2.205 GHz โดยอัตโนมัติ; ไม่มีหลักฐาน fit ของ complete gimbal ใน2U; ยังไม่มี raw curve CSV |
 | Nascetti et al., Tigrisat2015 | Comparison ที่2.45 GHz, simulated gain7.3 dBi และ measured HPBW≈60° | ไม่ใช่ downlink2.205 GHz design; 96 mm board มีปัญหา sweep ใน2U |
