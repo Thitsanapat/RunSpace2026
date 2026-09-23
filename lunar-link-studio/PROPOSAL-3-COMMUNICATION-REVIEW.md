@@ -1,14 +1,14 @@
 # Proposal (3): communication and antenna review
 
-ตรวจเมื่อ 23 กันยายน 2026 จาก `Ultra Smooth Landing - Proposal (3).pdf` และ Lunar Link Studio v1.5.0
+ตรวจเมื่อ 23 กันยายน 2026 จาก `Ultra Smooth Landing - Proposal (3).pdf` และ Lunar Link Studio v1.5.1
 
 ภาพพร้อมวางสไลด์ คำบรรยาย และตำแหน่งใช้งานอยู่ที่ [`slide-assets/README.md`](slide-assets/README.md) โดยมีภาพสรุปหน้า 16 ที่จัดสัดส่วนสำหรับพื้นที่ว่างด้านขวาไว้แล้ว
 
-ชุดกราฟข้อจำกัด thermal −170/+170°C, RF, mechanism, power, controller และ failure gates อยู่ที่ [`limitation-assets/README.md`](limitation-assets/README.md)
+ชุดกราฟข้อจำกัด thermal −170°C ถึง +110°C (+230°F), RF, mechanism, power, controller และ failure gates อยู่ที่ [`limitation-assets/README.md`](limitation-assets/README.md)
 
 ## ข้อสรุปที่ควรใช้เป็นแกนเรื่อง
 
-ผลิตภัณฑ์ควรถูกนิยามเป็น **secondary, independently pointed S-band antenna front-end** สำหรับกู้ลิงก์หลังยานเอียง โดยใช้ power, heater, attitude/ephemeris, data interface และ RF transponder/PA ของ lander ตาม interface ที่ตกลงกัน ไม่ควรเรียกว่า independent communication system จนกว่าจะรวม modem, receiver, transmitter, PA, diplexer, RF switch และ autonomous acquisition chain ไว้ใน 2U จริง
+ผลิตภัณฑ์ควรถูกนิยามเป็น **secondary, independently pointed S-band antenna front-end** สำหรับกู้ลิงก์หลังยานเอียง โดยใช้ power, attitude/ephemeris, data interface และ RF transponder/PA ของ lander ตาม interface ที่ตกลงกัน. ฮีตเตอร์เฉพาะที่อยู่บน payload/gimbal แต่รับไฟจาก lander. ไม่ควรเรียกว่า independent communication system จนกว่าจะรวม modem, receiver, transmitter, PA, diplexer, RF switch และ autonomous acquisition chain ไว้ใน 2U จริง
 
 สิ่งที่ระบบแก้ได้คือความเสียหายเชิงเรขาคณิต: body-fixed antenna ชี้ผิดทิศหลัง touchdown. ระบบไม่สามารถแก้ Earth ต่ำกว่าขอบฟ้า, terrain/hull blockage, host radio หรือ host power เสีย, สาย RF ขาด, gimbal jam หรือ antenna burial ได้
 
@@ -119,7 +119,7 @@ Ground station sensitivity ต้องอยู่ข้างผลหลั�
 
 - ถ้าใช้ **host lander radio/PA**: ตาราง payload ควรแสดง controller/motor ≈ 1–3 W และบรรทัดแยก `Host RF service: 5 W RF, ≈14.3 W DC at assumed 35%`; ต้องยืนยัน RF connector, band, power, duty cycle และ thermal allocation
 - ถ้าเป็น **standalone backup radio**: ต้องใส่ transceiver/PA/modem/Rx/diplexer/filter/RF switch, mass, peak power และ thermal rejection ใน 2U; ตาราง 1.67 W ปัจจุบันไม่พอ
-- การใช้ power/heater/radio จาก lander ทำให้ระบบเป็น geometry-resilient แต่ไม่ independent จาก host failure
+- การใช้ power/radio จาก lander รวมถึงไฟสำหรับ local heater ทำให้ระบบเป็น geometry-resilient แต่ไม่ independent จาก host failure
 
 ## สิ่งที่ซิมทำได้แล้ว
 

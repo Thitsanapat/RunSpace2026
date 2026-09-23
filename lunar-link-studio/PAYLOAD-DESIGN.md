@@ -4,7 +4,7 @@
 
 โมดูลทีมแทน green surface-payload block หนึ่งตำแหน่งบน lander. ภาพผู้ใช้ระบุบริการประมาณ 4 kg และ 200 mm cube; โครงการยังจำกัด **รวมทุกชิ้น 100 × 100 × 200 mm และ ≤1.5 kg**. 2U ในซิมหมายถึงกรอบโครงการ 2 ลิตร ไม่ใช่การรับรอง CubeSat rail/dispenser dimensions หรือ provider ICD. ตัวถัง lander ถูกปรับสัดส่วนจากภาพล่าสุด แต่ยังไม่มี CAD มิติจริง.
 
-**ยังยืนยันไม่ได้ว่า 2U รวม gimbal พอสำหรับช่วงการหมุนที่ต้องการ.** การใช้ไฟ/ฮีตเตอร์จาก lander ช่วยลดอุปกรณ์ใน payload แต่ไม่แก้พื้นที่กวาดของ antenna/motor/harness. แบบปัจจุบันเป็นแนวคิดที่ตั้งใจแสดงข้อขัดข้องจริง ไม่ใช่แบบพร้อมผลิต.
+**ยังยืนยันไม่ได้ว่า 2U รวม gimbal พอสำหรับช่วงการหมุนที่ต้องการ.** การใช้แหล่งจ่ายไฟจาก lander และติดฮีตเตอร์เฉพาะที่บน payload/gimbal ช่วยตัดแบตเตอรี่ แต่ไม่แก้พื้นที่กวาดของ antenna/motor/harness. แบบปัจจุบันเป็นแนวคิดที่ตั้งใจแสดงข้อขัดข้องจริง ไม่ใช่แบบพร้อมผลิต.
 
 ## สิ่งที่เพิ่มใน 3D
 
@@ -16,7 +16,7 @@
 | Control PCB | ขนาดเดียวกัน, ระดับ 76 mm | MCU, watchdog, attitude/encoder interfaces, temperature sensors, host data link |
 | กลไกด้านบน | 105–200 mm, pivot 152.5 mm | yaw stage, yoke, pitch motor, antenna, RF connector และ service loop |
 
-ภาพชิป/pins/traces ช่วยสื่อสารการจัดวาง ไม่ใช่ schematic, PCB routing, datasheet footprint หรือ flight BOM. สายที่วาดเป็น illustrative routing ไม่ได้ตาม deformation ขณะหมุน. ไม่มีแบตเตอรี่และไม่มี local heater. การใช้ host RF เป็นสมมติฐานเดิมของซิมที่ต้องยืนยันแยกจากการใช้ host power/heater; ถ้าต้องมี transceiver/PA ของเราเอง ต้องเพิ่มพื้นที่ กำลังไฟ และความร้อนใหม่.
+ภาพชิป/pins/traces ช่วยสื่อสารการจัดวาง ไม่ใช่ schematic, PCB routing, datasheet footprint หรือ flight BOM. สายที่วาดเป็น illustrative routing ไม่ได้ตาม deformation ขณะหมุน. ไม่มีแบตเตอรี่ แต่มี local heater บน payload/gimbal ซึ่งรับไฟจาก lander. การใช้ host RF เป็นสมมติฐานเดิมของซิมที่ต้องยืนยันแยกจาก host power; ถ้าต้องมี transceiver/PA ของเราเอง ต้องเพิ่มพื้นที่ กำลังไฟ และความร้อนใหม่.
 
 เปิด **Payload 2U → ปิด Payload cover → เปิด Exploded view**; exploded view แยกชิ้นส่วนออกนอกกรอบเพื่อดูรายละเอียด ไม่ใช่สภาพใช้งานจริง. ส่งออก GLB ได้พร้อมบอร์ดและ material; pose/exploded state ตามภาพที่เลือก.
 
@@ -34,7 +34,7 @@
 
 ## ไฟจาก lander: ทำไมยังต้องมีวงจรของเรา
 
-แหล่งจ่าย host → protection/inrush/filter → DC/DC → logic + drivers. Host heater → heated base → contact/strap → payload. แผ่นข้อมูลที่ส่งมายังไม่ได้ระบุ bus voltage, current, timing หรือ thermal interface ที่รับรองสำหรับงานเรา.
+แหล่งจ่าย host → protection/inrush/filter → แยกเป็น DC/DC สำหรับ logic/drivers และวงจร thermostat สำหรับ heater pad บน payload/gimbal. จุดยึดใช้ thermal isolator และยังมี parasitic conductance ไป lander. แผ่นข้อมูลที่ส่งมายังไม่ได้ระบุ bus voltage, current, timing หรือ thermal interface ที่รับรองสำหรับงานเรา.
 
 ค่าที่ปรับได้เพิ่ม: bus min/max (ตั้งสมมติ 22/32 V), branch allocation 0.5 A, harness resistance 0.5 Ω, entered inrush 0.8 A/20 ms, input capacitor 470 µF, brownout 18 V และ outage 100 ms. ทั้งหมดเป็น **design assumptions ไม่ใช่ ispace specification**.
 
@@ -46,7 +46,7 @@
 
 Ideal capacitor hold-up: `t = C(Vstart² − Vbrownout²)/(2P)`; กราฟ `V(t) = sqrt(max(0,Vstart² − 2Pt/C))`. ไม่รวม ESR, capacitor tolerance/derating, converter UVLO hysteresis, switching หรือ host foldback. Inrush เป็นค่าที่ผู้ใช้ป้อน ไม่ใช่ waveform ที่วงจรซิมได้.
 
-ตัวอย่าง Nominal ใน `examples/payload-design-study.json`: P≈0.967 W, Vload≈21.978 V, I≈0.044 A; entered inrush 0.8 A เกิน branch 0.5 A. Ideal hold-up≈38.64 ms จึงไม่ผ่าน outage 100 ms. ต้องอัปเดต load จากอุปกรณ์จริง โดยเฉพาะ motor start/stall; ผลนี้ไม่ใช่ flight power budget. Host RF/heater เป็น branch แยก ไม่บวกซ้ำใน payload branch.
+การ sizing แบบ worst case ปัจจุบันนับ functional peak ≈5.31 W พร้อม local heater 30 W รวม ≈35.31 W. ที่ bus minimum 22 V และ harness 0.5 Ω ได้ Vload≈21.17 V, I≈1.67 A จึงเกิน branch allocation 0.5 A; ideal hold-up 470 µF เหลือ≈0.83 ms เทียบ requirement 100 ms. ต้องตกลง operating modes หรือเพิ่ม power allocation และอัปเดตจากอุปกรณ์จริง โดยเฉพาะ heater, motor start/stall และ converter; ผลนี้ไม่ใช่ flight power budget.
 
 ## หลักฐานที่ยังต้องเพิ่มก่อนเรียกว่าสมบูรณ์
 
@@ -61,7 +61,7 @@ Ideal capacitor hold-up: `t = C(Vstart² − Vbrownout²)/(2P)`; กราฟ `V
 
 การสั่นตอนปฏิบัติงานหลัง touchdown อาจเป็น transient แต่ยังต้องตรวจ vibration ระหว่าง launch และอายุการหมุนของกลไก. NASA อธิบายความสำคัญของ structural environment, mechanism reliability, lubrication และการทดสอบใน [Structures, Materials, and Mechanisms](https://www.nasa.gov/smallsat-institute/sst-soa/structures-materials-and-mechanisms/). ต้องเลือก qualification loads จาก mission ICD ไม่ยกค่าตัวอย่างทั่วไปมาเป็น requirement ของยานนี้.
 
-การมี heater ที่ lander ไม่รับประกันอุณหภูมิของ motor/PCB: thermal contact, fasteners และ conductive paths กำหนดการถ่ายความร้อน ตาม [NASA Thermal Control](https://www.nasa.gov/smallsat-institute/sst-soa/thermal-control/). ค่า ±170°C ใช้เป็น environmental boundary case ไม่ใช่อุณหภูมิที่ทุกชิ้นต้องเท่ากันทันที และไม่มี atmospheric convection บนดวงจันทร์.
+การมี heater บน payload/gimbal ไม่รับประกันอุณหภูมิของทุกชิ้น: ตำแหน่ง heater, thermal spreader, isolator, fasteners และ conductive paths กำหนดการกระจายความร้อน ตาม [NASA Thermal Control](https://www.nasa.gov/smallsat-institute/sst-soa/thermal-control/). ตาราง NASA ชุดที่ใช้อ้างอิงระบุ −170°C/−274°F และ +110°C/+230°F; `+230` เป็นองศาฟาเรนไฮต์ ไม่ใช่เซลเซียส. ค่าเหล่านี้เป็น surface boundary ไม่ใช่อุณหภูมิที่ electronics ทุกชิ้นต้องเท่ากันทันที และไม่มี atmospheric convection บนดวงจันทร์.
 
 ต้องหา absolute target direction/attitude จริงด้วย: IMU อย่างเดียวไม่ให้ absolute yaw ที่ไร้ drift. และ gimbal ไม่สามารถกู้ link เมื่อเสาจมดิน, hull บัง Earth LOS หรือ lander ไม่มีไฟได้. ควรกำหนดขอบเขต recovery เป็นช่วง attitude/ground clearance/host availability ที่วัดและทดสอบได้.
 

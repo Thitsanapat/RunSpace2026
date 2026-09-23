@@ -1,17 +1,17 @@
 # Limitation evidence pack
 
-โฟลเดอร์นี้รวมกราฟข้อจำกัดของ Lunar Link Studio v1.4.2 แยกจากภาพผลลัพธ์สำหรับสไลด์หลัก ทุกภาพมีทั้ง PNG พร้อมวางและ SVG สำหรับแก้ไข ข้อมูลตัวเลขที่ใช้สร้างภาพอยู่ใน `limitation-data.json`
+โฟลเดอร์นี้รวมกราฟข้อจำกัดของ Lunar Link Studio v1.5.1 แยกจากภาพผลลัพธ์สำหรับสไลด์หลัก ทุกภาพมีทั้ง PNG พร้อมวางและ SVG สำหรับแก้ไข ข้อมูลตัวเลขที่ใช้สร้างภาพอยู่ใน `limitation-data.json`
 
 ## อ่านกราฟอุณหภูมิให้ถูกต้อง
 
-ค่า **−170°C และ +170°C เป็น ground/surface boundary ที่ผู้ใช้กำหนดให้ sensitivity study** ไม่ใช่อุณหภูมิของ payload และไม่ใช่คำอ้างว่าทุกพื้นที่บนดวงจันทร์มีอุณหภูมินี้ตลอดเวลา
+ค่า **−170°C/−274°F และ +110°C/+230°F เป็น surface-boundary references จากตาราง NASA** ไม่ใช่อุณหภูมิของ payload และไม่ใช่คำอ้างว่าทุกพื้นที่บนดวงจันทร์มีอุณหภูมินี้ตลอดเวลา. `+230` เป็น Fahrenheit ไม่ใช่ Celsius.
 
 โมเดล thermal เป็น lumped two-node model:
 
 - node 1: payload
 - node 2: lander interface
-- heater 30 W อยู่บน lander
-- payload รับความร้อนผ่าน thermal conductance 0.2 W/K
+- heater 30 W ติดบน payload/gimbal และรับไฟจาก lander bus
+- heater deposits heat เข้า payload node; thermal conductance 0.2 W/K เป็น parasitic path ระหว่าง payload กับ lander interface
 - RF และมอเตอร์ปิดระหว่าง long-duration study
 - sunlight และ ground boundary คงที่ตลอด 24 ชั่วโมง
 - ไม่มี orbital/day-night cycle, shadow transition, detailed conduction network, MLI, contact resistance, internal component gradients หรือ thermal-vacuum correlation
@@ -22,25 +22,25 @@
 
 ### 01 — Thermal extremes
 
-ไฟล์: `01-thermal-24h-minus170-plus170.png`
+ไฟล์: `01-thermal-24h-minus170-plus110.png`
 
 ผลปัจจุบัน:
 
-- Cold/no sunlight, ground −170°C: payload จาก −30°C ไปประมาณ −11.5°C หลัง 24 h; heater ใช้ประมาณ 206.5 Wh และยังอยู่ใน operating band −40…+80°C ของโมเดล
-- Hot/full sunlight, ground +170°C: payload ขึ้นถึงประมาณ +108.1°C หลัง 24 h จึง **เกิน operating maximum +80°C**
-- ผล cold ที่ผ่านขึ้นกับ lander heater, energy allocation, thermal contact และค่าการแผ่รังสีที่สมมติไว้ทั้งหมด
+- Cold/no sunlight, ground −170°C: payload จาก −30°C ไปจบประมาณ −0.25°C หลัง 24 h; ช่วงอุณหภูมิ −30…+1.11°C, heater ใช้ประมาณ 164.7 Wh และยังอยู่ใน operating band −40…+80°C ของโมเดล
+- Hot/full sunlight, ground +110°C/+230°F: payload ขึ้นถึงประมาณ +88.5°C หลัง 24 h จึง **เกิน operating maximum +80°C**
+- ผล cold ที่ผ่านขึ้นกับ local heater, lander energy allocation, parasitic thermal path และค่าการแผ่รังสีที่สมมติไว้ทั้งหมด
 
 ตำแหน่งแนะนำ: หน้า Environment/Thermal หรือ risk slide หลัก ถ้ามีพื้นที่สำหรับ thermal เพียงรูปเดียวให้ใช้รูปนี้
 
 คำบรรยาย:
 
-> 24-hour two-node thermal sensitivity with lander-mounted heater. The −170°C boundary remains within the entered payload operating band under the stated heater/contact assumptions, while the +170°C full-sun case reaches 108.1°C and fails the +80°C operating limit. This is a reduced-order screening result, not thermal qualification.
+> 24-hour two-node thermal sensitivity with a lander-powered heater mounted on the payload/gimbal. Under the entered assumptions, the −170°C case remains within the payload operating band, while the +110°C/+230°F full-sun case reaches 88.5°C and fails the +80°C limit. This is reduced-order screening, not thermal qualification.
 
 ### 02 — Thermal boundary sweep
 
 ไฟล์: `02-thermal-boundary-sweep.png`
 
-แสดง final payload temperature หลัง 24 h เมื่อ sweep ground boundary จาก −170 ถึง +170°C ทั้ง no-sunlight และ full-sunlight ใช้สำหรับตอบว่าผลไวต่อ environment แค่ไหน ไม่ควรเรียกเส้นนี้ว่า lunar temperature profile
+แสดง final payload temperature หลัง 24 h เมื่อ sweep ground boundary จาก −170 ถึง +110°C ทั้ง no-sunlight และ full-sunlight ใช้สำหรับตอบว่าผลไวต่อ environment แค่ไหน ไม่ควรเรียกเส้นนี้ว่า lunar temperature profile
 
 ตำแหน่งแนะนำ: appendix ต่อจากภาพ 01
 
@@ -96,9 +96,9 @@
 
 ข้อจำกัดปัจจุบัน:
 
-- peak payload branch 5.31 W
-- entered inrush 0.8 A มากกว่า bus allocation 0.5 A: FAIL
-- 470 µF ให้ ideal hold-up 6.85 ms เทียบ requirement 100 ms: FAIL
+- functional branch peak 5.31 W + local heater 30 W = worst-case payload service 35.31 W
+- steady current ประมาณ 1.67 A และ entered inrush 0.8 A เทียบ bus allocation 0.5 A: FAIL
+- 470 µF ให้ ideal hold-up ประมาณ 0.83 ms เทียบ requirement 100 ms: FAIL
 - 5 W RF output ของ host PA ต้องการประมาณ 14.29 W DC ที่ assumed 35% efficiency
 
 ต้องยืนยันด้วย lander ICD, converter selection, inrush waveform, ESR/derating และ hardware test
@@ -148,7 +148,7 @@
 
 ถ้าเพิ่มได้เพียง 3 รูป:
 
-1. `01-thermal-24h-minus170-plus170.png`
+1. `01-thermal-24h-minus170-plus110.png`
 2. `07-electrical-power-and-holdup-limits.png`
 3. `10-master-limitation-register.png`
 

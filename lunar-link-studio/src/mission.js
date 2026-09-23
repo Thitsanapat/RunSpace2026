@@ -35,7 +35,8 @@ export function visibility(q,c,t,az=0,el=0) {
   return {blocked:reason!==null,reason,groundClearance:minClearance,worldOrigin,position};
 }
 
-// Two thermal nodes: lander interface and payload. The heater belongs to the lander.
+// Two thermal nodes: lander interface and payload. The lander supplies electrical
+// power, while the dedicated heater deposits heat locally on the payload/gimbal.
 export function thermalRates(payloadC,landerC,c,{motorHeat=0,payloadHeat=0,heaterOn=false,connected=true}={}) {
   const sigma=5.670374419e-8,tp=payloadC+273.15,tl=landerC+273.15,tg=c.groundTemp+273.15;
   const sink=c.groundView*tg**4+(1-c.groundView)*3**4;
@@ -45,7 +46,7 @@ export function thermalRates(payloadC,landerC,c,{motorHeat=0,payloadHeat=0,heate
   const landerRadiation=c.landerEmissivity*sigma*c.landerArea*(tl**4-sink);
   const landerSolar=1361*c.sunlight*c.solarIncidence*c.landerAbsorptivity*c.landerArea;
   const heater=heaterOn?c.heaterW:0;
-  return {derivative:(solar+motorHeat+payloadHeat+conduction-radiation)/c.heatCapacity,
-    landerDerivative:(landerSolar+heater-conduction-landerRadiation)/c.landerHeatCapacity,
+  return {derivative:(solar+motorHeat+payloadHeat+heater+conduction-radiation)/c.heatCapacity,
+    landerDerivative:(landerSolar-conduction-landerRadiation)/c.landerHeatCapacity,
     solar,radiation,conduction,heater,landerRadiation,landerSolar};
 }

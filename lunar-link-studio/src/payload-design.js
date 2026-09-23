@@ -51,11 +51,15 @@ export function assemblyStudy(c,step=5) {
 }
 
 export function electricalStudy(c,r) {
-  const peakLoadW=Math.max(c.electronicsW/c.regulatorEfficiency,...r.frames.map(f=>f.power));
+  const peakFunctionalLoadW=Math.max(c.electronicsW/c.regulatorEfficiency,...r.frames.map(f=>f.power));
+  // Worst-case interface sizing assumes the local survival heater and functional
+  // branch can be on together. Both are supplied by the lander power service.
+  const heaterLoadW=c.heaterW;
+  const peakLoadW=peakFunctionalLoadW+heaterLoadW;
   const discriminant=c.busMinV*c.busMinV-4*c.harnessOhm*peakLoadW;
   const loadedV=discriminant<0?null:(c.busMinV+Math.sqrt(discriminant))/2;
   const steadyA=loadedV?peakLoadW/loadedV:null;
   const startV=loadedV??0,holdMs=Math.max(0,0.5*c.holdCapUf*1e-6*(startV*startV-c.brownoutV*c.brownoutV)/peakLoadW*1000);
   const rows=Array.from({length:101},(_,i)=>{const ms=i*Math.max(c.outageMs,100)/100;return {x:ms,y:Math.sqrt(Math.max(0,startV*startV-2*peakLoadW*(ms/1000)/(c.holdCapUf*1e-6)))};});
-  return {peakLoadW,loadedV,steadyA,peakBusDemandA:Math.max(steadyA??Infinity,c.inrushA),currentPass:steadyA!==null&&Math.max(steadyA,c.inrushA)<=c.busCurrentLimitA,voltagePass:loadedV!==null&&loadedV>c.brownoutV,holdUpMs:holdMs,outagePass:loadedV>c.brownoutV&&holdMs>=c.outageMs,inrushA:c.inrushA,inrushMs:c.inrushMs,rows,source:'Lander bus; no payload battery; capacitor hold-up screening only',scope:'Constant-power harness/drop and ideal capacitor discharge. Not a switching/inrush circuit simulation; does not gate the mission solver.'};
+  return {peakLoadW,peakFunctionalLoadW,heaterLoadW,loadedV,steadyA,peakBusDemandA:Math.max(steadyA??Infinity,c.inrushA),currentPass:steadyA!==null&&Math.max(steadyA,c.inrushA)<=c.busCurrentLimitA,voltagePass:loadedV!==null&&loadedV>c.brownoutV,holdUpMs:holdMs,outagePass:loadedV>c.brownoutV&&holdMs>=c.outageMs,inrushA:c.inrushA,inrushMs:c.inrushMs,rows,source:'Lander bus; no payload battery; local payload/gimbal heater; capacitor hold-up screening only',scope:'Constant-power harness/drop and ideal capacitor discharge. Not a switching/inrush circuit simulation; does not gate the mission solver.'};
 }

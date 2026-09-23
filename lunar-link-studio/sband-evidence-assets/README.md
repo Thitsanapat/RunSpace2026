@@ -55,7 +55,7 @@
 - gain vs frequency
 - S11 vs frequency
 - axial ratio vs frequency
-- gain/S11/AR vs −170…+170°C
+- gain/S11/AR vs component temperature across the qualified range; surface references are −170°C and +110°C/+230°F
 - installed antenna pattern บน lander
 
 ควรแสดงเป็น test requirement จนกว่าจะมี VNA, chamber, EM หรือ thermal-vacuum data ห้ามลากเส้น smooth curve จากจุดตัวเลขใน paper คนละงาน

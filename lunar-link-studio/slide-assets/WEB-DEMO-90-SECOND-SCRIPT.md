@@ -26,9 +26,9 @@
 
 > โจทย์ของเราคือ หลังลงจอด lander อาจเอียงจนเสาแบบติดตัวยานชี้ออกจากโลก และสูญเสีย link ทั้งที่ระบบหลักยังทำงานอยู่
 >
-> กล่องสีฟ้าคือ surface payload ที่แทน green zone ทั้ง antenna, two-axis gimbal และ electronics อยู่ใน 2U และไม่เกิน 1.5 กิโลกรัม เราเลือก stacked circularly polarized S-band patch ที่ 2.205 กิกะเฮิรตซ์ เป้าหมาย 60 คูณ 60 คูณ 7 มิลลิเมตร โดยใช้ power, RF service และ heater จาก lander
+> กล่องสีฟ้าคือ surface payload ที่แทน green zone ทั้ง antenna, two-axis gimbal, electronics และ heater pad อยู่ใน 2U และไม่เกิน 1.5 กิโลกรัม เราเลือก stacked circularly polarized S-band patch ที่ 2.205 กิกะเฮิรตซ์ เป้าหมาย 60 คูณ 60 คูณ 7 มิลลิเมตร โดยใช้ power และ RF service จาก lander; heater ติดบน payload/gimbal แต่รับไฟจาก lander
 >
-> ระหว่าง touchdown กิมบอลจะล็อก เมื่อยานนิ่งจึงใช้ attitude และ Earth ephemeris ชี้กลับหาโลก เว็บนี้คำนวณ geometry, control, power, thermal boundary ลบ 170 ถึงบวก 170 องศา และ RF link ร่วมกัน โดย heater อยู่ที่ lander ไม่ใช่เพียง animation
+> ระหว่าง touchdown กิมบอลจะล็อก เมื่อยานนิ่งจึงใช้ attitude และ Earth ephemeris ชี้กลับหาโลก เว็บนี้คำนวณ geometry, control, power, thermal surface reference ลบ 170 ถึงบวก 110 องศาเซลเซียส และ RF link ร่วมกัน โดย heater อยู่บน payload/gimbal และดึงไฟจาก lander ไม่ใช่เพียง animation ค่า NASA ที่เขียนบวก 230 คือฟาเรนไฮต์ หรือบวก 110 เซลเซียส
 >
 > สำหรับ direct-to-Earth ระยะ 384,400 กิโลเมตร FSPL เท่ากับ 211.01 เดซิเบล กำลังส่ง 5 วัตต์กับ gain target 5.2 dBic ให้ EIRP 11.19 dBW ที่ 4 กิโลบิตต่อวินาทีและ ground G/T 22 dB/K เหลือ headroom 4.26 dB หลัง reserve 3 dB
 >
@@ -50,7 +50,7 @@
 - ห้ามเรียก S11 −10 dB ว่าผล simulation; เป็น requirement
 - ห้ามพูดว่ากิมบอลแก้ได้ทุกท่าลงจอด เพราะ hull, terrain, burial, jam และ host-power loss ยังทำให้ link fail
 - ห้ามพูดว่า 5 W RF เท่ากับ 5 W DC; ที่ PA efficiency 35% ต้องใช้ประมาณ 14.29 W DC เฉพาะ PA
-- ห้ามเรียก ±170°C ว่าอุณหภูมิ antenna; เป็น thermal boundary stress
+- ห้ามเรียก −170/+110°C ว่าอุณหภูมิ antenna; เป็น surface-boundary reference และ +230 คือ °F
 
 ## เวอร์ชันตัดเหลือ 60 วินาที
 

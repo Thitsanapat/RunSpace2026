@@ -18,7 +18,7 @@ GitHub Pages: https://Thitsanapat.github.io/RunSpace2026/ — workflow build/tes
 
 ## ใหม่ในรุ่น 1.4: สัดส่วนจากภาพล่าสุดและวงจรภายใน 2U
 
-ขยายสัดส่วนดาดฟ้า/ลดความสูงแผงข้างตามภาพที่ส่งเพิ่ม และย้ายโมดูล cyan ไป **แทน green surface-payload block หนึ่งตำแหน่ง**. เพิ่ม PCB 3 ชั้น (power protection/DC-DC, motor drivers, MCU/sensor interfaces), connectors, thermal strap และสายประกอบภาพ. ใช้ไฟ/ความร้อนจาก lander ไม่มีแบตเตอรี่หรือฮีตเตอร์ในโมดูล. นี่คือ component allocation ไม่ใช่วงจร ECAD ที่ออกแบบหรือผ่าน qualification แล้ว.
+ขยายสัดส่วนดาดฟ้า/ลดความสูงแผงข้างตามภาพที่ส่งเพิ่ม และย้ายโมดูล cyan ไป **แทน green surface-payload block หนึ่งตำแหน่ง**. เพิ่ม PCB 3 ชั้น (power protection/DC-DC, motor drivers, MCU/sensor interfaces), connectors, heater pad และสายประกอบภาพ. Lander จ่ายไฟให้โมดูล; ไม่มีแบตเตอรี่ใน payload และมีฮีตเตอร์เฉพาะที่ติดบน payload/gimbal. นี่คือ component allocation ไม่ใช่วงจร ECAD ที่ออกแบบหรือผ่าน qualification แล้ว.
 
 กด **Payload 2U**, ปิด **Payload cover**, เปิด **Exploded view** เพื่อดูภายใน. ด้านล่างมี **2U assembly screening**: แผนที่ azimuth/elevation รวมกรอบ มอเตอร์ หัวต่อและพื้นที่โค้งสาย; **Lander bus interface**: current/inrush allocation, harness drop และ capacitor hold-up. ปรับพารามิเตอร์ใน sidebar และส่งออกด้วย **Export design study**.
 
@@ -56,10 +56,10 @@ GitHub Pages: https://Thitsanapat.github.io/RunSpace2026/ — workflow build/tes
 
 - แยก payload จาก lander; **100 × 100 × 200 mm รวม antenna และ gimbal ทั้งหมด** ปุ่ม **Payload 2U** แสดงโมดูลแยกในขนาดจริง
 - จำลอง landing lock → rest confirmation → acquisition; vibration เป็น transient หลัง touchdown แล้วหยุด
-- เพิ่มลงตะแคง ลงปัก คว่ำ/จมพื้น ไฟ lander หาย และพื้นผิว +170°C รวม 11 presets
+- เพิ่มลงตะแคง ลงปัก คว่ำ/จมพื้น ไฟ lander หาย และพื้นผิว +110°C/+230°F รวม 11 presets
 - ตรวจมุมแผ่นเสากับกรอบ 2U ทุก timestep; compact baseline ผ่าน plate sweep ส่วน ANSER 80 mm ถูกหยุดเมื่อชนกรอบ
 - Antenna & RF มี reference profiles จากงานวิจัย, สูตร beam/link budget แทนค่าจริง, gain pattern CSV และเครื่องคำนวณ patch
-- Heater อยู่ที่ lander; คำนวณอุณหภูมิ lander และ payload แยกกันผ่าน thermal conductance
+- Lander จ่ายกำลังไฟให้ฮีตเตอร์เฉพาะที่บน payload/gimbal; คำนวณอุณหภูมิ lander และ payload แยกกัน โดย thermal conductance เป็นเส้นทางรั่วไหลความร้อนผ่านจุดยึด
 - แยก payload power, RF DC power และ heater power รวมถึงกรณี thermal contact หรือ host power ขาด
 - 50 ms command latency แยกจาก motor settling time
 
@@ -91,7 +91,7 @@ GitHub Pages: https://Thitsanapat.github.io/RunSpace2026/ — workflow build/tes
 
 RF ตั้งต้นใช้ host transmitter; หาก payload allocation หมด controller หยุด แต่ RF ของ host อาจยังเปิดได้. Fixed baseline มี payload allocation แยกแต่ใช้สถานะ host เดียวกันจาก paired study. Heater เป็นส่วนหนึ่งของ host energy; อย่านำ host + payload + heater มาบวกซ้ำ. ไม่มี battery recharge และไม่ได้รวม housekeeping ทั้ง lander
 
-Thermal study ใช้สอง lumped nodes, timestep ≤1 s, constant sunlight/ground boundary; RF/motors OFF. ±170°C คือ ground boundary ไม่ใช่อุณหภูมิ payload. ฝุ่นเป็น sensitivity law ที่ยังไม่ได้ calibrate. ไม่มี convection ใน vacuum
+Thermal study ใช้สอง lumped nodes, timestep ≤1 s, constant sunlight/ground boundary; RF/motors OFF. Preset −170°C และ +110°C/+230°F คือ surface-boundary references ไม่ใช่อุณหภูมิ payload. ฝุ่นเป็น sensitivity law ที่ยังไม่ได้ calibrate. ไม่มี convection ใน vacuum
 
 Monte Carlo สุ่ม Euler roll/pitch/yaw อย่างละ ±180°, bias ±0.3°, dust 0–1; ไม่ใช่การสุ่ม orientation อย่างสม่ำเสมอบนทรงกลม และไม่ใช่อัตราความสำเร็จของภารกิจจริง
 

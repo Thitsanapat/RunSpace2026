@@ -1,6 +1,6 @@
-# Validation — v1.5.0 — 2026-09-23
+# Validation — v1.5.1 — 2026-09-23
 
-v1.5.0 ใช้ proposed compact stacked CP patch target และเก็บ ANSER เป็น research benchmark. `npm.cmd test` ผ่าน 43/43 กรณี รวม explicit RF-evidence reset, compact 2U sampled sweep pass และ ANSER sweep fail. ค่า baseline ที่ทำซ้ำได้: on-axis raw margin 7.2566 dB, excess above 3 dB reserve 4.2566 dB, compact 60 mm assembly 100% ของ sampled 5° grid และ minimum concept clearance 3.075 mm. ANSER assembly sampled passประมาณ3.05% และ minimum signed clearance −10.68 mm.
+v1.5.1 ใช้ proposed compact stacked CP patch target และเก็บ ANSER เป็น research benchmark. Thermal model ย้าย heater ไป payload/gimbal node โดย lander เป็นแหล่งจ่ายไฟ และ power screening รวม heater 30 W ใน worst case. `npm.cmd test` ผ่าน 44/44 กรณี รวม heater-node energy balance, lander-bus heater sizing, explicit RF-evidence reset, compact 2U sampled sweep pass และ ANSER sweep fail. ค่า baseline ที่ทำซ้ำได้: on-axis raw margin 7.2566 dB, excess above 3 dB reserve 4.2566 dB, compact 60 mm assembly 100% ของ sampled 5° grid และ minimum concept clearance 3.075 mm. ANSER assembly sampled passประมาณ3.05% และ minimum signed clearance −10.68 mm.
 
 ข้อจำกัดของผลผ่าน: 60 × 60 × 7 mm, 5.2 dBic, HPBW 90° และ S11 −10 dB เป็น design targets. Geometry เป็น bounding boxes ไม่ใช่ exact CAD และ pattern เป็น analytical cosine model ไม่ใช่ mounted 3D measurement.
 
@@ -87,7 +87,7 @@ Default100Hz + configured delay10ms ให้ latency bound20ms ใน scheduler
 
 ## Thermal24h
 
-Cold preset: payload−30 ถึง−11.42°C; heater206.55Wh; host total228.86Wh. Hot preset: payload30 ถึง108.12°C, heater0Wh; เกิน motor limit80°C. RF/motors OFF; default thermal/contact/energy assumptions; no recharge
+Cold preset −170°C/no sun: payload−30 ถึง+1.11°C และจบ−0.25°C; local heater164.73Wh; host total187.04Wh. Hot preset +110°C/+230°F: payload30 ถึง88.52°C, heater0Wh; เกิน motor limit80°C. RF/motors OFF; heater อยู่บน payload/gimbal แต่รับไฟจาก lander; default thermal/contact/energy assumptions; no recharge
 
 ## Physical validation still required
 

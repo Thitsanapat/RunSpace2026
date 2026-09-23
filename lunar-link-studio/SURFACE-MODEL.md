@@ -56,7 +56,7 @@ Nominal ยังมี final margin 8.5566 dB. ที่ตำแหน่ง�
 
 Lunar static weight `W = m × 1.62`. Peak base acceleration force estimate `F = m × shockG × 9.80665`; เช่น 1.5 kg และ 12 g₀ ให้ 176.5197 N. นี่คือแรงเฉื่อยโดยประมาณ ไม่รวม structural amplification, modal response, gravity vector summation, load factors หรือ stress และไม่ใช่ shock qualification.
 
-Heater ยังอยู่ฝั่ง lander และถ่ายความร้อนผ่าน conductance เดิม. ค่า bus 28 V, host power, thermal node และ heater เป็นสมมติฐานเดิมของงานเรา ไม่ได้ถอดจากภาพผู้ให้บริการ. Surface payload ไม่ได้หมายความว่าได้รับ heater หรือ power allocation ตามค่านี้โดยอัตโนมัติ.
+Lander จ่ายไฟ 28 V ตามสมมติฐาน แต่ heater ติดอยู่บน payload/gimbal และถ่ายความร้อนเข้า payload node โดยตรง; conductance เดิมแทน parasitic thermal path กลับไปยัง lander interface. ค่า bus, power allocation, thermal node และ heater เป็นสมมติฐานของงานเรา ไม่ได้ถอดจากภาพผู้ให้บริการ. Surface payload ไม่ได้หมายความว่าได้รับ power allocation ตามค่านี้โดยอัตโนมัติ.
 
 ## เปิดดูและทำซ้ำ
 

@@ -1,6 +1,6 @@
 # Antenna baseline decision — 2U surface payload
 
-อัปเดต 23 กันยายน 2026 สำหรับ Lunar Link Studio v1.5.0
+อัปเดต 23 กันยายน 2026 สำหรับ Lunar Link Studio v1.5.1
 
 ## ข้อสรุปการเลือก
 
@@ -20,7 +20,7 @@
 | Total mass | ≤1.5 kg | antenna allocation 100 g; total input 1.5 kg | PASS input limit; CAD roll-up pending |
 | Link | 384,400 km, 4 kbps, ≥3 dB reserve | 7.26 dB raw margin at 5 W RF and G/T 22 dB/K | PASS under assumptions |
 | Polarization | circular | AR target ≤3 dB; handedness TBD | OPEN until EM/measurement |
-| Thermal | payload −40…+80°C under ±170°C boundary stress | host heater/interface model | CONDITIONAL; integrated TVAC required |
+| Thermal | payload −40…+80°C under −170°C / +110°C surface references | lander-powered local payload/gimbal heater model | CONDITIONAL; integrated TVAC required |
 | RF power | 5 W RF study | radiator/feed power handling not proven | OPEN |
 | Installed RF | S11, AR, gain and 3D pattern on lander | analytical model only | OPEN — installed EM/VNA/chamber test |
 

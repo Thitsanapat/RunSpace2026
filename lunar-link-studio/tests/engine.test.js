@@ -45,8 +45,8 @@ test('energy cannot exceed budget and depletion disables RF',()=>{
 test('thermal energy balance and heater produce expected signs',()=>{
   const c={...DEFAULTS,sunlight:0,conductance:0,groundView:0};assert.ok(thermalDerivative(20,c).derivative<0);
   const off=thermalDerivative(-30,c,0,false),on=thermalDerivative(-30,c,0,true);
-  assert.equal(on.derivative,off.derivative);
-  assert.ok(Math.abs(on.landerDerivative-off.landerDerivative-c.heaterW/c.landerHeatCapacity)<1e-12);
+  assert.ok(Math.abs(on.derivative-off.derivative-c.heaterW/c.heatCapacity)<1e-12);
+  assert.equal(on.landerDerivative,off.landerDerivative);
   const r=runThermal({...c,batteryWh:0.001},6);assert.ok(r.energyWh<=0.001);assert.equal(r.frames.at(-1).powered,false);
 });
 test('input validation rejects non-finite and physically invalid configurations',()=>{

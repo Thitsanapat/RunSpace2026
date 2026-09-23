@@ -21,7 +21,7 @@ test('small plate proxy can fit, but yaw cable allocation still limits travel',(
   assert.equal(assemblyFit({...c,cableTwistLimitDeg:30},40,0).cablePass,false);
 });
 test('host capacitor outage screening matches independent energy balance',()=>{
-  const c={...DEFAULTS,electronicsW:9,regulatorEfficiency:0.9,busMinV:20,harnessOhm:0,brownoutV:10,holdCapUf:1000,inrushA:0,busCurrentLimitA:0.6,outageMs:10};
+  const c={...DEFAULTS,heaterW:0,electronicsW:9,regulatorEfficiency:0.9,busMinV:20,harnessOhm:0,brownoutV:10,holdCapUf:1000,inrushA:0,busCurrentLimitA:0.6,outageMs:10};
   const e=electricalStudy(c,{frames:[{power:10}]});
   assert.equal(e.loadedV,20);assert.equal(e.steadyA,0.5);
   assert.equal(e.holdUpMs,15);assert.equal(e.outagePass,true);
@@ -31,6 +31,11 @@ test('host capacitor outage screening matches independent energy balance',()=>{
   assert.ok(drop.loadedV<20);assert.ok(drop.holdUpMs<15);
   const collapse=electricalStudy({...c,harnessOhm:20},{frames:[{power:10}]});
   assert.equal(collapse.loadedV,null);assert.equal(collapse.voltagePass,false);assert.equal(collapse.outagePass,false);
+});
+test('lander bus sizing includes the local payload heater',()=>{
+  const r={frames:[{power:5}]},off=electricalStudy({...DEFAULTS,heaterW:0},r),on=electricalStudy({...DEFAULTS,heaterW:30},r);
+  assert.equal(on.peakFunctionalLoadW,5);assert.equal(on.heaterLoadW,30);assert.equal(on.peakLoadW,35);
+  assert.ok(on.steadyA>off.steadyA);assert.equal(on.currentPass,false);
 });
 test('interface input validation rejects contradictory voltage thresholds',()=>{
   assert.throws(()=>validateConfig({busMinV:30,busMaxV:20}));

@@ -2,7 +2,8 @@ import {chromium} from '@playwright/test';
 import {mkdir,writeFile,copyFile} from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
 import path from 'node:path';
-import {DEFAULTS,linkBudget} from '../src/engine.js';
+import {DEFAULTS,linkBudget,runSimulation} from '../src/engine.js';
+import {electricalStudy} from '../src/payload-design.js';
 
 const root=process.cwd(),out=path.join(root,'slide-assets');
 await mkdir(out,{recursive:true});
@@ -13,6 +14,7 @@ const svg=(body,w=1200,h=700)=>`<svg xmlns="http://www.w3.org/2000/svg" width="$
 async function saveSvg(name,body,w=1200,h=700){const file=path.join(out,name+'.svg');await writeFile(file,svg(body,w,h));return file;}
 
 const c={...DEFAULTS};
+const electrical=electricalStudy(c,runSimulation(c));
 const on=linkBudget(0,c,false,true,0,c.initialTemp);
 const fixed65=linkBudget(65,c,false,true,0,c.initialTemp);
 const headroom=on.rawMargin-c.reserveDb,fixedHeadroom=fixed65.rawMargin-c.reserveDb;
@@ -143,7 +145,7 @@ await saveSvg('p10-power-and-rf-boundary',`
 <text x="38" y="52" class="title">Power boundary · payload motion vs host RF service</text>
 <text x="38" y="83" class="sub">Do not mix RF output watts with DC input watts in the proposal table</text>
 <rect x="38" y="112" width="540" height="420" rx="12" class="card"/><rect x="622" y="112" width="540" height="420" rx="12" class="card"/>
-<text x="62" y="158" class="value">Payload DC branch</text><text x="62" y="202" class="label">Controller + sensors + motor drivers</text><text x="62" y="239" class="label">Motors: dynamic torque/current model</text><text x="62" y="276" class="label">Current simulated worst branch</text><text x="548" y="276" class="value orange" text-anchor="end">5.31 W</text><text x="62" y="319" class="label">Bus allocation</text><text x="548" y="319" class="label" text-anchor="end">0.5 A @ 22–32 V</text><text x="62" y="362" class="label">Entered inrush</text><text x="548" y="362" class="label orange" text-anchor="end">0.8 A · FAIL</text><text x="62" y="405" class="label">Ideal hold-up</text><text x="548" y="405" class="label orange" text-anchor="end">6.85 ms / 100 ms</text><text x="62" y="468" class="small">Requires motor/driver sizing, inrush mitigation and real bus ICD.</text>
+<text x="62" y="158" class="value">Lander-powered payload branch</text><text x="62" y="202" class="label">Functional peak</text><text x="548" y="202" class="label" text-anchor="end">${electrical.peakFunctionalLoadW.toFixed(2)} W</text><text x="62" y="239" class="label">Local payload/gimbal heater</text><text x="548" y="239" class="label" text-anchor="end">${electrical.heaterLoadW.toFixed(1)} W</text><text x="62" y="276" class="label">Worst-case simultaneous total</text><text x="548" y="276" class="value orange" text-anchor="end">${electrical.peakLoadW.toFixed(2)} W</text><text x="62" y="319" class="label">Current / allocation</text><text x="548" y="319" class="label orange" text-anchor="end">${electrical.steadyA.toFixed(2)} / ${c.busCurrentLimitA.toFixed(1)} A</text><text x="62" y="362" class="label">Entered inrush</text><text x="548" y="362" class="label orange" text-anchor="end">${electrical.inrushA.toFixed(1)} A · FAIL</text><text x="62" y="405" class="label">Ideal hold-up</text><text x="548" y="405" class="label orange" text-anchor="end">${electrical.holdUpMs.toFixed(2)} / ${c.outageMs} ms</text><text x="62" y="468" class="small">Requires heater/motor sizing, operating modes and real bus ICD.</text>
 <text x="646" y="158" class="value">Host radio / PA branch</text><text x="646" y="202" class="label">RF output used by link budget</text><text x="1132" y="202" class="value" text-anchor="end">5.00 W RF</text><text x="646" y="245" class="label">Assumed PA efficiency</text><text x="1132" y="245" class="label" text-anchor="end">35%</text><text x="646" y="288" class="label">PA DC input alone</text><text x="1132" y="288" class="value orange" text-anchor="end">≈14.29 W DC</text><text x="646" y="331" class="label">Feed/cable loss</text><text x="1132" y="331" class="label" text-anchor="end">1.00 dB</text><text x="646" y="374" class="label">Required interface</text><text x="1132" y="374" class="label" text-anchor="end">RF port + coax + duty cycle</text><text x="646" y="435" class="small">If host radio is unavailable, the proposed gimbal cannot close the link.</text><text x="646" y="468" class="small">Standalone backup requires its own transceiver/PA/modem budget.</text>
 <rect x="38" y="560" width="1124" height="104" rx="10" class="warn"/><text x="58" y="598" class="label">Use on page 10 · Current slide's ≈1.67 W transmission row cannot represent a 5 W RF transmitter.</text><text x="58" y="632" class="small">Recommended wording: “independently pointed antenna path using host lander RF/power service,” unless onboard radio hardware is added.</text>`);
 

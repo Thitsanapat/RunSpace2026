@@ -1,9 +1,9 @@
 # Lunar Link engineering study
 
-Model 1.4.0; generated 2026-09-20T18:29:50.826Z
+Model 1.5.1; generated 2026-09-23T15:54:34.732Z
 
 ## Scope
-Entire payload including gimbal: 100 × 100 × 200 mm. Reduced-order simulation; not flight qualification. Antenna anser: 82.44° is an analytical approximation using the 6.5 dBi gain and assumed 65% efficiency; NOT a beamwidth measured in this paper.
+Entire payload including gimbal: 100 × 100 × 200 mm. Reduced-order simulation; not flight qualification. Antenna compact: Mission packaging target, not a published antenna: 60 × 60 × 7 mm stacked CP patch topology informed by ANSER. Gain 5.2 dBic, 90° analytical HPBW and S11 −10 dB are system requirements/sensitivity inputs, not transferred measurements. Full-wave installed EM and hardware measurements are required.
 
 ## Results
 - Gimbal / fixed availability: 16.49 / 16.49% of complete run
@@ -11,7 +11,7 @@ Entire payload including gimbal: 100 × 100 × 200 mm. Reduced-order simulation;
 - Final pointing error: 0.0926 deg
 - Obstruction: LANDER HULL
 - Final plate fits: true; target fits: true
-- Full swept diameter: 113.33 mm
+- Full swept diameter: 85.14 mm
 - Landing lock release: 4.340 s
 - First link after release: — s; not sustained acquisition
 - Sampled command latency bound: 20.00 ms; does not measure motor settling or full sensor/computation delay
@@ -19,10 +19,10 @@ Entire payload including gimbal: 100 × 100 × 200 mm. Reduced-order simulation;
 
 ## Equations
 FSPL = 20log10(4 pi R f/c). EIRP = 10log10(Ptx) + gain - cable loss. C/N0 = EIRP - FSPL + G/T + 228.599 - polarization - other loss. Eb/N0 = C/N0 - 10log10(bitrate). Margin = Eb/N0 - required - implementation.
-Symmetric-cosine reference only (not a fit to imported 3D / elliptical patterns): exponent 2.43403; HPBW 82.44 deg; ideal directivity 8.37 dBi; implied efficiency 65.04%. Analytical pattern floor is -40 dB relative to peak; this floor is not imposed on imports. Imported polar cuts are axisymmetric approximations.
+Symmetric-cosine reference only (not a fit to imported 3D / elliptical patterns): exponent 2.00000; HPBW 90 deg; ideal directivity 7.78 dBi; implied efficiency 55.19%. Analytical pattern floor is -40 dB relative to peak; this floor is not imposed on imports. Imported polar cuts are axisymmetric approximations.
 
 ## Thermal and power boundary
-Two nodes: payload and lander. Heater deposits heat only in lander; conduction K(Tlander-Tpayload) exchanges equal/opposite heat. Each node radiates to ground/deep space and absorbs sunlight. Requested +/-170 C is a ground boundary, not prescribed payload temperature. Host heater/RF and payload allocation are separately tracked. No solar battery recharge or full lander power model. Fixed baseline shares the host availability from this paired study.
+Two nodes: payload and lander interface. The lander supplies electrical power; the dedicated heater is mounted on the payload/gimbal and deposits heat in the payload node. Conduction K(Tlander-Tpayload) is the separate parasitic thermal path and exchanges equal/opposite heat. Each node radiates to ground/deep space and absorbs sunlight. NASA table references are -170 C (-274 F) and +110 C (+230 F) surface values; they are not prescribed payload temperatures. Host-supplied heater/RF and payload allocations are separately tracked. No solar battery recharge or full lander power model. Fixed baseline shares the host availability from this paired study.
 
 ## Limits and proposal corrections
 Gimbal locks during impact and releases after rest confirmation. Body motion is prescribed, not a rigid-body contact/impact solver. Plate corner envelope does not validate cables/yokes/motors. Full swept rotation may exceed 2U. Hull is a box and ground is a plane; rocks, equipment panels, illustrated service blocks and terrain meshes do not enter obstruction. Buried antenna and lost power cannot be repaired by repointing. No shock strength, full-wave EM, complete CAD mass or lunar thermal qualification.
@@ -36,11 +36,13 @@ Semi-implicit Euler 2 ms; sampled PID 100 Hz; telemetry every 40 ms. Coordinates
 - [NASA (2026) — Small Spacecraft Communications / ground systems](https://www.nasa.gov/smallsat-institute/sst-soa/ground-data-systems-and-mission-operations/): Lists S-band return communications at 2200–2290 MHz and asset-dependent G/T, bandwidth, modulation and coding. Station availability and a mission frequency assignment are separate from antenna capability.
 - [MathWorks — polarization loss and vector mismatch](https://www.mathworks.com/help/phased/ref/polloss.html): Polarization loss comes from mismatch of normalized electric-field vectors. The simulator’s axial-ratio option is a restricted ideal-CP receiver calculation; it does not replace measured complex co/cross-polarized fields.
 - [Sánchez-Sevilleja et al. (2025) — compact S-band antenna](https://pmc.ncbi.nlm.nih.gov/articles/PMC11860546/): Measured stacked dual-circular-polarization patch; 80 × 80 × 6.53 mm, 30 g; 2.03 / 2.205 GHz; isolated peak gain 6.5–7 dBi. See Sections 3, 5–7. Its reported axial-ratio angular coverage is not a half-power beamwidth.
+- [AAC Clyde Space AC-2000 (2022) — flight-proven compact S-band patch](https://www.aac-clyde.space/wp-content/uploads/2021/11/AC-2000-1.pdf): Manufacturer datasheet: 2.0–2.3 GHz, VSWR 1.5:1, typical peak gain 5.2 dBic, approximately 2 × 2 inches, about 100 g, circular polarization, space-qualified and flight-proven. The published three-plane relative pattern is used conservatively in the mission profile. Thickness and RF power handling are not public in this datasheet.
 - [Nascetti et al. (2015) — Tigrisat four-patch antenna](https://doi.org/10.1109/LAWP.2014.2366791): Four patches on a 96 mm square annular board, 57 mm opening; 2.45 GHz. Reported simulated gain 7.3 dBi; measured beamwidth about 60°. Directivity 8.3 dBi must not be substituted for gain. Author manuscript: Sections II–III.
 - [MathWorks — rectangular patch sizing equations](https://www.mathworks.com/help/antenna/ug/impedance-analysis-of-2-by-2-patch-array.html): First-pass patch dimensions using effective permittivity and fringing-field extension; final antenna behavior requires electromagnetic analysis.
 - [MathWorks — satellite link budget](https://www.mathworks.com/help/satcom/gs/satellite-link-budget.html): EIRP, free-space loss, receiver G/T, C/N₀ and Eb/N₀ form the RF calculation chain.
 - [NASA — spacecraft thermal control](https://www.nasa.gov/smallsat-institute/sst-soa/thermal-control/): Vacuum thermal models use radiation and conduction, without atmospheric convection.
-- [NASA — Moon facts](https://science.nasa.gov/moon/facts/): NASA gives about +127°C in full Sun and −173°C in darkness as general surface examples. ±170°C here is the user-selected stress envelope, not a uniform lunar air temperature.
+- [NASA — Moon facts](https://science.nasa.gov/moon/facts/): NASA gives about +127°C in full Sun and −173°C in darkness as general surface examples. These are surface examples, not a uniform lunar air temperature.
+- [NASA NTRS 20150003498 — planetary temperature table](https://ntrs.nasa.gov/api/citations/20150003498/downloads/20150003498.pdf): The Moon row lists a maximum of 110°C / 230°F and a minimum of −170°C / −274°F. The +230 value is Fahrenheit, not Celsius. The simulator presets use this internally consistent Celsius pair as surface-boundary references.
 - [JAXA — SLIM landing outcome, 25 January 2024](https://global.jaxa.jp/press/2024/01/20240125-1_e.html): Earth communication was established after the off-attitude landing; solar power generation was the stated problem. Antenna pointing cannot restore a failed power source.
 - [Astrobotic — Lunar Landers Payload User’s Guide](https://science.nasa.gov/wp-content/uploads/2023/11/astrobotic-lunar-landers-pug.pdf): PDF p.20 describes actuated medium/high-gain antennas after touchdown; p.46 describes payload power interfaces. Steerable lander antennas are not an unprecedented invention.
 
@@ -52,7 +54,7 @@ Semi-implicit Euler 2 ms; sampled PID 100 Hz; telemetry every 40 ms. Coordinates
     "beamwidthV": 82.44,
     "backlobeFloorDb": 40,
     "gainConvention": "realized",
-    "s11Db": -15,
+    "s11Db": -10,
     "axialRatioDb": 3,
     "polarizationMode": "fixed",
     "installationLossDb": 0,
@@ -68,7 +70,7 @@ Semi-implicit Euler 2 ms; sampled PID 100 Hz; telemetry every 40 ms. Coordinates
     "wallMm": 2,
     "pitchMotorWidthMm": 6,
     "rfBendRadiusMm": 8,
-    "cableTwistLimitDeg": 90,
+    "cableTwistLimitDeg": 180,
     "busMinV": 22,
     "busMaxV": 32,
     "busCurrentLimitA": 0.5,
@@ -118,8 +120,8 @@ Semi-implicit Euler 2 ms; sampled PID 100 Hz; telemetry every 40 ms. Coordinates
     "resistance": 8,
     "frequencyGHz": 2.205,
     "txPowerW": 5,
-    "peakGain": 6.5,
-    "beamwidth": 82.44,
+    "peakGain": 5.2,
+    "beamwidth": 90,
     "cableLoss": 1,
     "polLoss": 0.5,
     "otherLoss": 1,
@@ -128,11 +130,11 @@ Semi-implicit Euler 2 ms; sampled PID 100 Hz; telemetry every 40 ms. Coordinates
     "requiredEbNo": 4.5,
     "implementationLoss": 1.5,
     "reserveDb": 3,
-    "antennaProfile": "anser",
-    "antennaWidthMm": 80,
-    "antennaHeightMm": 80,
-    "antennaThicknessMm": 6.53,
-    "antennaMassG": 30,
+    "antennaWidthMm": 60,
+    "antennaHeightMm": 60,
+    "antennaThicknessMm": 7,
+    "antennaMassG": 100,
+    "antennaProfile": "compact",
     "clearanceMm": 2,
     "mountX": 0.92,
     "mountY": 0.76,
@@ -179,16 +181,16 @@ Semi-implicit Euler 2 ms; sampled PID 100 Hz; telemetry every 40 ms. Coordinates
   "provenance": {},
   "beam": {
     "lambdaMm": 135.96029841269842,
-    "n": 2.4340335586804147,
-    "directivityDbi": 8.36834530600268,
-    "impliedEfficiency": 0.6503774417431857,
-    "effectiveAreaCm2": 65.7074108104345,
-    "farFieldM": 0.18829026045745287,
-    "halfAngle": 41.22,
-    "lossAtHalfDegree": 0.0004025141326634337,
-    "maxMispoint": 53.76010908613377,
+    "n": 2.0000000000000004,
+    "directivityDbi": 7.781512503836437,
+    "impliedEfficiency": 0.5518852024709852,
+    "effectiveAreaCm2": 48.70957656314172,
+    "farFieldM": 0.10591327150731723,
+    "halfAngle": 45,
+    "lossAtHalfDegree": 0.0003307383591552883,
+    "maxMispoint": 52.22320398857342,
     "internallyConsistent": true,
-    "availableLoss": 5.556644452189886
+    "availableLoss": 4.2566444521898745
   },
   "summary": {
     "samples": 9000,
@@ -273,5 +275,5 @@ Lander geometry is reconstructed conceptually from the photograph. Hull LOS/cont
 ```
 
 ## 2U assembly and host bus screening
-3 concept PCBs, no local battery/heater. Assembly grid step 5 deg; sampled pass 3.05%; minimum signed clearance -10.66 mm. This is not continuous CAD clearance or mission reliability. Plate-only solver limits remain separate.
-Worst payload branch 5.31 W; minimum terminal 21.88 V; entered inrush 0.8 A; current allocation pass false; ideal capacitor hold-up 6.85 ms; outage pass false. No circuit transient validation.
+3 concept PCBs, no local battery, and a host-powered local payload/gimbal heater. Assembly grid step 5 deg; sampled pass 100.00%; minimum signed clearance 3.08 mm. This is not continuous CAD clearance or mission reliability. Plate-only solver limits remain separate.
+Worst functional/heater/total branch 5.31 / 30.00 / 35.31 W; minimum terminal 21.17 V; entered inrush 0.8 A; current allocation pass false; ideal capacitor hold-up 0.83 ms; outage pass false. No circuit transient validation.

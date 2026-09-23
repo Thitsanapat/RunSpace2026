@@ -1,4 +1,4 @@
-# Antenna & RF laboratory — v1.5.0
+# Antenna & RF laboratory — v1.5.1
 
 รุ่น 1.5 ใช้ proposed compact stacked CP patch target ขนาด 60 × 60 × 7 mm, gain target 5.2 dBic, analytical HPBW 90° และ S11 target −10 dB. ค่าชุดนี้ใช้ทำ packaging/link sensitivity และยังไม่ใช่ผล full-wave EM หรือผลวัด. ที่ตำแหน่ง top green surface payload default 65° tip ยังถูก hull proxy บัง จึงไม่ผ่าน actual link แม้ on-axis clear-path budget มี raw margin 7.257 dB. ANSER 80 mm เป็น topology/qualification benchmark และจะแสดง packaging failure เมื่อเลือก profile นี้. ดู decision trace ที่ [ANTENNA-BASELINE-DECISION.md](ANTENNA-BASELINE-DECISION.md).
 

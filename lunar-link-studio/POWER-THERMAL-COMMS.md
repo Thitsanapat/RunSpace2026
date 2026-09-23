@@ -1,20 +1,20 @@
 # Earth link, lander power and high-temperature RF plan
 
-อัปเดต 22 กันยายน 2026 สำหรับ Lunar Link Studio v1.4.2
+อัปเดต 23 กันยายน 2026 สำหรับ Lunar Link Studio v1.5.1
 
 ## คำตอบเรื่องส่งถึงโลก
 
-**Downlink ปัจจุบันปิด link budget ได้แบบมีเงื่อนไข** ที่ 2.205 GHz, ระยะ 384,400 km, 4 kbps, RF output 5 W, realized antenna gain 6.5 dBic และ assumed ground-station G/T 22 dB/K:
+**Downlink ปัจจุบันปิด link budget ได้แบบมีเงื่อนไข** ที่ 2.205 GHz, ระยะ 384,400 km, 4 kbps, RF output 5 W, realized antenna gain target 5.2 dBic และ assumed ground-station G/T 22 dB/K:
 
 | Quantity | Result |
 |---|---:|
-| EIRP | 12.49 dBW |
+| EIRP | 11.19 dBW |
 | Free-space path loss | 211.01 dB |
-| C/N0 | 50.58 dB-Hz |
-| Eb/N0 | 14.56 dB |
-| Raw margin after threshold and implementation loss | 8.56 dB |
+| C/N0 | 49.28 dB-Hz |
+| Eb/N0 | 13.26 dB |
+| Raw margin after threshold and implementation loss | 7.26 dB |
 | Required design reserve | 3.00 dB |
-| Headroom above reserve | **+5.56 dB** |
+| Headroom above reserve | **+4.26 dB** |
 
 ผลนี้ผ่านเมื่อทุกเงื่อนไขต่อไปนี้จริงพร้อมกัน:
 
@@ -25,7 +25,7 @@
 - ground station มี G/T ใกล้ค่าที่สมมติและรองรับ waveform/frequency assignment
 - mounted antenna ยังให้ gain, S11 และ axial ratio ใกล้ค่าที่ใช้
 
-ตำแหน่ง Green Zone ปัจจุบันในเคส lander tilt 65° ถูก hull proxy บัง ดังนั้นผล +5.56 dB คือ **clear-path RF capability** ไม่ใช่หลักฐานว่า installed configuration ติดต่อโลกได้ทุกท่าลงจอด ต้องย้าย/ยก mount, จำกัด field of regard หรือเพิ่ม aperture อีกด้านก่อนอ้าง recovery coverage
+ตำแหน่ง Green Zone ปัจจุบันในเคส lander tilt 65° ถูก hull proxy บัง ดังนั้นผล +4.26 dB คือ **clear-path RF capability** ไม่ใช่หลักฐานว่า installed configuration ติดต่อโลกได้ทุกท่าลงจอด ต้องย้าย/ยก mount, จำกัด field of regard หรือเพิ่ม aperture อีกด้านก่อนอ้าง recovery coverage
 
 NASA ระบุ S-band return 2200–2290 MHz และแสดงว่า G/T แตกต่างตาม ground asset เช่นประมาณ 12.8, 17, 18, 19–21 และสูงกว่านั้น การจองสถานีและ mission frequency assignment เป็นเงื่อนไขแยกจาก antenna design: <https://www.nasa.gov/smallsat-institute/sst-soa/ground-data-systems-and-mission-operations/>
 
@@ -56,9 +56,10 @@ Reference ANSER มี dual-frequency ports แถว 2.03/2.205 GHz จึง�
 | Entered inrush | **0.8 A for 20 ms** | เกิน current allocation 0.5 A; FAIL |
 | Downlink RF output | **5.00 W RF** | กำลังออกจาก host PA ไม่ใช่ DC input |
 | Host PA DC input | **≈14.29 W DC** | ใช้ assumed PA efficiency 35%; ยังไม่รวม modem/baseband/standby overhead |
-| Lander heater peak | **30 W** | heater อยู่บน lander และถูก thermostat ควบคุม |
-| Cold-study heater energy | **206.5 Wh / 24 h** | average heater power ≈8.61 W ใน reduced-order cold case |
-| Cold-study total modeled lander energy | **228.9 Wh / 24 h** | payload electronics + heater; RF/motors OFF |
+| Local payload/gimbal heater peak | **30 W** | ติดบน payload/gimbal, thermostat อ่าน payload temperature และรับไฟจาก lander |
+| Payload service worst case | **≈35.31 W** | functional peak 5.31 W + heater 30 W; ก่อน host PA |
+| Cold-study heater energy | **164.7 Wh / 24 h** | average heater power ≈6.86 W ใน reduced-order cold case |
+| Cold-study total modeled lander energy | **187.0 Wh / 24 h** | payload electronics + local heater; RF/motors OFF |
 
 Current modeled sums:
 
@@ -67,27 +68,28 @@ Current modeled sums:
 - **Transmit:** ประมาณ 5.31 + 14.29 = **19.60 W DC** ใน conservative simultaneous peak บวก host radio/modem overhead
 - **Cold simultaneous heater + transmit peak:** อาจแตะประมาณ **49.6 W DC** บวก radio overhead; ควรจัด operating modes ไม่ให้ heater peak, full-speed gimbal และ TX peakเกิดพร้อมกันถ้า bus ไม่รองรับ
 - **Cold survival:** thermal study ปิด RF/motors และใช้ประมาณ 30.93 W เมื่อ heater ON; heater cycle ทำให้ค่าเฉลี่ยต่ำลง
+- **Payload power interface sizing:** functional peak + heater = **35.31 W**, หรือประมาณ **1.67 A** ที่ terminal ≈21.17 V จึงไม่ผ่านสมมติฐาน 0.5 A ปัจจุบัน
 
 ตัวเลขที่ควรขอใน host ICD:
 
 1. 22–32 V payload rail และ allowed steady/peak current
 2. inrush envelope และ protection behavior
 3. host radio/PA 5 W RF service พร้อม DC/duty-cycle allocation
-4. heater peak/energy allocation และตำแหน่ง thermal interface
+4. local heater peak/energy allocation, thermostat/control authority และ parasitic thermal interface
 5. RF connector, cable loss, allowable bend/twist และ receive/transmit switching
 6. temperature telemetry และ permission สำหรับ TX inhibit/safe mode
 
 ## ผล hot case ปัจจุบัน
 
-ที่ ground boundary +170°C, full sunlight, initial payload 30°C และ lander node 45°C:
+ที่ NASA table reference ground boundary +110°C (+230°F), full sunlight, initial payload 30°C และ lander node 45°C:
 
-- payload หลัง 24 h: **108.1°C**
-- lander node หลัง 24 h: **123.9°C**
+- payload หลัง 24 h: **88.5°C**
+- lander node หลัง 24 h: **105.1°C**
 - current payload operating range: −40…+80°C
 - heater: OFF
 - result: **FAIL hot operating limit**
 
-±170°C เป็น boundary stress input ไม่ใช่อุณหภูมิของ electronics โดยตรง และ current result เป็น two-node screening model ไม่ใช่ thermal qualification
+ตาราง NASA NTRS ชุดที่ผู้ใช้กล่าวถึงระบุ minimum −170°C/−274°F และ maximum +110°C/+230°F; `+230` เป็น Fahrenheit ไม่ใช่ Celsius. ค่าเหล่านี้เป็น surface boundary ไม่ใช่อุณหภูมิของ electronics โดยตรง และผลปัจจุบันเป็น two-node screening model ไม่ใช่ thermal qualification: <https://ntrs.nasa.gov/api/citations/20150003498/downloads/20150003498.pdf>
 
 ## Thermal architecture สำหรับรับและส่ง
 
@@ -104,7 +106,7 @@ Current modeled sums:
 - ไม่ให้ radiator มอง hot lunar ground มากเกินไป
 - ใช้ MLI/low-emissivity barrier รอบ electronics ในตำแหน่งที่ไม่กีดขวาง antenna, radiator หรือ mechanism
 - ลด thermal conductance จาก hot deck ไป payload ในช่วงกลางวัน
-- ถ้าต้องรับความร้อนจาก lander heaterในช่วงเย็น ให้พิจารณา controlled thermal switch หรือแยก heater feed จาก structural hot path แทน fixed high-conductance strap
+- ติด heater pad และ temperature sensor บน payload/gimbal ใกล้ชิ้นส่วน cold-critical พร้อม heat spreader; ใช้ thermal isolator ลด heat leak สู่ lander และออกแบบสายไฟให้ผ่านช่วงหมุนโดยไม่เพิ่ม torque มากเกินไป
 
 NASA ระบุว่า SmallSat thermal design มักใช้ coatings, tapes/MLI, thermal straps, interface conductance, sunshades และ radiator surfacesร่วมกับ heater โดย radiator ต้องมี high IR emissivity และ low solar absorptivity: <https://www.nasa.gov/smallsat-institute/sst-soa/thermal-control/>
 
@@ -146,7 +148,7 @@ P_average = duty_cycle × P_PA,DC
 
 1. VNA วัด S11/S21 ของ antenna + feed + rotary path ที่อุณหภูมิหลายจุด
 2. วัด gain/pattern/axial ratio ใน chamber ก่อนและหลังติดกับ representative lander deck
-3. thermal-vac RF test โดยวัด component temperature จริง ไม่ใช้ ground boundary ±170°C เป็น test temperature ของ electronics โดยตรง
+3. thermal-vac RF test โดยวัด component temperature จริง ไม่ใช้ surface boundary −170/+110°C เป็น test temperature ของ electronics โดยตรง
 4. PA output/efficiency/EVM หรือ modulation quality เทียบอุณหภูมิและ duty cycle
 5. receiver sensitivity/noise figure/BER เทียบอุณหภูมิ
 6. ใส่ measured curves กลับเข้า simulator แล้วทำ downlink และ uplink Monte Carlo ใหม่
@@ -158,5 +160,5 @@ P_average = duty_cycle × P_PA,DC
 - **Uplink reception:** not yet demonstrated; separate budget required
 - **Payload/motor power:** 5.31 W peak in current model, but inrush fails present 0.5 A allocation
 - **Host TX power:** at least 14.29 W DC for the assumed 5 W RF PA, plus radio overhead
-- **Cold thermal:** model passes only with lander heater/contact and large energy use
+- **Cold thermal:** model passesใน 24 h ด้วย lander-powered local heater แต่ใช้พลังงานมากและยังต้องยืนยัน heater placement/spreading
 - **Hot thermal:** fails current +80°C limit; passive design, thermal isolation/radiation and TX duty control are required before claiming operation

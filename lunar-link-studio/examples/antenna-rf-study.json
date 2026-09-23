@@ -1,6 +1,6 @@
 {
-  "modelVersion": "1.5.0",
-  "createdAt": "2026-09-23T13:47:02.072Z",
+  "modelVersion": "1.5.1",
+  "createdAt": "2026-09-23T16:10:24.511Z",
   "source": "ASSUMED COSINE MODEL",
   "provenance": {},
   "config": {
@@ -3658,7 +3658,13 @@
       "id": "moon",
       "title": "NASA — Moon facts",
       "url": "https://science.nasa.gov/moon/facts/",
-      "facts": "NASA gives about +127°C in full Sun and −173°C in darkness as general surface examples. ±170°C here is the user-selected stress envelope, not a uniform lunar air temperature."
+      "facts": "NASA gives about +127°C in full Sun and −173°C in darkness as general surface examples. These are surface examples, not a uniform lunar air temperature."
+    },
+    {
+      "id": "nasaTempTable",
+      "title": "NASA NTRS 20150003498 — planetary temperature table",
+      "url": "https://ntrs.nasa.gov/api/citations/20150003498/downloads/20150003498.pdf",
+      "facts": "The Moon row lists a maximum of 110°C / 230°F and a minimum of −170°C / −274°F. The +230 value is Fahrenheit, not Celsius. The simulator presets use this internally consistent Celsius pair as surface-boundary references."
     },
     {
       "id": "slim",

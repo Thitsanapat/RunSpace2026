@@ -5,7 +5,7 @@ import {SURFACE,surfaceAssessment} from './surface-payload.js';
 import {DESIGN_DEFAULTS,DESIGN_BOUNDS} from './payload-design.js';
 import {RF_DEFAULTS,RF_BOUNDS,validateGrid,validateResponse,directionalGain,rfState,antennaCoordinates} from './antenna-rf.js';
 
-export const MODEL_VERSION = '1.5.0';
+export const MODEL_VERSION = '1.5.1';
 export const DEFAULTS = Object.freeze({
   ...RF_DEFAULTS,
   ...DESIGN_DEFAULTS,
@@ -38,13 +38,13 @@ export const PRESETS = {
   nominal: { label: 'Nominal landing', thai: 'ลงจอดปกติ', note: 'A gentle touchdown. Both antennas should retain the link.', values: { roll: 3, pitch: -5, yaw: 0, jitter: 0.1, dust: 0, shockG: 0, jamAxis: 'none' } },
   tilt: { label: 'Off-nominal landing', thai: 'ยานเอียงหลังลงจอด', note: 'A 65° tip. Gimbal remains locked during touchdown and acquires after rest confirmation.', values: { roll: 12, pitch: -65, yaw: 8, jitter: 1, dust: 0, shockG: 0, jamAxis: 'none' } },
   shock: { label: 'Hard touchdown', thai: 'ลงจอดกระแทก', note: 'A half-sine acceleration pulse applies a load to the offset payload.', values: { roll: 18, pitch: -42, yaw: -5, jitter: 1.1, shockG: 12, shockMs: 30, dust: 0.15, jamAxis: 'none' } },
-  dust: { label: 'Dust & cold', thai: 'ฝุ่นและความเย็น', note: '−170°C ground boundary. Lander heater warms the payload through a thermal interface.', values: { roll: 10, pitch: -32, yaw: 15, jitter: 0.5, dust: 0.8, initialTemp: -30, sunlight: 0, baseTemp: 0, groundTemp: -170, shockG: 0, jamAxis: 'none' } },
+  dust: { label: 'Dust & cold', thai: 'ฝุ่นและความเย็น', note: 'NASA table reference: −170°C (−274°F) surface boundary. The lander bus powers a local payload/gimbal heater.', values: { roll: 10, pitch: -32, yaw: 15, jitter: 0.5, dust: 0.8, initialTemp: -30, sunlight: 0, baseTemp: 0, groundTemp: -170, shockG: 0, jamAxis: 'none' } },
   jam: { label: 'Actuator fault', thai: 'แกน elevation ติดขัด', note: 'The elevation axis locks at touchdown. Recovery is not guaranteed.', values: { roll: 12, pitch: -65, yaw: 8, jitter: 0.3, jamAxis: 'elevation', dust: 0, shockG: 0 } },
   limit: { label: 'Beyond travel', thai: 'เป้าหมายเกินระยะหมุน', note: 'Restricted mechanical travel exposes an unreachable target.', values: { roll: 25, pitch: 55, yaw: 20, elMax: 45, elMin: -10, azLimit: 90, jitter: 0.2, shockG: 0, jamAxis: 'none' } },
   side: {label:'Sideways landing',thai:'ยานตะแคง 90°',note:'Tests a side-resting lander; mounting position and hull obstruction determine recovery.',values:{roll:90,pitch:0,yaw:0,jitter:1.5,shockG:8}},
   nose: {label:'Nose-down impact',thai:'ยานปักหัว 105°',note:'A nose-down geometry study, not a reconstruction of any specific mission.',values:{roll:10,pitch:-105,yaw:15,jitter:2,shockG:15,burialDepth:0.15}},
   inverted: {label:'Inverted / buried',thai:'ยานคว่ำและจมพื้น',note:'180° inversion and ground penetration expose cases that repointing cannot rescue.',values:{roll:180,pitch:0,yaw:0,jitter:1.5,burialDepth:0.15}},
-  hot: {label:'Hot surface stress',thai:'พื้นผิว +170°C',note:'+170°C is a requested hot stress case, not the standard temperature of every lunar site.',values:{groundTemp:170,sunlight:1,baseTemp:45,initialTemp:30,roll:12,pitch:-65}},
+  hot: {label:'Hot surface reference',thai:'พื้นผิว +110°C',note:'NASA table reference: +110°C equals +230°F. The value +230 is Fahrenheit, not Celsius.',values:{groundTemp:110,sunlight:1,baseTemp:45,initialTemp:30,roll:12,pitch:-65}},
   blackout: {label:'Host power lost',thai:'ไฟ lander หาย',note:'At touchdown the host bus, transmitter and heater lose power. A gimbal cannot restore them.',values:{hostPower:0,roll:12,pitch:-65}}
 };
 
@@ -203,8 +203,8 @@ export class Simulator {
       if(axis.angle<min||axis.angle>max) { axis.angle=clamp(axis.angle,min,max); axis.velocity=0; }
     });
     if(!packaging(this.axes[0].angle,this.axes[1].angle,c).fits){this.axes.forEach((a,i)=>{a.angle=previousAngles[i];a.velocity=0;a.integral=0;});this.packagingLimited=true;}
-    if(this.landerTemp<c.heaterSetpoint-1) this.heater=true;
-    if(this.landerTemp>c.heaterSetpoint+1) this.heater=false;
+    if(this.temp<c.heaterSetpoint-1) this.heater=true;
+    if(this.temp>c.heaterSetpoint+1) this.heater=false;
     const heaterPowered=this.heater&&hostPowered;
     const thermal=thermalRates(this.temp,this.landerTemp,c,{motorHeat:copperHeat,payloadHeat:powered?c.electronicsW:0,heaterOn:heaterPowered,connected:Boolean(c.heaterConnected)});
     this.temp+=thermal.derivative*dt;
@@ -303,7 +303,7 @@ export function runThermal(config,hours=24,step=5) {
     const hostPowered=c.hostPower===1&&landerEnergy<c.landerBatteryWh,powered=hostPowered&&energy<c.batteryWh;
     if(t%interval===0||t===seconds)frames.push({hours:t/3600,temp,landerTemp,energy,landerEnergy,heaterEnergy,powered,hostPowered});
     if(t===seconds)break;
-    if(landerTemp<c.heaterSetpoint-1)heater=true;if(landerTemp>c.heaterSetpoint+1)heater=false;
+    if(temp<c.heaterSetpoint-1)heater=true;if(temp>c.heaterSetpoint+1)heater=false;
     const heat=heater&&hostPowered?c.heaterW:0,power=powered?c.electronicsW/c.regulatorEfficiency:0;
     const d=thermalRates(temp,landerTemp,c,{payloadHeat:powered?c.electronicsW:0,heaterOn:heat>0,connected:Boolean(c.heaterConnected)});
     temp+=d.derivative*dt;landerTemp+=d.landerDerivative*dt;minTemp=Math.min(minTemp,temp);maxTemp=Math.max(maxTemp,temp);

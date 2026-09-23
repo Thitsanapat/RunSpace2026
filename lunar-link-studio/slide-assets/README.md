@@ -1,8 +1,10 @@
 # Slide-ready simulation evidence
 
-ชุดนี้ export จาก Lunar Link Studio v1.5.0 สำหรับ `Ultra Smooth Landing - Proposal (3).pdf` โดยใช้เลขหน้าตาม PDF ปัจจุบัน ภาพ PNG พร้อมวางในสไลด์ ส่วน SVG ใช้เมื่อต้องการแก้สี ข้อความ หรือส่งออกความละเอียดสูง หน้า antenna ที่พิมพ์เลข **14** บนสไลด์ตรงกับหน้า **16** ของไฟล์ PDF เพราะมีหน้าปก/สารบัญนำหน้า. ผลของทีมใช้ proposed compact target 5.2 dBic; ค่า 6.5–7 dBi ใช้ได้เฉพาะเมื่อระบุว่าเป็น ANSER research benchmark.
+สคริปต์ล่าสุดสำหรับ Proposal (4): [`PROPOSAL-4-100-SECOND-SCRIPT.md`](PROPOSAL-4-100-SECOND-SCRIPT.md) แบ่ง 90 วินาทีสำหรับสามสไลด์ และ 10 วินาทีสำหรับ live off-nominal simulation
 
-กราฟ thermal −170/+170°C และชุดข้อจำกัดทั้งหมดแยกอยู่ที่ [`../limitation-assets/README.md`](../limitation-assets/README.md)
+ชุดนี้ export จาก Lunar Link Studio v1.5.1 สำหรับ `Ultra Smooth Landing - Proposal (3).pdf` โดยใช้เลขหน้าตาม PDF ปัจจุบัน ภาพ PNG พร้อมวางในสไลด์ ส่วน SVG ใช้เมื่อต้องการแก้สี ข้อความ หรือส่งออกความละเอียดสูง หน้า antenna ที่พิมพ์เลข **14** บนสไลด์ตรงกับหน้า **16** ของไฟล์ PDF เพราะมีหน้าปก/สารบัญนำหน้า. ผลของทีมใช้ proposed compact target 5.2 dBic; ค่า 6.5–7 dBi ใช้ได้เฉพาะเมื่อระบุว่าเป็น ANSER research benchmark.
+
+กราฟ thermal −170°C ถึง +110°C (+230°F) และชุดข้อจำกัดทั้งหมดแยกอยู่ที่ [`../limitation-assets/README.md`](../limitation-assets/README.md)
 
 กราฟ S-band gain, frequency evidence และรายการ RF test gaps แยกอยู่ที่ [`../sband-evidence-assets/README.md`](../sband-evidence-assets/README.md)
 
@@ -47,7 +49,7 @@
 
 - `p10-power-and-rf-boundary.png` — ภาพหลัก
 - แก้แถว transmission เดิมที่ประมาณ 1.67 W เพราะไม่สามารถแทน 5 W RF output ได้
-- ระบุให้ชัดว่า lander ต้องให้บริการอะไร: DC bus, heater, radio/modem/PA, attitude/ephemeris, data interface และ RF coax/port
+- ระบุให้ชัดว่า lander ต้องให้บริการอะไร: DC bus (รวม branch ของ local payload heater), radio/modem/PA, attitude/ephemeris, data interface และ RF coax/port
 - ค่าที่ยังไม่ผ่านใน model ปัจจุบัน: entered inrush 0.8 A สูงกว่า allocation 0.5 A และ ideal hold-up 6.85 ms ต่ำกว่า requirement 100 ms
 
 ## หน้า 14 — Control และ pointing

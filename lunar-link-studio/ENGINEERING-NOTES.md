@@ -29,7 +29,7 @@ SLIM ไม่ใช่หลักฐานว่าผิดท่าแล้
 
 **Nascetti et al., Tigrisat**, DOI10.1109/LAWP.2014.2366791: four-patch บนบอร์ด annular96mm มีช่องกลาง57mm ที่2.45GHz; simulated gain7.3dBi, directivity8.3dBi และ measured beamwidth ประมาณ60°. ใช้เป็น comparison profile; รุ่น1.2 ใช้ความหนารวม7mm ตาม Sensors2025 Table3 แทน allowance2.1mm ที่นับเฉพาะชั้นบอร์ด; มวล50g ยังเป็น allowance ไม่ใช่ measured mass. ความถี่นี้ไม่ใช่แบบสำเร็จสำหรับ downlink2.2–2.3GHz. [Paper DOI](https://doi.org/10.1109/LAWP.2014.2366791)
 
-ทั้งสองงานไม่ได้รับรองว่าระบบของเราจะทำงานใน lunar ±170°C และ pattern ใกล้ lander อาจต่างจาก isolated measurement
+ทั้งสองงานไม่ได้รับรองว่าระบบของเราจะทำงานตลอดช่วง surface reference −170°C ถึง +110°C และ pattern ใกล้ lander อาจต่างจาก isolated measurement
 
 ## ตรวจ 2U ก่อนล็อกแบบ
 
@@ -97,19 +97,19 @@ Ground plane heuristic W+6h, L+6h ≈44.461×35.778mm ไม่รับรอ�
 Thermal สองโหนด ไม่มี convection:
 
 ```
-Cp dTp/dt = Qsolar,p + Qelectronics + Qmotor + K(Tl−Tp) − Qrad,p
-Cl dTl/dt = Qsolar,l + Qheater − K(Tl−Tp) − Qrad,l
+Cp dTp/dt = Qsolar,p + Qelectronics + Qmotor + Qheater + K(Tl−Tp) − Qrad,p
+Cl dTl/dt = Qsolar,l − K(Tl−Tp) − Qrad,l
 Qrad = εσA [T⁴ − Fground Tg⁴ − (1−Fground) Tspace⁴]
 ```
 
-ใช้ Kelvin ใน radiation; deep-space3K, solar1361W/m², default K=0.2W/K, Cp=240J/K, Cl=3000J/K, heater lander30W setpoint0°C ±1°C hysteresis. Cl/area คือ simplified allocated lander node ไม่ใช่โมเดลยานทั้งลำที่ทดสอบแล้ว. ยังไม่รวมความร้อนวิทยุ/housekeeping ของ host. [NASA thermal control](https://www.nasa.gov/smallsat-institute/sst-soa/thermal-control/)
+ใช้ Kelvin ใน radiation; deep-space3K, solar1361W/m², default K=0.2W/K, Cp=240J/K, Cl=3000J/K. Heater 30W ติดบน payload/gimbal, รับไฟจาก lander และใช้ payload setpoint0°C กับ ±1°C hysteresis; K แทน parasitic thermal path ไป lander. Cl/area คือ simplified allocated lander node ไม่ใช่โมเดลยานทั้งลำที่ทดสอบแล้ว. ยังไม่รวมความร้อนวิทยุ/housekeeping ของ host. [NASA thermal control](https://www.nasa.gov/smallsat-institute/sst-soa/thermal-control/)
 
-±170°C เป็น stress boundary ที่ผู้ใช้กำหนด. NASA ยกตัวอย่างพื้นรับแสง≈+127°C และด้านมืด−173°C ไม่ใช่ ambient air temperature และไม่ใช่ทุกจุดมีสภาพเดียวกัน. [NASA Moon facts](https://science.nasa.gov/moon/facts/)
+NASA Moon Facts ยกตัวอย่างพื้นรับแสง≈+127°C และด้านมืด−173°C. ตาราง NASA NTRS อีกชุดระบุ −170°C/−274°F และ +110°C/+230°F; `+230` เป็น Fahrenheit ไม่ใช่ Celsius. Preset ใช้คู่ −170/+110°C เป็น surface boundary ไม่ใช่ ambient air หรืออุณหภูมิ electronics. [NASA Moon facts](https://science.nasa.gov/moon/facts/) · [NASA NTRS 20150003498](https://ntrs.nasa.gov/api/citations/20150003498/downloads/20150003498.pdf)
 
 ผล24h ตาม presets/สมมติฐานปัจจุบัน:
 
-- Cold: payload เริ่ม−30°C, สูงสุด−11.42°C, heater206.55Wh, host รวม228.86Wh จาก allocation300Wh; ไม่ได้แปลว่าอยู่ครบ lunar night336h ได้
-- Hot +170°C ground: payload108.12°C, lander123.91°C; เกิน motor maximum80°C. Heater แก้ไม่ได้ ต้องศึกษาผิว/radiator/view factor/thermal isolation และท่าคว่ำ
+- Cold −170°C/no sun: payload เริ่ม−30°C, อยู่ช่วง−30…+1.11°C และจบ−0.25°C; heater164.73Wh, host รวม187.04Wh จาก allocation300Wh; ไม่ได้แปลว่าอยู่ครบ lunar night336h ได้
+- Hot +110°C/+230°F ground: payload88.52°C, lander105.08°C; เกิน motor maximum80°C. Heater ปิดและแก้ความร้อนไม่ได้ ต้องศึกษาผิว/radiator/view factor/thermal isolation และท่าคว่ำ
 - RF5W ที่ PA efficiency35% ใช้ DC14.286W ก่อน overhead อื่น; default จ่ายจาก lander. Payload idle≈0.79/0.85=0.929W หรือ33.2mA ที่28V. จึงห้ามอ้างว่า RF+payload+heater ทั้งหมดใช้เพียง2.55W
 
 Vibration ใช้ damped sinusoid พร้อม taper ช่วง3s หลัง touchdown จากนั้นท่าคงที่. Lock ปลดหลัง tilt transition และ angular-rate estimate <0.5°/s ต่อเนื่อง0.5s. เป็น sequencing model ไม่ใช่การพิสูจน์ว่า lock ทน15g ได้จริง
@@ -117,7 +117,7 @@ Vibration ใช้ damped sinusoid พร้อม taper ช่วง3s หล�
 ## หลักฐานที่ควรทำต่อ
 
 1. CAD swept volume ใน2U รวมสาย RF, motor, lock, fasteners, tolerances; ทำ BOM/inertia แทนค่ามวลสมมติ
-2. Host ICD: bus/current/energy, transmitter, thermal conductance, heater authority และ attitude data หลังผิดท่า
+2. Host ICD: bus/current/energy, transmitter, local-heater allocation/control, parasitic thermal conductance และ attitude data หลังผิดท่า
 3. EM/measurement บน lander mock-up: S11, gain, HPBW, axial ratio, efficiency, backlobes และ loss ที่อุณหภูมิใช้งาน
 4. Bench lock–release และ angular step; timestamp command/encoder แยก latency, slew, settling และ steady error
 5. วางยานเอียง/คว่ำจริง ตรวจ blocked LOS กับตำแหน่งติดตั้ง และเก็บ failed cases
