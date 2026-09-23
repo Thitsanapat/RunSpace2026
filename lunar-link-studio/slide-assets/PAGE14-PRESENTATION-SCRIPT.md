@@ -8,6 +8,8 @@
 
 ## รูปที่วางหน้า 14
 
+ถ้าจะสร้างหน้าใหม่ทั้งหน้า ให้ใช้ `p14-final-literature-to-link-evidence.png` เป็น master visual. ไฟล์นี้จัดสัดส่วน 16:9 และเชื่อม literature → selection rationale → system evidence ไว้แล้ว.
+
 ### ซ้าย — Literature reference ประมาณ 38–42%
 
 1. `p14-anser-reference-antenna-figure5d.png` — assembled stacked dual-CP antenna

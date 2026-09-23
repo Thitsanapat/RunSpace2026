@@ -16,6 +16,7 @@
     "export:limitations": "node scripts/export-limitation-assets.mjs",
     "export:sband-evidence": "node scripts/export-sband-evidence.mjs",
     "export:paper-comparison": "node scripts/export-paper-comparable-rf.mjs",
+    "export:page14-final": "node scripts/export-page14-final-slide.mjs",
     "export:patch-detail": "node scripts/export-patch-detail.mjs"
   },
   "dependencies": {
