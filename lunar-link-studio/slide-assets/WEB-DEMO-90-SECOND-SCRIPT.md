@@ -28,7 +28,7 @@
 >
 > กล่องสีฟ้าคือ surface payload ที่แทน green zone ทั้ง antenna, two-axis gimbal และ electronics อยู่ใน 2U และไม่เกิน 1.5 กิโลกรัม เราเลือก stacked circularly polarized S-band patch ที่ 2.205 กิกะเฮิรตซ์ เป้าหมาย 60 คูณ 60 คูณ 7 มิลลิเมตร โดยใช้ power, RF service และ heater จาก lander
 >
-> ระหว่าง touchdown กิมบอลจะล็อก เมื่อยานนิ่งจึงใช้ attitude และ Earth ephemeris ชี้กลับหาโลก เว็บนี้คำนวณ geometry, control, power, thermal และ RF link ร่วมกัน ไม่ใช่เพียง animation
+> ระหว่าง touchdown กิมบอลจะล็อก เมื่อยานนิ่งจึงใช้ attitude และ Earth ephemeris ชี้กลับหาโลก เว็บนี้คำนวณ geometry, control, power, thermal boundary ลบ 170 ถึงบวก 170 องศา และ RF link ร่วมกัน โดย heater อยู่ที่ lander ไม่ใช่เพียง animation
 >
 > สำหรับ direct-to-Earth ระยะ 384,400 กิโลเมตร FSPL เท่ากับ 211.01 เดซิเบล กำลังส่ง 5 วัตต์กับ gain target 5.2 dBic ให้ EIRP 11.19 dBW ที่ 4 กิโลบิตต่อวินาทีและ ground G/T 22 dB/K เหลือ headroom 4.26 dB หลัง reserve 3 dB
 >
