@@ -8,6 +8,8 @@
 
 ## รูป antenna ที่ใช้ในสไลด์ 14
 
+ผังวางรูป, speaker script 75–90 วินาที, คำตอบเรื่อง S11 และรายการ full-wave outputs อยู่ที่ [`PAGE14-PRESENTATION-SCRIPT.md`](PAGE14-PRESENTATION-SCRIPT.md).
+
 ใช้ **`p14-anser-reference-antenna-figure5d.png`** เป็นรูปหลักฝั่งงานวิจัย เพราะเห็น assembled stacked dual-CP patch ชัดและไม่แน่นเกินไป. ใต้ภาพใช้ข้อความ:
 
 > Literature reference — assembled dual-circular-polarized stacked S-band patch, 80 × 80 × 6.53 mm nominal stack; adapted from Sánchez-Sevilleja et al. [1], Fig. 5(d). The proposed 60 × 60 × 7 mm payload antenna is a packaging target and requires a new full-wave EM design and measurement.
