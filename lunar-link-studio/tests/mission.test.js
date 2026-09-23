@@ -10,12 +10,13 @@ test('touchdown vibration terminates exactly and lock prevents motion before rel
   const r=runSimulation(c),first=r.frames[0];assert.ok(r.summary.releaseTime>=c.eventTime+c.rampTime+c.restHold-0.005);
   for(const f of r.frames.filter(f=>f.locked)){assert.equal(f.az,first.az);assert.equal(f.el,first.el);assert.deepEqual(f.torque,[0,0]);}
 });
-test('2U accepts a stowed 80 mm plate but rejects its diagonal sweep',()=>{
+test('mission-fit patch clears the plate sweep while the ANSER benchmark does not',()=>{
   const c={...DEFAULTS};assert.equal(packaging(0,0,c).fits,true);
-  assert.equal(packaging(45*RAD,90*RAD,c).fits,false);
-  assert.ok(Math.abs(packaging(0,0,c).sweptDiameterMm-113.325)<0.01);
-  const r=runSimulation(presetConfig('nose'));assert.ok(r.frames.some(f=>f.packagingLimited));
-  assert.ok(r.frames.every(f=>f.packaging.fits));
+  assert.equal(packaging(45*RAD,90*RAD,c).fits,true);
+  assert.ok(Math.abs(packaging(0,0,c).sweptDiameterMm-Math.hypot(50.8,50.8,15))<0.01);
+  const anser=applyAntennaProfile(c,'anser');assert.equal(packaging(0,0,anser).fits,true);
+  assert.equal(packaging(45*RAD,90*RAD,anser).fits,false);
+  assert.ok(Math.abs(packaging(0,0,anser).sweptDiameterMm-Math.hypot(80,80,7))<0.01);
 });
 test('burial, hull obstruction and host loss cannot be cured by perfect pointing',()=>{
   const inverted=runSimulation(presetConfig('inverted')).frames.at(-1);
@@ -34,7 +35,12 @@ test('host radio remains on after payload allocation expires, while controller s
 });
 test('paper profiles retain provenance and cosine approximation has physical gain',()=>{
   const c=applyAntennaProfile(DEFAULTS,'anser'),b=beamMetrics(c,linkBudget(0,c).rawMargin);
-  assert.equal(c.frequencyGHz,2.205);assert.equal(c.antennaWidthMm,80);assert.ok(Math.abs(b.impliedEfficiency-0.65)<0.001);
+  assert.equal(c.frequencyGHz,2.205);assert.equal(c.antennaWidthMm,80);assert.equal(c.pattern,null);assert.ok(Math.abs(b.impliedEfficiency-0.65)<0.001);
   assert.ok(b.lossAtHalfDegree<0.001);assert.ok(b.maxMispoint>c.beamwidth/2);
   const t=applyAntennaProfile(c,'tigrisat');assert.equal(t.frequencyGHz,2.45);assert.equal(t.beamwidth,60);assert.equal(packaging(0,0,t).fits,false);
+});
+test('mission profile uses published compact-pattern evidence and retains link reserve',()=>{
+  const c=applyAntennaProfile(DEFAULTS,'ac2000'),l=linkBudget(0,c);
+  assert.equal(c.frequencyGHz,2.205);assert.equal(c.antennaWidthMm,50.8);assert.equal(c.antennaMassG,100);
+  assert.equal(c.pattern.length,9);assert.ok(l.margin>=c.reserveDb);assert.equal(l.available,true);
 });

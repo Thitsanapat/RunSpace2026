@@ -5,9 +5,9 @@ import {patternGain,rfState,validateGrid,parseGridCSV,parseResponseCSV,antennaCo
 const near=(a,b,t=1e-8)=>assert.ok(Math.abs(a-b)<t,`${a} vs ${b}`);
 const iso=()=>validateGrid({frequencyGHz:2.205,rows:[0,90,180].flatMap(t=>[0,90,180,270].map(p=>[t,p,0]))});
 test('two-plane pattern has the requested half-power widths and enters link gain',()=>{
- const c={...DEFAULTS,patternShape:'elliptical',beamwidth:80,beamwidthV:40};near(patternGain(40,0,c),c.peakGain-3.0102999566);near(patternGain(20,90,c),c.peakGain-3.0102999566);
+ const c={...DEFAULTS,pattern:null,patternShape:'elliptical',beamwidth:80,beamwidthV:40};near(patternGain(40,0,c),c.peakGain-3.0102999566);near(patternGain(20,90,c),c.peakGain-3.0102999566);
  assert.ok(linkBudget(30,c,false,true,90).margin<linkBudget(30,c,false,true,0).margin);
- const r=runSimulation({...presetConfig('tilt'),patternShape:'elliptical',beamwidthV:40}),f=r.frames.at(-1);near(f.link.gain,patternGain(f.error,f.rfAngles.phi,r.config));
+ const r=runSimulation({...presetConfig('tilt'),pattern:null,patternShape:'elliptical',beamwidthV:40}),f=r.frames.at(-1);near(f.link.gain,patternGain(f.error,f.rfAngles.phi,r.config));
 });
 test('antenna coordinates distinguish equal angular errors in orthogonal cuts',()=>{
  const s=Math.SQRT1_2,a=antennaCoordinates([s,0,s],0,0),b=antennaCoordinates([0,s,s],0,0);near(a.theta,45);near(b.theta,45);near(a.phi,0);near(b.phi,90);
@@ -43,9 +43,13 @@ test('frequency response interpolates without extrapolation and thermal shift ch
  assert.throws(()=>parseResponseCSV('frequency_ghz,s11_db,gain_dbi,axial_ratio_db\n2.0,-10,6,3\n2.0,-20,8,1'));
  assert.throws(()=>validateConfig({...DEFAULTS,modulationBits:1.5}));
 });
+test('validated profile changes can explicitly clear prior RF evidence',()=>{
+ const cleared=validateConfig({...DEFAULTS,pattern:null,patternGrid:null,frequencyResponse:null});
+ assert.equal(cleared.pattern,null);assert.equal(cleared.patternGrid,null);assert.equal(cleared.frequencyResponse,null);
+});
 test('evaluated pattern integral follows frequency gain and losses while directivity is unchanged',()=>{
  const base=patternMetrics(DEFAULTS),c={...DEFAULTS,gainConvention:'accepted',s11Db:-10,installationLossDb:3,frequencyResponse:[{frequencyGHz:2,s11Db:-10,gainDbi:8.5,axialRatioDb:2},{frequencyGHz:2.4,s11Db:-10,gainDbi:8.5,axialRatioDb:2}]},m=patternMetrics(c,40);
- const delta=2-3+10*Math.log10(0.9);near(m.peakGain-base.peakGain,delta);near(m.integratedEfficiency/base.integratedEfficiency,10**(delta/10));near(m.directivityDbi,base.directivityDbi);
+ const delta=8.5-base.peakGain-3+10*Math.log10(0.9);near(m.peakGain-base.peakGain,delta);near(m.integratedEfficiency/base.integratedEfficiency,10**(delta/10));near(m.directivityDbi,base.directivityDbi);
  assert.equal(patternMetrics({...c,frequencyGHz:3}).supported,false);assert.equal(patternMetrics({...c,frequencyGHz:3}).peakGain,null);
 });
 test('evaluated CSV round-trip preserves directional gain and CP loss without double subtraction',()=>{
@@ -58,6 +62,6 @@ test('evaluated CSV round-trip preserves directional gain and CP loss without do
 test('unsupported export and malformed snapshot metadata fail explicitly',()=>{
  assert.throws(()=>exportPatternCSV({...DEFAULTS,patternGrid:iso(),frequencyGHz:3},20),/supported/);
  const csv=exportPatternCSV(DEFAULTS,20);assert.throws(()=>parseGridCSV(csv.replace('"version":1','"version":9')),/metadata/);
- assert.throws(()=>parseGridCSV(csv.replace('"s11Db":-15','"s11Db":1')),/metadata/);
+ assert.throws(()=>parseGridCSV(csv.replace('"s11Db":-13.98','"s11Db":1')),/metadata/);
  const generic=parseGridCSV(csv.split('\n').filter(l=>!l.startsWith('# lunar-link-metadata:')).join('\n'));assert.equal(gridImportPatch(generic).gainConvention,undefined);
 });

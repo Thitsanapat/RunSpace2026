@@ -1,6 +1,6 @@
-# Antenna & RF laboratory — v1.3.0
+# Antenna & RF laboratory — v1.5.0
 
-รุ่น 1.3 เปลี่ยนตำแหน่งติดตั้งเป็น top green surface payload ตาม [SURFACE-MODEL.md](SURFACE-MODEL.md). สมการ RF เดิมยังใช้ แต่ default 65° tip ที่ตำแหน่งใหม่ถูก hull proxy บัง จึงไม่ผ่าน actual link แม้ on-axis clear-path budget ด้านล่างยังมี margin 8.557 dB.
+รุ่น 1.5 เปลี่ยน mission baseline เป็น compact AC-2000 evidence profile ขนาดประมาณ 50.8 mm, gain 5.2 dBic และ conservative datasheet radiation cut. ที่ตำแหน่ง top green surface payload default 65° tip ยังถูก hull proxy บัง จึงไม่ผ่าน actual link แม้ on-axis clear-path budget มี raw margin 7.257 dB. ANSER 80 mm คงไว้เป็น research benchmark และจะแสดง packaging failure เมื่อเลือก profile นี้. ดู decision trace ที่ [ANTENNA-BASELINE-DECISION.md](ANTENNA-BASELINE-DECISION.md).
 
 ขอบเขตงาน: เพิ่มซิมและหลักฐานคำนวณตาม `Ultra Smooth Landing - Proposal (2).pdf`; ไม่ได้แก้หรือสร้างสไลด์. Payload รวมเสาและ gimbal ยังคง2U ตามข้อกำหนดล่าสุด
 
@@ -10,11 +10,12 @@
 
 | Reference | หลักฐานที่ใช้ | สิ่งที่ไม่ย้ายมาอ้าง |
 |---|---|---|
+| AAC Clyde Space AC-2000 | Flight-proven CP S-band patch; 2.0–2.3 GHz, 5.2 dBic typical, VSWR1.5:1, approx.2×2in, ≈100g และ pattern cuts สามระนาบ | public datasheet ไม่ให้ thickness, axial-ratio number หรือ RF power handling; ซิมจองความหนา15mm เป็น project allocation |
 | Sánchez-Sevilleja et al., Sensors2025 | Dual-CP stacked patch80×80×6.53 mm,30g;2.03/2.205 GHz; isolated gain6.5–7 dBi | HPBW82.44° ในซิมเป็น approximation; ไม่ใช่ measured HPBW; ไม่ได้ digitize full pattern |
 | Jirawattanaphol et al., Technologies2026, เผยแพร่27เม.ย.2026 | Mounted prototype: measured S11 bandwidth2.00–2.34 GHz, AR bandwidth2.04–2.25 GHz; gainสูงสุด7.24 dBic ที่2.18 GHz; มี measured cuts ที่2.05/2.15/2.25 GHz | ห้ามใช้7.24 dBic ที่2.205 GHz โดยอัตโนมัติ; ไม่มีหลักฐาน fit ของ complete gimbal ใน2U; ยังไม่มี raw curve CSV |
 | Nascetti et al., Tigrisat2015 | Comparison ที่2.45 GHz, simulated gain7.3 dBi และ measured HPBW≈60° | ไม่ใช่ downlink2.205 GHz design; 96 mm board มีปัญหา sweep ใน2U |
 
-แหล่งหลัก: [Sensors2025 ฉบับเต็ม](https://pmc.ncbi.nlm.nih.gov/articles/PMC11860546/), [Technologies2026 DOI](https://doi.org/10.3390/technologies14050263), [Tigrisat DOI](https://doi.org/10.1109/LAWP.2014.2366791). ตรวจข้อมูล19ก.ย.2026 ไม่ได้อ้างว่าเป็นการสำรวจงานทั้งหมดในโลก
+แหล่งหลัก: [AC-2000 datasheet](https://www.aac-clyde.space/wp-content/uploads/2021/11/AC-2000-1.pdf), [Sensors2025 ฉบับเต็ม](https://pmc.ncbi.nlm.nih.gov/articles/PMC11860546/), [Technologies2026 DOI](https://doi.org/10.3390/technologies14050263), [Tigrisat DOI](https://doi.org/10.1109/LAWP.2014.2366791). ตรวจข้อมูล23ก.ย.2026 ไม่ได้อ้างว่าเป็นการสำรวจงานทั้งหมดในโลก
 
 NASA แสดง S-band return communications2200–2290 MHz พร้อมสเปก G/T, bandwidth และ modulation/coding ที่ต่างกันตามสถานี. ซิมยังใช้ G/T22 dB/K เป็น assumption ไม่ได้ผูกกับบริการสถานีใดที่ยืนยันแล้ว. [NASA Ground Data Systems2026](https://www.nasa.gov/smallsat-institute/sst-soa/ground-data-systems-and-mission-operations/)
 

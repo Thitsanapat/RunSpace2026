@@ -1,4 +1,8 @@
-# Validation — v1.4.2 — 2026-09-21
+# Validation — v1.5.0 — 2026-09-23
+
+v1.5.0 เปลี่ยน default antenna เป็น compact evidence profile และเก็บ ANSER เป็น research benchmark. `npm.cmd test` ผ่าน 43/43 กรณี รวม conservative pattern, explicit RF-evidence reset, compact 2U sampled sweep pass และ ANSER sweep fail. Production build, general Chrome workflow และ RF Chrome workflow ผ่าน. ค่า baseline ที่ทำซ้ำได้: on-axis raw margin 7.2566 dB, excess above 3 dB reserve 4.2566 dB, compact assembly 100% ของ sampled 5° grid และ minimum concept clearance 5.5 mm. ANSER assembly sampled passประมาณ3.05% และ minimum signed clearance −10.68 mm.
+
+ข้อจำกัดของผลผ่าน: AC-2000 public datasheet ระบุ footprint แบบประมาณและไม่ระบุความหนา/RF power handling; 15 mm เป็น mechanical allocation. Geometry เป็น bounding boxes ไม่ใช่ exact CAD และ pattern เป็น conservative 1D cut จาก datasheet ไม่ใช่ mounted 3D measurement.
 
 v1.4.2 เพิ่ม browser regression สำหรับ migration จาก mount รุ่นเก่าไป `[0.92, 0.76, 0.62]` และซ่อน selected green envelope รวมถึงแผ่น placeholder ที่ถูก cyan payload ครอบครองแล้ว เพื่อไม่แสดงเป็น payload สองก้อน.
 

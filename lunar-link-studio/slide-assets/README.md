@@ -1,6 +1,6 @@
 # Slide-ready simulation evidence
 
-ชุดนี้ export จาก Lunar Link Studio v1.4.2 สำหรับ `Ultra Smooth Landing - Proposal (3).pdf` โดยใช้เลขหน้าตาม PDF ปัจจุบัน ภาพ PNG พร้อมวางในสไลด์ ส่วน SVG ใช้เมื่อต้องการแก้สี ข้อความ หรือส่งออกความละเอียดสูง หน้า antenna ที่พิมพ์เลข **14** บนสไลด์ตรงกับหน้า **16** ของไฟล์ PDF เพราะมีหน้าปก/สารบัญนำหน้า
+ชุดนี้ export เดิมจาก Lunar Link Studio v1.4.2 สำหรับ `Ultra Smooth Landing - Proposal (3).pdf` โดยใช้เลขหน้าตาม PDF ปัจจุบัน ภาพ PNG พร้อมวางในสไลด์ ส่วน SVG ใช้เมื่อต้องการแก้สี ข้อความ หรือส่งออกความละเอียดสูง หน้า antenna ที่พิมพ์เลข **14** บนสไลด์ตรงกับหน้า **16** ของไฟล์ PDF เพราะมีหน้าปก/สารบัญนำหน้า. ซิม v1.5.0 ใช้ compact 5.2 dBic mission baseline แล้ว ดังนั้นภาพเก่าที่ระบุ 6.5 dBic ต้องติดป้าย **ANSER research benchmark** หรือ export ใหม่ก่อนใช้เป็นผล baseline.
 
 กราฟ thermal −170/+170°C และชุดข้อจำกัดทั้งหมดแยกอยู่ที่ [`../limitation-assets/README.md`](../limitation-assets/README.md)
 

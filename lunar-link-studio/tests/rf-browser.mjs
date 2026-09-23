@@ -27,11 +27,11 @@ try{
  await page.locator('[data-preset="tilt"]').click();
  // Export synchronously after an edit: it must flush the 150 ms recalculation delay.
  const pendingDownload=page.waitForEvent('download');await page.evaluate(()=>{const input=document.querySelector('#p-installationLossDb');input.value='2';input.dispatchEvent(new Event('change',{bubbles:true}));document.querySelector('#rf-export-data').click();});
- const pending=await pendingDownload;const exported=JSON.parse(await readFile(await pending.path(),'utf8'));assert.equal(exported.config.installationLossDb,2);assert.ok(Math.abs(exported.patternMetrics.peakGain-4.5)<1e-8);
+ const pending=await pendingDownload;const exported=JSON.parse(await readFile(await pending.path(),'utf8'));assert.equal(exported.config.installationLossDb,2);assert.ok(Math.abs(exported.patternMetrics.peakGain-3.2)<1e-8);
  const pendingTime=page.waitForEvent('download');await page.evaluate(()=>{const slider=document.querySelector('#rf-time');slider.value='3.2';slider.dispatchEvent(new Event('input',{bubbles:true}));document.querySelector('#rf-export-data').click();});assert.ok(Math.abs(JSON.parse(await readFile(await (await pendingTime).path(),'utf8')).selectedTime-3.2)<0.05);
  const snapshotDownload=page.waitForEvent('download');await page.locator('#rf-export-grid').click();const snapshot=await snapshotDownload;await snapshot.saveAs('test-results/evaluated-pattern.csv');
  await page.locator('#rf-grid-file').setInputFiles('test-results/evaluated-pattern.csv');await page.waitForFunction(()=>window.lunarLink.config.patternGrid?.snapshot);
- assert.equal(await page.evaluate(()=>window.lunarLink.config.installationLossDb),0);assert.ok(Math.abs(await page.evaluate(()=>window.lunarLink.rfStudy.cuts.find(r=>r.x===0).h)-4.5)<1e-8);
+ assert.equal(await page.evaluate(()=>window.lunarLink.config.installationLossDb),0);assert.ok(Math.abs(await page.evaluate(()=>window.lunarLink.rfStudy.cuts.find(r=>r.x===0).h)-3.2)<1e-8);
  await page.locator('[data-preset="tilt"]').click();
  const download=page.waitForEvent('download');await page.locator('#rf-export-data').click();assert.equal((await download).suggestedFilename(),'antenna-rf-study.json');
  const gridDownload=page.waitForEvent('download');await page.locator('#rf-export-grid').click();assert.match((await gridDownload).suggestedFilename(),/generated\.csv/);

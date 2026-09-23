@@ -12,7 +12,7 @@ test('free-space loss agrees with known 1 GHz / 1 km result',()=>{
   assert.ok(Math.abs(fspl(2,1)-fspl(1,1)-6.0206)<0.0001);
 });
 test('half-power beamwidth and link budget do not count pointing loss twice',()=>{
-  const c={...DEFAULTS},on=linkBudget(0,c),edge=linkBudget(c.beamwidth/2,c);
+  const c={...DEFAULTS,pattern:null},on=linkBudget(0,c),edge=linkBudget(c.beamwidth/2,c);
   assert.ok(Math.abs(antennaGain(c.beamwidth/2,c)-c.peakGain+3.010299956)<1e-8);
   assert.ok(Math.abs(on.margin-edge.margin-3.010299956)<1e-8);
   assert.ok(Math.abs(linkBudget(0,{...c,bitrateKbps:c.bitrateKbps*2}).margin-on.margin+3.010299956)<1e-8);

@@ -1,0 +1,6 @@
+candidate,evidence_class,frequency_ghz,peak_gain_dbic,width_mm,height_mm,thickness_mm,mass_g,mission_decision,reason
+AC-2000,flight-proven manufacturer datasheet,2.0-2.3,5.2,50.8,50.8,not_public,100,baseline,"Fits concept sweep; exact ICD and RF power rating required"
+ANSER 2025,peer-reviewed measured qualified and flown,2.205,6.5-7.0,80,80,7,30,research_benchmark,"Exact frequency and strong evidence; fails current full gimbal sweep"
+SLSP 2026,peer-reviewed measured mounted and qualified,2.0-2.34,7.24,100,100,15,not_reported,reject_packaging,"Strong RF evidence; enclosure consumes 2U cross-section"
+Tigrisat,peer-reviewed mixed measured and simulated,2.45,7.3,96,96,7,50_assumed,reject_frequency,"Wrong study frequency and full sweep fails"
+ESSAC 2017,conference simulation,2.43,5.01,68.58,59.48,3.2,not_reported,reject_evidence,"Wrong frequency and no measured or qualification evidence"

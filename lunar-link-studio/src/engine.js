@@ -1,11 +1,11 @@
 import { RAD, DEG, clamp, attitude, rotate, qInv, direction, angles, separation, cross, dot, rayBox, seededRandom } from './math.js';
 import {packaging,visibility,thermalRates} from './mission.js';
-import {ANTENNA_PROFILES} from './research.js';
+import {ANTENNA_PROFILES,AC2000_CONSERVATIVE_PATTERN} from './research.js';
 import {SURFACE,surfaceAssessment} from './surface-payload.js';
 import {DESIGN_DEFAULTS,DESIGN_BOUNDS} from './payload-design.js';
 import {RF_DEFAULTS,RF_BOUNDS,validateGrid,validateResponse,directionalGain,rfState,antennaCoordinates} from './antenna-rf.js';
 
-export const MODEL_VERSION = '1.4.2';
+export const MODEL_VERSION = '1.5.0';
 export const DEFAULTS = Object.freeze({
   ...RF_DEFAULTS,
   ...DESIGN_DEFAULTS,
@@ -17,10 +17,10 @@ export const DEFAULTS = Object.freeze({
   kp: 0.08, ki: 0.01, kd: 0.006, friction: 0.0001, damping: 0.0003,
   encoderBits: 14, sensorBias: 0.05, sensorNoise: 0.025,
   controlHz: 100, delayMs: 10, torqueConstant: 0.025, resistance: 8,
-  frequencyGHz: 2.205, txPowerW: 5, peakGain: 6.5, beamwidth: 82.44,
+  frequencyGHz: 2.205, txPowerW: 5, peakGain: 5.2, beamwidth: 90,
   cableLoss: 1, polLoss: 0.5, otherLoss: 1, receiverGT: 22,
   bitrateKbps: 4, requiredEbNo: 4.5, implementationLoss: 1.5, reserveDb: 3,
-  antennaProfile:'anser',antennaWidthMm:80,antennaHeightMm:80,antennaThicknessMm:6.53,antennaMassG:30,clearanceMm:2,
+  ...ANTENNA_PROFILES.ac2000.values,antennaProfile:'ac2000',clearanceMm:2,
   mountX:SURFACE.mount[0],mountY:SURFACE.mount[1],mountZ:SURFACE.mount[2],burialDepth:0,payloadMassKg:1.5,
   initialTemp: 15, baseTemp: 15, groundTemp: -40, sunlight: 0.65,
   solarIncidence: 0.5, emissivity: 0.65, absorptivity: 0.3, thermalArea: 0.018,
@@ -31,7 +31,7 @@ export const DEFAULTS = Object.freeze({
   dust: 0, sealFactor: 0.25, shockG: 0, shockMs: 30,
   batteryWh: 30, electronicsW: 0.79, rfEfficiency: 0.35,
   jamAxis: 'none', pointingRequirement: 0.5, seed: 2026,
-  pattern: null
+  pattern: AC2000_CONSERVATIVE_PATTERN
 });
 
 export const PRESETS = {
@@ -78,11 +78,11 @@ export function validateConfig(input) {
   else c.scenario = input.scenario || c.scenario;
   if (input.jamAxis !== undefined && !['none','azimuth','elevation'].includes(input.jamAxis)) errors.push('Invalid jam axis');
   else c.jamAxis = input.jamAxis || 'none';
-  if (input.pattern) { try { c.pattern = validatePattern(input.pattern); } catch (e) { errors.push(e.message); } }
+  if(input.pattern===null)c.pattern=null;else if(input.pattern!==undefined){try{c.pattern=validatePattern(input.pattern);}catch(e){errors.push(e.message);}}
   for(const [key,values] of Object.entries({patternShape:['symmetric','elliptical'],gainConvention:['realized','accepted'],polarizationMode:['fixed','same','opposite']})){if(input[key]!==undefined){if(!values.includes(input[key]))errors.push(`Invalid ${key}`);else c[key]=input[key];}}
-  if(input.patternGrid)try{c.patternGrid=validateGrid(input.patternGrid);}catch(e){errors.push(e.message);}
-  if(input.frequencyResponse)try{c.frequencyResponse=validateResponse(input.frequencyResponse);}catch(e){errors.push(e.message);}
-  if(input.antennaProfile!==undefined && !['anser','tigrisat','custom'].includes(input.antennaProfile))errors.push('Invalid antenna profile');else c.antennaProfile=input.antennaProfile||c.antennaProfile;
+  if(input.patternGrid===null)c.patternGrid=null;else if(input.patternGrid!==undefined)try{c.patternGrid=validateGrid(input.patternGrid);}catch(e){errors.push(e.message);}
+  if(input.frequencyResponse===null)c.frequencyResponse=null;else if(input.frequencyResponse!==undefined)try{c.frequencyResponse=validateResponse(input.frequencyResponse);}catch(e){errors.push(e.message);}
+  if(input.antennaProfile!==undefined && ![...Object.keys(ANTENNA_PROFILES),'custom'].includes(input.antennaProfile))errors.push('Invalid antenna profile');else c.antennaProfile=input.antennaProfile||c.antennaProfile;
   for (const key of ['encoderBits','controlHz','seed','landingLock','heaterConnected','hostPower','hostRadio','modulationBits']) if (!Number.isInteger(c[key])) errors.push(`${key}: expected an integer`);
   if (c.eventTime >= c.duration) errors.push('Event must occur before simulation ends');
   if(c.busMinV>c.busMaxV)errors.push('Bus minimum must not exceed bus maximum');
@@ -92,7 +92,7 @@ export function validateConfig(input) {
 }
 
 export function presetConfig(id) { return { ...DEFAULTS, ...PRESETS[id].values, scenario: id }; }
-export function applyAntennaProfile(config,id){if(!ANTENNA_PROFILES[id])throw new Error('Unknown antenna reference');return validateConfig({...config,...ANTENNA_PROFILES[id].values,beamwidthV:ANTENNA_PROFILES[id].values.beamwidth,antennaProfile:id,patternShape:'symmetric',pattern:null,patternGrid:null,frequencyResponse:null});}
+export function applyAntennaProfile(config,id){if(!ANTENNA_PROFILES[id])throw new Error('Unknown antenna reference');const p=ANTENNA_PROFILES[id];return validateConfig({...config,...p.values,beamwidthV:p.values.beamwidth,antennaProfile:id,patternShape:'symmetric',pattern:p.values.pattern??null,patternGrid:null,frequencyResponse:null});}
 
 export function validatePattern(rows) {
   if (!Array.isArray(rows) || rows.length < 3 || rows.length > 10000) throw new Error('Pattern requires 3–10,000 angle/gain rows');

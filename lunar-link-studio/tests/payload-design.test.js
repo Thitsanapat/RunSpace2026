@@ -1,14 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {DEFAULTS,validateConfig} from '../src/engine.js';
+import {DEFAULTS,validateConfig,applyAntennaProfile} from '../src/engine.js';
 import {assemblyFit,assemblyStudy,electricalStudy} from '../src/payload-design.js';
 
-test('80 mm plate alone cannot establish full mechanism fit',()=>{
-  const fit=assemblyFit(DEFAULTS,0,0);
+test('compact mission allocation passes the sampled sweep; 80 mm benchmark fails',()=>{
+  const mission=assemblyStudy(DEFAULTS,15);
+  assert.equal(mission.allSampledFit,true);assert.equal(mission.sampledPassPercent,100);assert.ok(mission.minimumClearanceMm>0);
+  const anser=applyAntennaProfile(DEFAULTS,'anser'),fit=assemblyFit(anser,0,0);
   assert.equal(fit.fits,false);
   const motor=fit.failures.find(f=>f.part==='Pitch motor allocation');
   assert.ok(Math.abs(motor.clearanceMm+6)<1e-9);
-  const study=assemblyStudy(DEFAULTS,15);
+  const study=assemblyStudy(anser,15);
   assert.ok(study.plateDiagonalMm>113);
   assert.equal(study.allSampledFit,false);
   assert.ok(study.sampledPassPercent>=0&&study.sampledPassPercent<100);

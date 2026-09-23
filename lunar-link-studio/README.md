@@ -1,6 +1,6 @@
-# Lunar Link Studio 1.4.2
+# Lunar Link Studio 1.5.0
 
-รุ่น 1.4.2 แก้ตำแหน่งที่ browser เคยจำจากรุ่นเก่า: ถ้าเป็นพิกัดเดิม `[0.65, 0.76, 0.45]` จะย้ายเป็น green bay ปัจจุบัน `[0.92, 0.76, 0.62]` อัตโนมัติ. โมดูล cyan จึงแทนบล็อกเขียวที่เลือกจริง และไม่วาดทั้งกรอบหรือแผ่นสีเขียวซ้อนใต้โมดูล. ค่าตำแหน่งที่ผู้ใช้ตั้งเองต่างจากพิกัดเก่าจะไม่ถูกเขียนทับ.
+รุ่น 1.5.0 เปลี่ยน antenna baseline เป็น compact S-band CP patch profile ที่ใช้ข้อมูล flight-proven AC-2000: 2.0–2.3 GHz, gain 5.2 dBic, footprint ประมาณ 50.8 × 50.8 mm และ conservative radiation cut จาก datasheet. ANSER 2025 ยังคงเป็น research benchmark ที่ 2.205 GHz สำหรับ S11/AR/gain/qualification แต่แผ่น 80 mm ไม่ผ่าน full gimbal sweep ปัจจุบัน. อ่านเหตุผลและ requirement gates ที่ [ANTENNA-BASELINE-DECISION.md](ANTENNA-BASELINE-DECISION.md).
 
 โปรแกรมจำลองเสาอากาศบน lunar lander พร้อม 3D และการคำนวณ เปิดใช้งานในเครื่องได้ มี source code และ production build ครบ
 
@@ -22,7 +22,7 @@ GitHub Pages: https://Thitsanapat.github.io/RunSpace2026/ — workflow build/tes
 
 กด **Payload 2U**, ปิด **Payload cover**, เปิด **Exploded view** เพื่อดูภายใน. ด้านล่างมี **2U assembly screening**: แผนที่ azimuth/elevation รวมกรอบ มอเตอร์ หัวต่อและพื้นที่โค้งสาย; **Lander bus interface**: current/inrush allocation, harness drop และ capacitor hold-up. ปรับพารามิเตอร์ใน sidebar และส่งออกด้วย **Export design study**.
 
-**2U รวม gimbal ยังไม่ผ่านการยืนยัน:** แผ่น 80 × 80 mm มี diagonal 113.33 mm; cavity หลังเผื่อผนัง/ระยะห่าง 92 × 89 × 92 mm และมอเตอร์ concept ยังชนกรอบบางมุม. ตาราง 60/70/80 mm เป็นการเทียบพื้นที่ ไม่ได้ยืนยัน RF เมื่อย่อเสา. อ่าน [PAYLOAD-DESIGN.md](PAYLOAD-DESIGN.md) สำหรับสมการ ข้อจำกัด และรายการซิม/ทดสอบที่ต้องเพิ่ม.
+**2U รวม gimbal ผ่านเฉพาะ concept screening:** compact baseline ผ่าน 100% ของ sampled 5° bounding-box grid โดยมี concept clearance มากกว่า 5 mm. ผลนี้ยังไม่ใช่ exact CAD/tolerance/cable qualification. เมื่อเลือก ANSER 80 × 80 × 7 mm ซิมจะแสดง interference ตามจริง. อ่าน [PAYLOAD-DESIGN.md](PAYLOAD-DESIGN.md) และ [ANTENNA-BASELINE-DECISION.md](ANTENNA-BASELINE-DECISION.md).
 
 ## โมเดลจากรูปขยายสองมุม
 
@@ -57,7 +57,7 @@ GitHub Pages: https://Thitsanapat.github.io/RunSpace2026/ — workflow build/tes
 - แยก payload จาก lander; **100 × 100 × 200 mm รวม antenna และ gimbal ทั้งหมด** ปุ่ม **Payload 2U** แสดงโมดูลแยกในขนาดจริง
 - จำลอง landing lock → rest confirmation → acquisition; vibration เป็น transient หลัง touchdown แล้วหยุด
 - เพิ่มลงตะแคง ลงปัก คว่ำ/จมพื้น ไฟ lander หาย และพื้นผิว +170°C รวม 11 presets
-- ตรวจมุมแผ่นเสากับกรอบ 2U ทุก timestep; หยุดเมื่อชนกรอบ ไม่ได้ถือว่าเสาขนาด 80 mm หมุนได้ครบทุกทิศ
+- ตรวจมุมแผ่นเสากับกรอบ 2U ทุก timestep; compact baseline ผ่าน plate sweep ส่วน ANSER 80 mm ถูกหยุดเมื่อชนกรอบ
 - Antenna & RF มี reference profiles จากงานวิจัย, สูตร beam/link budget แทนค่าจริง, gain pattern CSV และเครื่องคำนวณ patch
 - Heater อยู่ที่ lander; คำนวณอุณหภูมิ lander และ payload แยกกันผ่าน thermal conductance
 - แยก payload power, RF DC power และ heater power รวมถึงกรณี thermal contact หรือ host power ขาด
@@ -68,12 +68,14 @@ GitHub Pages: https://Thitsanapat.github.io/RunSpace2026/ — workflow build/tes
 1. เลือก **Off-nominal landing** → Run scenario: เสาจะค้างช่วงกระแทกก่อนเริ่มชี้เป้า
 2. กด **Payload 2U** และเลื่อนเวลาเพื่อดู antenna sweep; กล่องเส้นคือกรอบ payload โดยรวม
 3. เลือก **Nose-down impact**, **Inverted / buried** และ **Host power lost** เพื่อดูข้อจำกัดที่ gimbal แก้ไม่ได้
-4. แท็บ **Antenna & RF** เลือก INTA/ANSER หรือ Tigrisat; อ่านหมายเหตุ measured / simulated / assumed ก่อนใช้ตัวเลข
+4. แท็บ **Antenna & RF** เลือก Mission-fit compact patch, INTA/ANSER หรือ Tigrisat; อ่านหมายเหตุ measured / simulated / assumed ก่อนใช้ตัวเลข
 5. แท็บ **Environment** รัน 24 ชั่วโมงใน Dust & cold และ Hot surface stress; กราฟน้ำเงินคือ payload สีส้มคือ lander
 6. แท็บ **Batch analysis** ทดสอบ motor step และ Monte Carlo; ต้องมีเวลาสังเกตอย่างน้อย 1 s หลัง vibration window + rest hold + 2 s acquisition allowance
 7. Export run → JSON, CSV, report Markdown หรือภาพ 3D PNG เพื่อเก็บหลักฐาน
 
 ## เอกสารประกอบ
+
+- [ANTENNA-BASELINE-DECISION.md](ANTENNA-BASELINE-DECISION.md): candidate screen, requirement gates, link calculation และช่องว่างที่ต้องปิดก่อน CDR
 
 - [ENGINEERING-NOTES.md](ENGINEERING-NOTES.md): ข้อแก้ไขจาก proposal, คำนวณ antenna/beam/RF, thermal และแผนพิสูจน์ด้วยฮาร์ดแวร์
 - [POWER-THERMAL-COMMS.md](POWER-THERMAL-COMMS.md): เงื่อนไข Earth link, power modes จาก lander และแผนจัดการ RF/thermal ในเคสร้อน

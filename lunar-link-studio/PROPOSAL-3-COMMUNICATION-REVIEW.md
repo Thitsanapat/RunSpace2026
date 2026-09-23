@@ -1,6 +1,6 @@
 # Proposal (3): communication and antenna review
 
-ตรวจเมื่อ 22 กันยายน 2026 จาก `Ultra Smooth Landing - Proposal (3).pdf` และ Lunar Link Studio v1.4.2
+ตรวจเมื่อ 23 กันยายน 2026 จาก `Ultra Smooth Landing - Proposal (3).pdf` และ Lunar Link Studio v1.5.0
 
 ภาพพร้อมวางสไลด์ คำบรรยาย และตำแหน่งใช้งานอยู่ที่ [`slide-assets/README.md`](slide-assets/README.md) โดยมีภาพสรุปหน้า 16 ที่จัดสัดส่วนสำหรับพื้นที่ว่างด้านขวาไว้แล้ว
 
@@ -35,18 +35,18 @@
 ### Design baseline
 
 - Study frequency: **2.205 GHz downlink**, อยู่ในช่วง S-band return 2200–2290 MHz ที่ NASA รวบรวมไว้ แต่ยังไม่ใช่ mission frequency assignment
-- Antenna: dual circularly polarized stacked patch, reference envelope **80 × 80 × 6.53 mm, 30 g**
-- Reference isolated realized gain: **6.5–7 dBi** ที่ 2.205 GHz
-- Current simulation value: **6.5 dBic realized gain**
-- Current analytical HPBW: **82.44° full width**; ค่านี้เป็น approximation จาก gain/aperture efficiency ไม่ใช่ measured HPBW ของ reference antenna
-- Current matching inputs: S11 = −15 dB และ axial ratio = 3 dB เป็น assumptions จนกว่าจะนำ VNA/anechoic data เข้ามา
+- Mission-fit antenna profile: **AC-2000 compact circularly polarized S-band patch**, ขนาดที่ผู้ผลิตระบุแบบประมาณ 2 × 2 in หรือ **50.8 × 50.8 mm**, มวลประมาณ **100 g**, gain สูงสุดทั่วไป **5.2 dBic**, bandwidth 2.0–2.3 GHz และ VSWR 1.5:1
+- Mechanical model จองความหนา **15 mm** สำหรับ antenna/connector interface; ตัวเลขนี้เป็น project allocation เพราะ public datasheet ไม่ให้ความหนา ต้องแทนด้วย vendor ICD/CAD ก่อน CDR
+- Pattern ในซิมใช้ค่าที่ต่ำที่สุดจาก phi cuts สามระนาบใน datasheet ที่แต่ละมุม เพื่อเป็น conservative 1D cut; ไม่ใช่ mounted 3D pattern ของ lander
+- Research benchmark: **ANSER 2025 dual-CP stacked patch, 80 × 80 × 7 mm physical, 30 g, 6.5–7 dBi** ที่ 2.205 GHz พร้อม vibration/shock/TVAC evidence แต่ไม่ผ่าน full gimbal sweep ภายใน cavity ปัจจุบัน
+- Current matching input ของ mission profile: S11 ≈ **−13.98 dB** ซึ่งคำนวณจาก VSWR 1.5:1; axial ratio = 3 dB ยังเป็น assumption เพราะ public AC-2000 datasheet ไม่ให้ค่าตัวเลข AR
 - Polarization: CP ลด sensitivity ต่อ rotation รอบแนว LOS แต่ต้องกำหนด RHCP/LHCP ให้ตรงกับ ground station
-- Mechanical pointing target ±0.5° เป็น control target; ที่ beamwidth นี้ loss ที่ 0.5° เพียงประมาณ 0.0004 dB จึงห้ามอ้างว่า ±0.5° จำเป็นเพราะ RF link budget
+- Mechanical pointing target ±0.5° เป็น control target ไม่ใช่ข้อบังคับจาก beamwidth; เหตุผลหลักคือ acquisition repeatability, keep-out และ interface margin
 
 ### เหตุผลที่เลือก S-band CP patch + gimbal
 
 - S-band มี component และ ground-segment ecosystem สำหรับ small spacecraft; NASA รวบรวม return band 2200–2290 MHz และ ground-station G/T หลายระดับ
-- Patch แบน เบา และเข้ากับหน้ากว้าง 100 mm; reference flight-integrated antenna ปี 2025 มีมวล 30 g และสูงประมาณ 6.7 mm
+- Patch แบน เบา และเข้ากับหน้ากว้าง 100 mm; mission-fit profile มี footprint ประมาณ 50.8 mm และใช้ RF chain เดียว ส่วน ANSER ยืนยันว่ารูปแบบ stacked patch ที่ 2.205 GHz สามารถผ่าน qualification ได้
 - CP ลด polarization mismatch จากการหมุนของ lander เมื่อเทียบกับ linear polarization
 - Gimbal หมุน aperture เดิมให้คง gain ใกล้ boresight จึงรักษา EIRP ได้ในมุมที่ planar array เริ่มเสีย scan gain
 - กลไกหนึ่งชุดกับ RF chain หนึ่งทางตรวจ bench test ได้ตรงไปตรงมากว่าสถาปัตยกรรมหลาย element/หลาย channel ใน PoC
@@ -55,7 +55,7 @@
 
 - moving parts มีความเสี่ยงจาก shock, cold welding/lubrication, regolith, cable wrap, bearing play และ single-point jam
 - gimbal ไม่ทะลุ lander hull/terrain และไม่แก้ Earth below local horizon
-- 2U envelope ผ่านเฉพาะ stowed geometry; current sampled full sweep ยังพบ interference และต้องแก้ CAD
+- Mission-fit 50.8 mm profile ผ่าน sampled bounding-box sweep 100% ที่ step 5° ใน model ปัจจุบันและมี minimum concept clearance มากกว่า 5 mm; ผลนี้ยังไม่แทน exact CAD collision, tolerance stack หรือ cable-stress analysis
 - mounted radiation pattern อาจต่างจาก isolated antenna เพราะ deck, red payload, frame, cable และ lander structure
 - S11, axial ratio, gain และ resonance ต้องวัดหลังติดตั้งและหลัง thermal-vacuum; temperature coefficient ในซิมยังเป็น user assumption
 - final channel, RF port power, ground service, coding, BER/FER requirement และ availability ต้องอยู่ใน ICD/ground-service agreement
@@ -84,32 +84,32 @@ Baseline ปัจจุบันเป็น **engineering assumption**, ไม
 | Frequency | 2.205 GHz |
 | Earth–Moon range | 384,400 km |
 | RF power at antenna-chain input | 5 W = 6.99 dBW |
-| Antenna realized gain, on axis | 6.50 dBic |
+| Antenna realized gain, on axis | 5.20 dBic |
 | Feed/cable loss | 1.00 dB |
-| **EIRP** | **12.49 dBW** |
+| **EIRP** | **11.19 dBW** |
 | Free-space path loss | 211.01 dB |
 | Assumed receiver G/T | 22.00 dB/K |
 | Polarization + other losses | 0.50 + 1.00 dB |
-| **C/N0** | **50.58 dB-Hz** |
+| **C/N0** | **49.28 dB-Hz** |
 | Information rate | 4.00 kbps |
 | Coding / modulation | rate 1/2, QPSK assumption, roll-off 0.35 |
 | Occupied bandwidth | 5.40 kHz |
-| **Eb/N0** | **14.56 dB** |
+| **Eb/N0** | **13.26 dB** |
 | Required Eb/N0 + implementation loss | 4.50 + 1.50 dB |
-| **Raw margin** | **8.56 dB** |
+| **Raw margin** | **7.26 dB** |
 | Required design reserve | 3.00 dB |
-| **Excess above reserve** | **5.56 dB** |
-| Maximum rate at the same threshold/reserve | 14.38 kbps |
+| **Excess above reserve** | **4.26 dB** |
+| Maximum rate at the same threshold/reserve | 10.66 kbps |
 
 Ground station sensitivity ต้องอยู่ข้างผลหลัก:
 
 | Assumed G/T | Raw margin | Excess above 3 dB reserve | Result at 4 kbps |
 |---:|---:|---:|---|
-| 12.8 dB/K | −0.64 dB | −3.64 dB | FAIL |
-| 17 dB/K | 3.56 dB | 0.56 dB | PASS, little headroom |
-| 18 dB/K | 4.56 dB | 1.56 dB | PASS |
-| 21 dB/K, NASA listed typical | 7.56 dB | 4.56 dB | PASS |
-| 22 dB/K, current sim | 8.56 dB | 5.56 dB | PASS |
+| 12.8 dB/K | −1.94 dB | −4.94 dB | FAIL |
+| 17 dB/K | 2.26 dB | −0.74 dB | FAIL reserve gate |
+| 18 dB/K | 3.26 dB | 0.26 dB | PASS, little headroom |
+| 21 dB/K, NASA listed typical | 6.26 dB | 3.26 dB | PASS |
+| 22 dB/K, current sim | 7.26 dB | 4.26 dB | PASS |
 
 ดังนั้นข้อความบนสไลด์ควรเป็น “closes under the stated 5 W / 4 kbps / G/T assumption” ไม่ใช่ “communication guaranteed.”
 
