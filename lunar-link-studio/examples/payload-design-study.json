@@ -1,5 +1,5 @@
 {
-  "modelVersion": "1.5.1",
+  "modelVersion": "1.5.2",
   "config": {
     "patternShape": "symmetric",
     "beamwidthV": 82.44,
@@ -114,7 +114,7 @@
     "landerBatteryWh": 300,
     "heaterConnected": 1,
     "hostPower": 1,
-    "hostRadio": 1,
+    "hostRadio": 0,
     "busVoltage": 28,
     "regulatorEfficiency": 0.85,
     "dust": 0,
@@ -18141,34 +18141,34 @@
     "note": "Sample grid fraction, not mission success probability. No trajectory path planning or interpolated collision guarantee."
   },
   "electrical": {
-    "peakLoadW": 30.967124756887028,
-    "peakFunctionalLoadW": 0.9671247568870261,
+    "peakLoadW": 47.77384744596266,
+    "peakFunctionalLoadW": 17.77384744596266,
     "heaterLoadW": 30,
-    "loadedV": 21.272119431819146,
-    "steadyA": 1.455761136361709,
-    "peakBusDemandA": 1.455761136361709,
+    "loadedV": 20.854596707984484,
+    "steadyA": 2.290806584031028,
+    "peakBusDemandA": 2.290806584031028,
     "currentPass": false,
     "voltagePass": true,
-    "holdUpMs": 0.9751702988458668,
+    "holdUpMs": 0.5455880005239537,
     "outagePass": false,
     "inrushA": 0.8,
     "inrushMs": 20,
     "rows": [
       {
         "x": 0,
-        "y": 21.272119431819146
+        "y": 20.854596707984484
       },
       {
         "x": 1,
-        "y": 17.908882325709246
+        "y": 15.219107595306536
       },
       {
         "x": 2,
-        "y": 13.74602004911328
+        "y": 5.322430661113099
       },
       {
         "x": 3,
-        "y": 7.561618095695363
+        "y": 0
       },
       {
         "x": 4,

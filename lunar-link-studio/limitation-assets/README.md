@@ -1,6 +1,6 @@
 # Limitation evidence pack
 
-โฟลเดอร์นี้รวมกราฟข้อจำกัดของ Lunar Link Studio v1.5.1 แยกจากภาพผลลัพธ์สำหรับสไลด์หลัก ทุกภาพมีทั้ง PNG พร้อมวางและ SVG สำหรับแก้ไข ข้อมูลตัวเลขที่ใช้สร้างภาพอยู่ใน `limitation-data.json`
+โฟลเดอร์นี้รวมกราฟข้อจำกัดของ Lunar Link Studio v1.5.2 แยกจากภาพผลลัพธ์สำหรับสไลด์หลัก ทุกภาพมีทั้ง PNG พร้อมวางและ SVG สำหรับแก้ไข ข้อมูลตัวเลขที่ใช้สร้างภาพอยู่ใน `limitation-data.json`
 
 ## อ่านกราฟอุณหภูมิให้ถูกต้อง
 
@@ -96,10 +96,10 @@
 
 ข้อจำกัดปัจจุบัน:
 
-- functional branch peak 5.31 W + local heater 30 W = worst-case payload service 35.31 W
-- steady current ประมาณ 1.67 A และ entered inrush 0.8 A เทียบ bus allocation 0.5 A: FAIL
+- functional branch peak 22.11 W + local heater 30 W = worst-case payload service 52.11 W
+- steady current ประมาณ 2.51 A และ entered inrush 0.8 A เทียบ bus allocation 0.5 A: FAIL
 - 470 µF ให้ ideal hold-up ประมาณ 0.83 ms เทียบ requirement 100 ms: FAIL
-- 5 W RF output ของ host PA ต้องการประมาณ 14.29 W DC ที่ assumed 35% efficiency
+- 5 W RF output ของ onboard payload PA ต้องการประมาณ 14.29 W DC ที่ assumed 35% efficiency
 
 ต้องยืนยันด้วย lander ICD, converter selection, inrush waveform, ESR/derating และ hardware test
 
@@ -120,7 +120,7 @@
 
 ไฟล์: `09-scenario-failure-gate-matrix.png`
 
-แสดงว่า link ต้องผ่าน Earth visibility, LOS, travel/fit, mechanism, host RF และ RF closure พร้อมกัน Gimbal แก้ host power loss, actuator jam, burial, terrain/hull blockage หรือ target นอก travel ไม่ได้
+แสดงว่า link ต้องผ่าน Earth visibility, LOS, travel/fit, mechanism, lander DC/onboard RF และ RF closure พร้อมกัน Gimbal แก้ lander power loss, actuator jam, burial, terrain/hull blockage หรือ target นอก travel ไม่ได้
 
 ตำแหน่งแนะนำ: หน้า Verification/Risks
 
@@ -142,7 +142,7 @@
 - antenna–lander coupling: ไม่มี installed full-wave EM model
 - landing probability: presets และ Monte Carlo เป็น synthetic cases ไม่ใช่ mission probability distribution
 - total mass reserve: entered mass เท่ากับ project target 1.5 kg จึงยังไม่มี reserve และไม่มี detailed BOM
-- host interface: power, RF port, heater, attitude/ephemeris, data rate และ duty cycle ยังต้องยืนยันใน ICD
+- host interface: DC power, attitude/ephemeris, data rate และ duty cycle ยังต้องยืนยันใน ICD; RF chain และ heater อยู่บน payload
 
 ## ชุดสั้นสำหรับนำเสนอ
 

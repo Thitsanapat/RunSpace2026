@@ -26,7 +26,7 @@
 
 > โจทย์ของเราคือ หลังลงจอด lander อาจเอียงจนเสาแบบติดตัวยานชี้ออกจากโลก และสูญเสีย link ทั้งที่ระบบหลักยังทำงานอยู่
 >
-> กล่องสีฟ้าคือ surface payload ที่แทน green zone ทั้ง antenna, two-axis gimbal, electronics และ heater pad อยู่ใน 2U และไม่เกิน 1.5 กิโลกรัม เราเลือก stacked circularly polarized S-band patch ที่ 2.205 กิกะเฮิรตซ์ เป้าหมาย 60 คูณ 60 คูณ 7 มิลลิเมตร โดยใช้ power และ RF service จาก lander; heater ติดบน payload/gimbal แต่รับไฟจาก lander
+> กล่องสีฟ้าคือ surface payload ที่แทน green zone ทั้ง antenna, two-axis gimbal, transceiver/PA, electronics และ heater pad อยู่ใน 2U และไม่เกิน 1.5 กิโลกรัม เราเลือก stacked circularly polarized S-band patch ที่ 2.205 กิกะเฮิรตซ์ เป้าหมาย 60 คูณ 60 คูณ 7 มิลลิเมตร โดย lander จ่ายเฉพาะ DC power; heater ติดบน payload/gimbal และรับไฟจาก bus เดียวกัน
 >
 > ระหว่าง touchdown กิมบอลจะล็อก เมื่อยานนิ่งจึงใช้ attitude และ Earth ephemeris ชี้กลับหาโลก เว็บนี้คำนวณ geometry, control, power, thermal surface reference ลบ 170 ถึงบวก 110 องศาเซลเซียส และ RF link ร่วมกัน โดย heater อยู่บน payload/gimbal และดึงไฟจาก lander ไม่ใช่เพียง animation ค่า NASA ที่เขียนบวก 230 คือฟาเรนไฮต์ หรือบวก 110 เซลเซียส
 >

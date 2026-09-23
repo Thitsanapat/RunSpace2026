@@ -1,4 +1,4 @@
-# Antenna & RF laboratory — v1.5.1
+# Antenna & RF laboratory — v1.5.2
 
 รุ่น 1.5 ใช้ proposed compact stacked CP patch target ขนาด 60 × 60 × 7 mm, gain target 5.2 dBic, analytical HPBW 90° และ S11 target −10 dB. ค่าชุดนี้ใช้ทำ packaging/link sensitivity และยังไม่ใช่ผล full-wave EM หรือผลวัด. ที่ตำแหน่ง top green surface payload default 65° tip ยังถูก hull proxy บัง จึงไม่ผ่าน actual link แม้ on-axis clear-path budget มี raw margin 7.257 dB. ANSER 80 mm เป็น topology/qualification benchmark และจะแสดง packaging failure เมื่อเลือก profile นี้. ดู decision trace ที่ [ANTENNA-BASELINE-DECISION.md](ANTENNA-BASELINE-DECISION.md).
 
@@ -6,7 +6,7 @@
 
 ## ความถี่และงานวิจัยที่เลือก
 
-ใช้ **2.205 GHz เป็น baseline สำหรับซิม downlink** เนื่องจากอยู่ในช่วง2.2–2.3 GHz ที่สไลด์ PDFหน้า13 ระบุ และมี reference antenna ที่วัดจริง. การกำหนดความถี่ภารกิจสุดท้ายต้องตรง host radio, ground station, bandwidth และ mission frequency assignment; งาน antenna paper ไม่ใช่หลักฐานการจัดสรรช่องสัญญาณ
+ใช้ **2.205 GHz เป็น baseline สำหรับซิม downlink** เนื่องจากอยู่ในช่วง2.2–2.3 GHz ที่สไลด์ PDFหน้า13 ระบุ และมี reference antenna ที่วัดจริง. การกำหนดความถี่ภารกิจสุดท้ายต้องตรง onboard payload radio, ground station, bandwidth และ mission frequency assignment; งาน antenna paper ไม่ใช่หลักฐานการจัดสรรช่องสัญญาณ
 
 | Reference | หลักฐานที่ใช้ | สิ่งที่ไม่ย้ายมาอ้าง |
 |---|---|---|
@@ -46,7 +46,7 @@ NASA แสดง S-band return communications2200–2290 MHz พร้อมส
 | กลุ่ม | Inputs/ค่าตั้งต้น | ผลในซิม | หลักฐานที่ยังต้องหา |
 |---|---|---|---|
 | Antenna pattern | peak6.5 dBi; HPBW82.44°; second-plane HPBW; analytical backlobe floor40 dB | directional gain ตามθ,φเข้าสู่budgetทั้งfixed/gimbal | วัด/EM full pattern บน representative lander; measured gain convention |
-| Frequency |2.205 GHz | FSPL; lookup RF CSV เมื่อมี | ย่าน host radio + station; calibrationของfrequency response |
+| Frequency |2.205 GHz | FSPL; lookup RF CSV เมื่อมี | ย่าน onboard radio + station; calibrationของfrequency response |
 | Matching | scalar S11−15 dB | VSWR1.433; mismatch0.140 dBใช้เฉพาะaccepted-power gain | VNA S11หลังconnector/feed reference planeที่กำหนด |
 | Gain convention | Realized(default) / accepted-power | Realizedไม่หักmismatchซ้ำ;acceptedหัก1−|Γ|²หนึ่งครั้ง | แยกgain/directivity/realized/co-polarอย่างชัดเจน |
 | Polarization | fixedloss0.5 dB หรือAR→idealCP receiver; scalar AR3 dB | polarization overlapลดreceivedpower | measured co/cross fieldsหรือARทั้งfrequencyและangle; receiverpolarization |

@@ -1,6 +1,6 @@
 # Proposal (3): communication and antenna review
 
-ตรวจเมื่อ 23 กันยายน 2026 จาก `Ultra Smooth Landing - Proposal (3).pdf` และ Lunar Link Studio v1.5.1
+ตรวจเมื่อ 23 กันยายน 2026 จาก `Ultra Smooth Landing - Proposal (3).pdf` และ Lunar Link Studio v1.5.2
 
 ภาพพร้อมวางสไลด์ คำบรรยาย และตำแหน่งใช้งานอยู่ที่ [`slide-assets/README.md`](slide-assets/README.md) โดยมีภาพสรุปหน้า 16 ที่จัดสัดส่วนสำหรับพื้นที่ว่างด้านขวาไว้แล้ว
 
@@ -10,15 +10,15 @@
 
 ผลิตภัณฑ์ควรถูกนิยามเป็น **secondary, independently pointed S-band antenna front-end** สำหรับกู้ลิงก์หลังยานเอียง โดยใช้ power, attitude/ephemeris, data interface และ RF transponder/PA ของ lander ตาม interface ที่ตกลงกัน. ฮีตเตอร์เฉพาะที่อยู่บน payload/gimbal แต่รับไฟจาก lander. ไม่ควรเรียกว่า independent communication system จนกว่าจะรวม modem, receiver, transmitter, PA, diplexer, RF switch และ autonomous acquisition chain ไว้ใน 2U จริง
 
-สิ่งที่ระบบแก้ได้คือความเสียหายเชิงเรขาคณิต: body-fixed antenna ชี้ผิดทิศหลัง touchdown. ระบบไม่สามารถแก้ Earth ต่ำกว่าขอบฟ้า, terrain/hull blockage, host radio หรือ host power เสีย, สาย RF ขาด, gimbal jam หรือ antenna burial ได้
+สิ่งที่ระบบแก้ได้คือความเสียหายเชิงเรขาคณิต: body-fixed antenna ชี้ผิดทิศหลัง touchdown. ระบบไม่สามารถแก้ Earth ต่ำกว่าขอบฟ้า, terrain/hull blockage, lander power เสีย, onboard radio/PA เสีย, สาย RF ขาด, gimbal jam หรือ antenna burial ได้
 
 ## ตำแหน่งที่ควรวางผลซิมในสไลด์
 
 | หน้า PDF ปัจจุบัน | สิ่งที่ควรวาง | หลักฐานจากซิม |
 |---|---|---|
-| 6 — System architecture | วาดขอบเขตให้ชัด: lander bus/attitude/ephemeris/RF port → controller → gimbal → CP patch. แยก DC, data และ RF coax | block diagram และสถานะ host power / host radio gate |
+| 6 — System architecture | วาดขอบเขตให้ชัด: lander DC/data/attitude interface → onboard transceiver/PA/controller → gimbal → CP patch. แยก DC, data และ internal RF cable | block diagram และสถานะ lander-power / payload-RF gate |
 | 8 — 3D prototype | แสดง stowed envelope 100 × 100 × 181 mm และ **swept envelope**; ระบุ coax bend radius, cable twist, hard stop และ keep-out | 2U fit/clearance view; sampled assembly collision result |
-| 10 — Mass & power | แยก `payload DC branch` ออกจาก `host RF/PA branch`; ห้ามรวม 5 W RF output เป็น 5 W DC | power/current/inrush/hold-up result |
+| 10 — Mass & power | รวม onboard RF/PA ใน `payload DC branch`; ห้ามรวม 5 W RF output เป็น 5 W DC | power/current/inrush/hold-up result |
 | 14 — Control/Dynamics | ใส่ error-vs-time และ step response พร้อมนิยาม settling band; แยก command latency ออกจาก motor settling | pointing error chart + step response table |
 | 15 — 100 km relay | ถ้าจะเก็บหน้านี้ ต้องเป็น scenario คนละชุดกับ DTE: range, relay G/T, frequency, data rate, visibility และ ephemeris คนละค่า | relay preset ที่ยังต้องเพิ่ม; ห้ามใช้ผล Earth–Moon เดิม |
 | **16 — Antenna & Earth–Moon link** | หน้าหลักของ communication proof: 3D radiation + principal cuts + auditable link budget + fixed/gimbal result | RF laboratory และ link-budget table |
@@ -58,7 +58,7 @@
 - Proposed 60 mm profile ผ่าน sampled bounding-box sweep 100% ที่ step 5° ใน model ปัจจุบันและมี minimum concept clearance **3.08 mm**; ผลนี้ยังไม่แทน exact CAD collision, tolerance stack หรือ cable-stress analysis
 - mounted radiation pattern อาจต่างจาก isolated antenna เพราะ deck, red payload, frame, cable และ lander structure
 - S11, axial ratio, gain และ resonance ต้องวัดหลังติดตั้งและหลัง thermal-vacuum; temperature coefficient ในซิมยังเป็น user assumption
-- final channel, RF port power, ground service, coding, BER/FER requirement และ availability ต้องอยู่ใน ICD/ground-service agreement
+- final channel, lander DC/data allocation, ground service, coding, BER/FER requirement และ availability ต้องอยู่ใน ICD/ground-service agreement
 
 ## คำตอบ “ทำไมไม่ใช้ phased array?”
 
@@ -117,9 +117,9 @@ Ground station sensitivity ต้องอยู่ข้างผลหลั�
 
 5 W ใน link budget คือ **RF output**, ไม่ใช่ DC input. ที่ PA efficiency 35% ต้องใช้ไฟประมาณ `5/0.35 = 14.29 W DC` ก่อน motor/controller และก่อน regulator margin.
 
-- ถ้าใช้ **host lander radio/PA**: ตาราง payload ควรแสดง controller/motor ≈ 1–3 W และบรรทัดแยก `Host RF service: 5 W RF, ≈14.3 W DC at assumed 35%`; ต้องยืนยัน RF connector, band, power, duty cycle และ thermal allocation
-- ถ้าเป็น **standalone backup radio**: ต้องใส่ transceiver/PA/modem/Rx/diplexer/filter/RF switch, mass, peak power และ thermal rejection ใน 2U; ตาราง 1.67 W ปัจจุบันไม่พอ
-- การใช้ power/radio จาก lander รวมถึงไฟสำหรับ local heater ทำให้ระบบเป็น geometry-resilient แต่ไม่ independent จาก host failure
+- Baseline ล่าสุดใช้ **onboard payload radio/PA**: ต้องใส่ transceiver/PA/modem/Rx/diplexer/filter/RF switch, mass, peak power และ thermal rejection ใน 2U; 5 W RF ต้องการ PA DC อย่างน้อย ≈14.3 W ที่ efficiency 35% ก่อน converter/overhead
+- Lander ให้เฉพาะ DC bus และ data/attitude interface; local heater, radio/PA และ RF cable อยู่บน payload
+- การรับ power จาก lander ทำให้ระบบยังไม่ independent จาก host power failure
 
 ## สิ่งที่ซิมทำได้แล้ว
 
@@ -128,7 +128,7 @@ Ground station sensitivity ต้องอยู่ข้างผลหลั�
 - EIRP, FSPL, received power, noise, C/N, C/N0, Eb/N0, bandwidth และ max supported rate
 - frequency/rate/range/pointing sweeps และ one-variable sensitivity
 - fixed vs gimbal time history, gimbal travel, 2U packaging, lander/ground blockage
-- power/energy, host radio/power gates, thermal two-node model และ Monte Carlo landing attitudes
+- power/energy, lander-power/onboard-radio gates, thermal two-node model และ Monte Carlo landing attitudes
 
 ## สิ่งที่ควรแก้ในซิมก่อน capture ใส่รอบชิง
 
@@ -137,7 +137,7 @@ Ground station sensitivity ต้องอยู่ข้างผลหลั�
 1. เพิ่ม **ground-station profiles** อย่างน้อย 12.8, 17, 18, 21 และ 22 dB/K พร้อมสถานะ `reference / assumed / contracted`
 2. เพิ่มกราฟ **final lander tilt sweep** สำหรับ fixed, gimbal-clear และ gimbal-with-blockage โดยใช้ geometry/travel/packaging gate จริง ไม่ใช้ mispoint angle แทน tilt เฉย ๆ
 3. แยก preset `Direct-to-Earth 384,400 km` และ `100 km lunar relay`; แต่ละ preset ต้องมี frequency, Rx G/T, rate, waveform และ visibility ของตัวเอง
-4. เพิ่ม selector `host RF service` / `onboard radio` และแสดง DC power ที่ boundary ถูกต้อง
+4. ล็อก baseline เป็น `onboard radio` และแสดง PA DC, regulator loss, heater และ motor peak ที่ lander bus boundary
 5. เพิ่ม **uncertainty sweep** ของ G/T, Tx power, feed/installation loss, antenna gain, pointing bias และ temperature; รายงาน P5/P50/P95 margin หรือ pass probability
 6. ทำ mount field-of-view sweep เพื่อหาตำแหน่งที่ไม่ถูก hull บังใน attitude envelope. Current 65° case ที่ green-zone concept mount ถูก hull proxy บัง จึงไม่ควรนำกราฟนั้นไปอ้างว่า gimbal กู้ลิงก์สำเร็จ
 7. เพิ่ม architecture trade model สำหรับ fixed patch / gimballed patch / planar phased array โดยเปิด assumptions ของ scan limit, scan loss, insertion loss, mass, DC power และ number of faces; ห้ามใส่ phased-array ตัวเลขเป็น fact หากไม่มี component/CAD source

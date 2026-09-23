@@ -38,7 +38,7 @@
 
 - **ทำไมไม่ใช้ phased array:** ในกรอบ 2U และไม่เกิน 1.5 kg เราใช้ single CP patch กับ mechanical pointing เพื่อลด RF chains, phase shifters, calibration และ DC/thermal load โดยยอมรับความเสี่ยงของชิ้นส่วนเคลื่อนที่
 - **ส่งถึงโลกได้หรือไม่:** กรณีวิเคราะห์ clear path ที่ 2.205 GHz, ระยะ 384,400 km, กำลัง RF 5 W, 4 kbps และสมมติ ground G/T 22 dB/K ให้ link reserve ประมาณ +4.26 dB; ground service, installed pattern และ frequency assignment ยังต้องยืนยัน
-- **ไฟและความร้อน:** lander bus จ่ายไฟให้ payload ทั้งชุด แต่ฮีตเตอร์ 30 W อยู่บน payload/gimbal และควบคุมจากอุณหภูมิ payload; กรณีเลวร้าย functional load 5.31 W รวมฮีตเตอร์เป็น 35.31 W ซึ่งเกิน allocation 0.5 A ที่ตั้งไว้และถูกแสดงเป็น interface gap ในเว็บ
+- **ไฟและความร้อน:** lander bus จ่ายไฟให้ payload ทั้งชุด; transceiver/PA และฮีตเตอร์ 30 W อยู่บน payload/gimbal. กรณีเลวร้าย functional load 22.11 W รวมฮีตเตอร์เป็น 52.11 W หรือประมาณ 2.51 A ที่ modeled minimum terminal ซึ่งเกิน allocation 0.5 A และถูกแสดงเป็น interface gap ในเว็บ
 
 ## ข้อความที่ต้องแก้บนสไลด์ก่อนใช้
 

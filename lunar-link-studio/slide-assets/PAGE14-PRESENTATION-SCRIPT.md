@@ -27,6 +27,10 @@
 > **Proposed antenna target — EM pending**  
 > 2.205 GHz · stacked CP patch · 60 × 60 × 7 mm · 5.2 dBic target · S11 ≤ −10 dB · AR ≤ 3 dB
 
+เพิ่มบรรทัด architecture ใต้ caption:
+
+> Lander provides DC power only · transceiver/PA, RF cable and isolated heater are onboard the 2U payload
+
 เพิ่มแถบข้อจำกัด:
 
 > Current installed 65° green-zone geometry is hull-blocked; mount/FOV optimization is required.
@@ -37,7 +41,7 @@
 
 > งานวิจัยฝั่งซ้ายแสดงว่า stacked circularly polarized S-band patch ที่ 2.205 GHz สามารถสร้าง วัด และผ่าน environmental qualification ได้ แต่ฮาร์ดแวร์อ้างอิงมีขนาด 80 มิลลิเมตร จึงไม่สามารถนำมาใส่ในกิมบอล 2U ของเราโดยตรง เราจึงใช้ topology นี้เป็น precedent และกำหนดเป้าหมายของทีมเป็น 60 คูณ 60 คูณ 7 มิลลิเมตร ซึ่งต้อง re-optimize ด้วย full-wave EM.
 >
-> ฝั่งขวาเป็นผล system-level ของเรา ที่ 2.205 กิกะเฮิรตซ์ ระยะโลกถึงดวงจันทร์ทำให้เกิด free-space path loss 211.01 เดซิเบล เมื่อใช้กำลัง RF 5 วัตต์และ gain target 5.2 dBic จะได้ EIRP 11.19 dBW. ที่ data rate 4 กิโลบิตต่อวินาทีและสมมติ ground G/T 22 dB/K ระบบมี headroom 4.26 dB หลังหัก reserve 3 dBในกรณี clear line of sight.
+> ฝั่งขวาเป็นผล system-level ของเรา ที่ 2.205 กิกะเฮิรตซ์ ระยะโลกถึงดวงจันทร์ทำให้เกิด free-space path loss 211.01 เดซิเบล เมื่อใช้กำลัง RF 5 วัตต์จาก PA บน payload และ gain target 5.2 dBic จะได้ EIRP 11.19 dBW. ที่ data rate 4 กิโลบิตต่อวินาทีและสมมติ ground G/T 22 dB/K ระบบมี headroom 4.26 dB หลังหัก reserve 3 dBในกรณี clear line of sight. Lander ให้เฉพาะ DC power; ที่ PA efficiency 35% กำลัง 5 W RF ต้องการ PA DC ประมาณ 14.29 W.
 >
 > ถ้าเสาติดกับตัวยานและยานเอียง 65 องศา link จะเหลือ minus 3.22 dB และไม่ผ่าน แต่เมื่อกิมบอลชี้กลับเข้าหาโลกจะกลับมาเป็น plus 4.26 dB. อย่างไรก็ตาม geometry ติดตั้งปัจจุบันยังถูก hull บัง จึงต้องปรับ mount และ field of view. ผลนี้พิสูจน์คุณค่าของกิมบอลในเชิง pointing แต่ยังไม่ใช่ antenna qualification.
 >

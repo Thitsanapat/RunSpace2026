@@ -36,12 +36,12 @@ export function buildPayloadInternals(view) {
     for(let i=0;i<10;i++)view.box([0.0008,0.005,0.0008],gold,group,[-0.012+i*0.0026,0.007,-0.034]);
   }
   const hostConnector=view.box([0.024,0.008,0.010],metal,base,[0.014,0.010,-0.039]);hostConnector.name='Lander power / data input';
-  view.box([0.008,0.008,0.008],gold,base,[-0.022,0.010,-0.039]).name='Host RF coax interface';
+  view.box([0.008,0.008,0.008],gold,base,[-0.022,0.010,-0.039]).name='Onboard PA RF output connector';
   // Local survival heater: electrically supplied by the lander bus and thermally
   // attached to the payload/gimbal deck. The mount remains a separate parasitic path.
   view.box([0.040,0.0025,0.024],mat('#d6652f'),base,[-0.014,0.008,0.010]).name='Host-powered payload heater pad';
   view.box([0.010,0.002,0.040],gold,base,[-0.035,0.005,0.010]).name='Parasitic thermal path to lander interface';
   const wire=(points,color,radius=0.001)=>view.mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p))),24,radius,6,false),mat(color),base);
   wire([[0.014,0.014,-0.039],[0.03,0.020,-0.03],[0.033,0.049,-0.033],[0.028,0.080,-0.029]],'#c65b53');
-  wire([[-0.022,0.014,-0.039],[-0.03,0.08,-0.033],[-0.027,0.12,-0.03],[0,0.143,-0.026],[0,0.1525,-0.009]],'#d5a84c',0.0012).name='Illustrative RF service loop; not cable dynamics';
+  wire([[-0.022,0.014,-0.039],[-0.03,0.08,-0.033],[-0.027,0.12,-0.03],[0,0.143,-0.026],[0,0.1525,-0.009]],'#d5a84c',0.0012).name='Illustrative onboard PA-to-patch RF loop; not cable dynamics';
 }

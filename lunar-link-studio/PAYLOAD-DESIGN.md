@@ -16,7 +16,7 @@
 | Control PCB | ขนาดเดียวกัน, ระดับ 76 mm | MCU, watchdog, attitude/encoder interfaces, temperature sensors, host data link |
 | กลไกด้านบน | 105–200 mm, pivot 152.5 mm | yaw stage, yoke, pitch motor, antenna, RF connector และ service loop |
 
-ภาพชิป/pins/traces ช่วยสื่อสารการจัดวาง ไม่ใช่ schematic, PCB routing, datasheet footprint หรือ flight BOM. สายที่วาดเป็น illustrative routing ไม่ได้ตาม deformation ขณะหมุน. ไม่มีแบตเตอรี่ แต่มี local heater บน payload/gimbal ซึ่งรับไฟจาก lander. การใช้ host RF เป็นสมมติฐานเดิมของซิมที่ต้องยืนยันแยกจาก host power; ถ้าต้องมี transceiver/PA ของเราเอง ต้องเพิ่มพื้นที่ กำลังไฟ และความร้อนใหม่.
+ภาพชิป/pins/traces ช่วยสื่อสารการจัดวาง ไม่ใช่ schematic, PCB routing, datasheet footprint หรือ flight BOM. สายที่วาดเป็น illustrative routing ไม่ได้ตาม deformation ขณะหมุน. ไม่มีแบตเตอรี่ แต่มี transceiver/PA และ local heater บน payload/gimbal ซึ่งรับไฟจาก lander. Lander interface ให้ DC และ data/attitude; สาย RF อยู่ภายใน payload.
 
 เปิด **Payload 2U → ปิด Payload cover → เปิด Exploded view**; exploded view แยกชิ้นส่วนออกนอกกรอบเพื่อดูรายละเอียด ไม่ใช่สภาพใช้งานจริง. ส่งออก GLB ได้พร้อมบอร์ดและ material; pose/exploded state ตามภาพที่เลือก.
 
@@ -46,14 +46,14 @@
 
 Ideal capacitor hold-up: `t = C(Vstart² − Vbrownout²)/(2P)`; กราฟ `V(t) = sqrt(max(0,Vstart² − 2Pt/C))`. ไม่รวม ESR, capacitor tolerance/derating, converter UVLO hysteresis, switching หรือ host foldback. Inrush เป็นค่าที่ผู้ใช้ป้อน ไม่ใช่ waveform ที่วงจรซิมได้.
 
-การ sizing แบบ worst case ปัจจุบันนับ functional peak ≈5.31 W พร้อม local heater 30 W รวม ≈35.31 W. ที่ bus minimum 22 V และ harness 0.5 Ω ได้ Vload≈21.17 V, I≈1.67 A จึงเกิน branch allocation 0.5 A; ideal hold-up 470 µF เหลือ≈0.83 ms เทียบ requirement 100 ms. ต้องตกลง operating modes หรือเพิ่ม power allocation และอัปเดตจากอุปกรณ์จริง โดยเฉพาะ heater, motor start/stall และ converter; ผลนี้ไม่ใช่ flight power budget.
+การ sizing แบบ worst case ปัจจุบันนับ onboard RF/PA + functional peak ≈22.11 W พร้อม local heater 30 W รวม ≈52.11 W. ที่ bus minimum 22 V และ harness 0.5 Ω ได้ Vload≈20.74 V, I≈2.51 A จึงเกิน branch allocation 0.5 A; ideal hold-up 470 µF เหลือ≈0.48 ms เทียบ requirement 100 ms. ต้องตกลง operating modes หรือเพิ่ม power allocation และอัปเดตจากอุปกรณ์จริง โดยเฉพาะ PA, heater, motor start/stall และ converter; ผลนี้ไม่ใช่ flight power budget.
 
 ## หลักฐานที่ยังต้องเพิ่มก่อนเรียกว่าสมบูรณ์
 
 | ลำดับ | งาน/กราฟที่ต้องมี | ผลที่ต้องใช้ตัดสิน |
 |---|---|---|
 | 1 | ICD + CAD: bolt pattern, complete assembly, tolerance stack, cable bend/twist, mass/BOM/CG/inertia | minimum clearance ตลอด trajectory; mass reserve; mount load ทุกแกน |
-| 2 | Installed RF/EM + bench: frequency sweep, S11/VSWR, axial ratio, efficiency, gain และ 3D pattern เมื่ออยู่บนยาน | link margin / available data rate vs attitude, frequency และ temperature; VNA/pattern measurement; host RF compatibility |
+| 2 | Installed RF/EM + bench: frequency sweep, S11/VSWR, axial ratio, efficiency, gain และ 3D pattern เมื่ออยู่บนยาน | link margin / available data rate vs attitude, frequency และ temperature; VNA/pattern measurement; onboard PA/feed compatibility |
 | 3 | Thermal network/FE model ของ base/PCB/motor/antenna พร้อม hot/cold case, shadow, contact degradation | temperature/time ของทุกชิ้น, heater duty/energy, cold start; thermal-vacuum และ thermal-cycle correlation |
 | 4 | Structural FE + test: modal, launch random vibration และ shock ตอน landing แยกกัน | natural frequencies, stress/displacement, fastener loads, alignment shift; ใช้ load spectrum จากผู้ให้บริการ |
 | 5 | Electrical SPICE/bench: start/stall/inrush, converter efficiency, brownout/restart, EMI/EMC | V/I waveforms, peak current, temperatures, reset/recovery; source interruption test |

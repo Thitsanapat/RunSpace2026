@@ -1,5 +1,5 @@
 {
-  "modelVersion": "1.5.1",
+  "modelVersion": "1.5.2",
   "defaults": {
     "patternShape": "symmetric",
     "beamwidthV": 82.44,
@@ -114,7 +114,7 @@
     "landerBatteryWh": 300,
     "heaterConnected": 1,
     "hostPower": 1,
-    "hostRadio": 1,
+    "hostRadio": 0,
     "busVoltage": 28,
     "regulatorEfficiency": 0.85,
     "dust": 0,

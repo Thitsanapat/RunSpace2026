@@ -1,6 +1,6 @@
 # Antenna baseline decision — 2U surface payload
 
-อัปเดต 23 กันยายน 2026 สำหรับ Lunar Link Studio v1.5.1
+อัปเดต 23 กันยายน 2026 สำหรับ Lunar Link Studio v1.5.2
 
 ## ข้อสรุปการเลือก
 

@@ -2,9 +2,11 @@
 
 สคริปต์ล่าสุดสำหรับ Proposal (4): [`PROPOSAL-4-100-SECOND-SCRIPT.md`](PROPOSAL-4-100-SECOND-SCRIPT.md) แบ่ง 90 วินาทีสำหรับสามสไลด์ และ 10 วินาทีสำหรับ live off-nominal simulation
 
-ชุดนี้ export จาก Lunar Link Studio v1.5.1 สำหรับ `Ultra Smooth Landing - Proposal (3).pdf` โดยใช้เลขหน้าตาม PDF ปัจจุบัน ภาพ PNG พร้อมวางในสไลด์ ส่วน SVG ใช้เมื่อต้องการแก้สี ข้อความ หรือส่งออกความละเอียดสูง หน้า antenna ที่พิมพ์เลข **14** บนสไลด์ตรงกับหน้า **16** ของไฟล์ PDF เพราะมีหน้าปก/สารบัญนำหน้า. ผลของทีมใช้ proposed compact target 5.2 dBic; ค่า 6.5–7 dBi ใช้ได้เฉพาะเมื่อระบุว่าเป็น ANSER research benchmark.
+ชุดนี้ export จาก Lunar Link Studio v1.5.2 สำหรับ `Ultra Smooth Landing - Proposal (3).pdf` โดยใช้เลขหน้าตาม PDF ปัจจุบัน ภาพ PNG พร้อมวางในสไลด์ ส่วน SVG ใช้เมื่อต้องการแก้สี ข้อความ หรือส่งออกความละเอียดสูง หน้า antenna ที่พิมพ์เลข **14** บนสไลด์ตรงกับหน้า **16** ของไฟล์ PDF เพราะมีหน้าปก/สารบัญนำหน้า. ผลของทีมใช้ proposed compact target 5.2 dBic; ค่า 6.5–7 dBi ใช้ได้เฉพาะเมื่อระบุว่าเป็น ANSER research benchmark.
 
 กราฟ thermal −170°C ถึง +110°C (+230°F) และชุดข้อจำกัดทั้งหมดแยกอยู่ที่ [`../limitation-assets/README.md`](../limitation-assets/README.md)
+
+การคำนวณหน้า 14 หลังแก้ architecture เป็น lander-DC-only อยู่ที่ [`PAGE14-RECALCULATION.md`](PAGE14-RECALCULATION.md): link budget ทีละบรรทัด, fixed/gimbal 65°, onboard PA power และการตีความอุณหภูมิ NASA.
 
 กราฟ S-band gain, frequency evidence และรายการ RF test gaps แยกอยู่ที่ [`../sband-evidence-assets/README.md`](../sband-evidence-assets/README.md)
 
@@ -31,7 +33,7 @@
 | หน้า | ไฟล์หลัก | ตำแหน่ง/ขนาดที่แนะนำ | คำบรรยายใต้ภาพ |
 |---|---|---|---|
 | 8 — 3D prototype | `p08-green-zone-installed-payload.png` | แทนภาพโมเดลเดิมหรือวางเต็มครึ่งขวา | **Concept installation:** โมดูล 2U ติดตั้งแทน top surface payload allocation สีเขียว; รูปร่าง lander สร้างจากภาพอ้างอิงและไม่ใช่ CAD/ICD ของผู้ให้บริการ |
-| 10 — Mass & power | `p10-power-and-rf-boundary.png` | เต็มความกว้างใต้ตาราง หรือแทนตาราง power เดิม | **Power boundary:** payload motion branch สูงสุด 5.31 W ในซิม; 5 W RF เป็นกำลังขาออกของ host PA และเทียบเป็นประมาณ 14.29 W DC เมื่อสมมติประสิทธิภาพ 35% |
+| 10 — Mass & power | `p10-power-and-rf-boundary.png` | เต็มความกว้างใต้ตาราง หรือแทนตาราง power เดิม | **Power boundary:** onboard RF/PA + payload functional peak 22.11 W; local heater ทำให้ worst-case branch 52.11 W. 5 W RF ต้องการ PA DC 14.29 W ที่ efficiency 35% |
 | 14 — Control/Dynamics | `p14-controller-step-response.png` + `p14-pointing-error-time-history.png` | วางคู่กัน โดยให้ step response ใหญ่กว่า | **Current controller result:** settling 154 ms, rise 124 ms, overshoot 0.61%; ยังไม่ผ่านเป้าหมาย 50 ms. หลัง transient ช่วง 3 s สุดท้ายมี RMS error ประมาณ 0.12° |
 | สไลด์ 14 / PDF 16 — Antenna & Earth–Moon link | `p14-rf-evidence-final.png` | แทนกรอบม่วงด้านขวาตามภาพล่าสุด; จัดลำดับ Our Analysis → FSPL → fixed/gimballed → margin-vs-tilt ไว้แล้ว | **Clear-LOS DTE study:** ที่ lander tilt 65° fixed patch เหลือ −3.22 dB ขณะที่ gimbal on-axisมี +4.26 dB หลัง reserve 3 dB; installed green-zone case ปัจจุบันยังถูก hull บัง |
 | 17 — Verification/Risks | `p17-monte-carlo-attitude-map.png` + `p17-link-failure-gates.png` | แผนที่ 60% ของหน้า; failure gates 40% | **Seeded reduced-order screening:** gimbal 53/100 เทียบ fixed antenna 18/100 สำหรับตัวอย่าง uniform Euler-angle attitudes; ใช้เปรียบเทียบสถาปัตยกรรม ไม่ใช่ค่าความน่าเชื่อถือของภารกิจ |
@@ -49,7 +51,7 @@
 
 - `p10-power-and-rf-boundary.png` — ภาพหลัก
 - แก้แถว transmission เดิมที่ประมาณ 1.67 W เพราะไม่สามารถแทน 5 W RF output ได้
-- ระบุให้ชัดว่า lander ต้องให้บริการอะไร: DC bus (รวม branch ของ local payload heater), radio/modem/PA, attitude/ephemeris, data interface และ RF coax/port
+- ระบุให้ชัดว่า lander ให้เฉพาะ DC bus และ data/attitude/ephemeris interface; radio/modem/PA, RF cable และ local heater อยู่บน payload 2U
 - ค่าที่ยังไม่ผ่านใน model ปัจจุบัน: entered inrush 0.8 A สูงกว่า allocation 0.5 A และ ideal hold-up 6.85 ms ต่ำกว่า requirement 100 ms
 
 ## หน้า 14 — Control และ pointing

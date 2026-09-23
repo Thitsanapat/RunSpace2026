@@ -5,7 +5,7 @@ import {SURFACE,surfaceAssessment} from './surface-payload.js';
 import {DESIGN_DEFAULTS,DESIGN_BOUNDS} from './payload-design.js';
 import {RF_DEFAULTS,RF_BOUNDS,validateGrid,validateResponse,directionalGain,rfState,antennaCoordinates} from './antenna-rf.js';
 
-export const MODEL_VERSION = '1.5.1';
+export const MODEL_VERSION = '1.5.2';
 export const DEFAULTS = Object.freeze({
   ...RF_DEFAULTS,
   ...DESIGN_DEFAULTS,
@@ -27,7 +27,7 @@ export const DEFAULTS = Object.freeze({
   heatCapacity: 240, conductance: 0.2, groundView: 0.25,
   heaterW: 30, heaterSetpoint: 0, operatingMin: -40, operatingMax: 80,
   landerHeatCapacity:3000,landerArea:0.2,landerEmissivity:0.1,landerAbsorptivity:0.15,landerBatteryWh:300,
-  heaterConnected:1,hostPower:1,hostRadio:1,busVoltage:28,regulatorEfficiency:0.85,
+  heaterConnected:1,hostPower:1,hostRadio:0,busVoltage:28,regulatorEfficiency:0.85,
   dust: 0, sealFactor: 0.25, shockG: 0, shockMs: 30,
   batteryWh: 30, electronicsW: 0.79, rfEfficiency: 0.35,
   jamAxis: 'none', pointingRequirement: 0.5, seed: 2026,
@@ -233,9 +233,10 @@ export class Simulator {
     const error=separation(bore,sol.target),fixedError=separation(fixedBore,sol.target);
     const rfAngles=antennaCoordinates(sol.local,this.axes[0].angle,this.axes[1].angle),fixedRfAngles=antennaCoordinates(sol.local,c.targetAz*RAD,c.targetEl*RAD);
     const fixedView=visibility(body.q,c,this.t,c.targetAz*RAD,c.targetEl*RAD),hostPowered=(c.hostPower===1||this.t<c.eventTime)&&this.landerEnergy<c.landerBatteryWh;
-    const payloadPowered=hostPowered&&this.energy<c.batteryWh,rfPowered=hostPowered&&(c.hostRadio===1||payloadPowered);
+    const payloadPowered=hostPowered&&this.energy<c.batteryWh,payloadOperational=this.temp>=c.operatingMin&&this.temp<=c.operatingMax;
+    const rfPowered=hostPowered&&(c.hostRadio===1||(payloadPowered&&payloadOperational));
     return {t:this.t,body,desired:sol.desired,command:sol.command,az:this.axes[0].angle,el:this.axes[1].angle,bore,fixedBore,target:sol.target,error,fixedError,
-      rfAngles,fixedRfAngles,link:linkBudget(error,c,sol.blocked,rfPowered,rfAngles.phi,this.temp),fixedLink:linkBudget(fixedError,c,fixedView.blocked,hostPowered&&(c.hostRadio===1||this.fixedEnergy<c.batteryWh),fixedRfAngles.phi,this.temp),
+      rfAngles,fixedRfAngles,link:linkBudget(error,c,sol.blocked,rfPowered,rfAngles.phi,this.temp),fixedLink:linkBudget(fixedError,c,fixedView.blocked,hostPowered&&(c.hostRadio===1||(this.fixedEnergy<c.batteryWh&&payloadOperational)),fixedRfAngles.phi,this.temp),
       blocked:sol.blocked,reachable:sol.reachable,temp:this.temp,energy:this.energy,fixedEnergy:this.fixedEnergy,power:this.power||0,
       blockedReason:sol.reason,fixedBlocked:fixedView.blocked,groundClearance:sol.groundClearance,position:sol.position,origin:sol.worldOrigin,
       packaging:packaging(this.axes[0].angle,this.axes[1].angle,c),packagingLimited:this.packagingLimited,packagingReachable:sol.packagingReachable,

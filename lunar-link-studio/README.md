@@ -1,6 +1,6 @@
-# Lunar Link Studio 1.5.0
+# Lunar Link Studio 1.5.2
 
-รุ่น 1.5.0 ใช้ **proposed compact stacked CP patch target 60 × 60 × 7 mm** เป็น geometry baseline ภายใน 2U. ค่า gain 5.2 dBic, HPBW 90° และ S11 −10 dB เป็นข้อกำหนด/ตัวแปร sensitivity ที่ยังไม่ใช่ผล EM หรือผลวัด. รูปแบบชั้นเสาอากาศอ้างอิง ANSER 2025 ซึ่งมีหลักฐานวัดและ qualification ที่ 2.205 GHz แต่ฮาร์ดแวร์อ้างอิง 80 mm ไม่ผ่าน full gimbal sweep ปัจจุบัน. AC-2000 คงไว้เป็น commercial flight comparator เท่านั้น เพราะรูปทรงผลิตภัณฑ์จริงไม่ตรงกับ planar stacked patch ที่เสนอ. อ่านเหตุผลและ requirement gates ที่ [ANTENNA-BASELINE-DECISION.md](ANTENNA-BASELINE-DECISION.md).
+รุ่น 1.5.2 ใช้ **proposed compact stacked CP patch target 60 × 60 × 7 mm** เป็น geometry baseline ภายใน 2U. ค่า gain 5.2 dBic, HPBW 90° และ S11 −10 dB เป็นข้อกำหนด/ตัวแปร sensitivity ที่ยังไม่ใช่ผล EM หรือผลวัด. รูปแบบชั้นเสาอากาศอ้างอิง ANSER 2025 ซึ่งมีหลักฐานวัดและ qualification ที่ 2.205 GHz แต่ฮาร์ดแวร์อ้างอิง 80 mm ไม่ผ่าน full gimbal sweep ปัจจุบัน. Lander ให้เฉพาะ DC power; transceiver/PA, RF cable และ heater อยู่บน payload. อ่านเหตุผลและ requirement gates ที่ [ANTENNA-BASELINE-DECISION.md](ANTENNA-BASELINE-DECISION.md).
 
 โปรแกรมจำลองเสาอากาศบน lunar lander พร้อม 3D และการคำนวณ เปิดใช้งานในเครื่องได้ มี source code และ production build ครบ
 
@@ -89,7 +89,7 @@ GitHub Pages: https://Thitsanapat.github.io/RunSpace2026/ — workflow build/tes
 
 ระบบรับ attitude ที่ทราบแล้วและเติม bias/noise; ยังไม่มี star tracker, ephemeris หรือ IMU fusion จริง. ช่วงชี้เป้า, ±0.5°, พลังงาน, และ link reserve เป็นคนละเกณฑ์. Link ผ่านไม่ได้แปลว่าผ่านทุกข้อ
 
-RF ตั้งต้นใช้ host transmitter; หาก payload allocation หมด controller หยุด แต่ RF ของ host อาจยังเปิดได้. Fixed baseline มี payload allocation แยกแต่ใช้สถานะ host เดียวกันจาก paired study. Heater เป็นส่วนหนึ่งของ host energy; อย่านำ host + payload + heater มาบวกซ้ำ. ไม่มี battery recharge และไม่ได้รวม housekeeping ทั้ง lander
+RF ตั้งต้นใช้ transceiver/PA บน payload; lander ให้เฉพาะ DC bus. หาก payload allocation หมด controller และ RF หยุด. Fixed baseline มี payload allocationแยกแต่ใช้สถานะ host power เดียวกันจาก paired study. Heater เป็นส่วนหนึ่งของ host energy; อย่านำ host + payload + heater มาบวกซ้ำ. ไม่มี battery recharge และไม่ได้รวม housekeeping ทั้ง lander
 
 Thermal study ใช้สอง lumped nodes, timestep ≤1 s, constant sunlight/ground boundary; RF/motors OFF. Preset −170°C และ +110°C/+230°F คือ surface-boundary references ไม่ใช่อุณหภูมิ payload. ฝุ่นเป็น sensitivity law ที่ยังไม่ได้ calibrate. ไม่มี convection ใน vacuum
 

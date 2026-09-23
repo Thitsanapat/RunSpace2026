@@ -58,8 +58,8 @@ try{
   await page.locator('#show-zones').uncheck();const minimalDownload=page.waitForEvent('download');await page.locator('#export-model').click();const minimal=glbJSON(await readFile(await(await minimalDownload).path()));
   assert.ok(!minimal.nodes.some(n=>n.name==='Orbiter / red'));assert.equal(await page.evaluate(()=>JSON.stringify(window.lunarLink.result.summary)),before);
   const currentLimit=page.locator('#p-busCurrentLimitA');await currentLimit.evaluate(e=>e.closest('details').open=true);
-  await currentLimit.fill('2');await currentLimit.dispatchEvent('change');
-  await page.waitForFunction(()=>window.lunarLink.result.config.busCurrentLimitA===2);
+  await currentLimit.fill('3');await currentLimit.dispatchEvent('change');
+  await page.waitForFunction(()=>window.lunarLink.result.config.busCurrentLimitA===3);
   assert.match(await page.locator('#design-bus-summary').textContent(),/WITHIN CURRENT ALLOCATION/);
   await currentLimit.fill('0.5');await currentLimit.dispatchEvent('change');
   await page.waitForFunction(()=>window.lunarLink.result.config.busCurrentLimitA===0.5);

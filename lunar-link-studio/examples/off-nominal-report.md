@@ -1,6 +1,6 @@
 # Lunar Link engineering study
 
-Model 1.5.1; generated 2026-09-23T15:54:34.732Z
+Model 1.5.2; generated 2026-09-23T16:39:36.191Z
 
 ## Scope
 Entire payload including gimbal: 100 × 100 × 200 mm. Reduced-order simulation; not flight qualification. Antenna compact: Mission packaging target, not a published antenna: 60 × 60 × 7 mm stacked CP patch topology informed by ANSER. Gain 5.2 dBic, 90° analytical HPBW and S11 −10 dB are system requirements/sensitivity inputs, not transferred measurements. Full-wave installed EM and hardware measurements are required.
@@ -15,14 +15,14 @@ Entire payload including gimbal: 100 × 100 × 200 mm. Reduced-order simulation;
 - Landing lock release: 4.340 s
 - First link after release: — s; not sustained acquisition
 - Sampled command latency bound: 20.00 ms; does not measure motor settling or full sensor/computation delay
-- Payload / host / heater energy: 0.00507 / 0.07650 / 0.00000 Wh. Host includes payload; heater is a subset.
+- Payload / host / heater energy: 0.08910 / 0.08910 / 0.00000 Wh. Host includes payload; heater is a subset.
 
 ## Equations
 FSPL = 20log10(4 pi R f/c). EIRP = 10log10(Ptx) + gain - cable loss. C/N0 = EIRP - FSPL + G/T + 228.599 - polarization - other loss. Eb/N0 = C/N0 - 10log10(bitrate). Margin = Eb/N0 - required - implementation.
 Symmetric-cosine reference only (not a fit to imported 3D / elliptical patterns): exponent 2.00000; HPBW 90 deg; ideal directivity 7.78 dBi; implied efficiency 55.19%. Analytical pattern floor is -40 dB relative to peak; this floor is not imposed on imports. Imported polar cuts are axisymmetric approximations.
 
 ## Thermal and power boundary
-Two nodes: payload and lander interface. The lander supplies electrical power; the dedicated heater is mounted on the payload/gimbal and deposits heat in the payload node. Conduction K(Tlander-Tpayload) is the separate parasitic thermal path and exchanges equal/opposite heat. Each node radiates to ground/deep space and absorbs sunlight. NASA table references are -170 C (-274 F) and +110 C (+230 F) surface values; they are not prescribed payload temperatures. Host-supplied heater/RF and payload allocations are separately tracked. No solar battery recharge or full lander power model. Fixed baseline shares the host availability from this paired study.
+Two nodes: payload and lander interface. The lander supplies DC power only; the transceiver/PA and dedicated heater are mounted on the payload/gimbal. The heater deposits heat in the payload node. Conduction K(Tlander-Tpayload) is the residual path through the isolated mount and exchanges equal/opposite heat. Each node radiates to ground/deep space and absorbs sunlight. NASA table references are -170 C (-274 F) and +110 C (+230 F) surface values; they are not prescribed payload temperatures. Payload RF, heater and functional loads all draw from the lander bus allocation. No solar battery recharge or full lander power model. Fixed baseline shares the host availability from this paired study.
 
 ## Limits and proposal corrections
 Gimbal locks during impact and releases after rest confirmation. Body motion is prescribed, not a rigid-body contact/impact solver. Plate corner envelope does not validate cables/yokes/motors. Full swept rotation may exceed 2U. Hull is a box and ground is a plane; rocks, equipment panels, illustrated service blocks and terrain meshes do not enter obstruction. Buried antenna and lost power cannot be repaired by repointing. No shock strength, full-wave EM, complete CAD mass or lunar thermal qualification.
@@ -163,7 +163,7 @@ Semi-implicit Euler 2 ms; sampled PID 100 Hz; telemetry every 40 ms. Coordinates
     "landerBatteryWh": 300,
     "heaterConnected": 1,
     "hostPower": 1,
-    "hostRadio": 1,
+    "hostRadio": 0,
     "busVoltage": 28,
     "regulatorEfficiency": 0.85,
     "dust": 0,
@@ -206,7 +206,7 @@ Semi-implicit Euler 2 ms; sampled PID 100 Hz; telemetry every 40 ms. Coordinates
     "rmsError": 20.13144480953583,
     "availability": 16.488888888888305,
     "fixedAvailability": 16.488888888888305,
-    "energyWh": 0.005068966491651558,
+    "energyWh": 0.08910257993702447,
     "surfaceInterface": {
       "service": "ispace-top-concept",
       "source": "User-provided ispace Lunar Transportation Service leaflet photo, as of July 2026",
@@ -234,7 +234,7 @@ Semi-implicit Euler 2 ms; sampled PID 100 Hz; telemetry every 40 ms. Coordinates
     "settlingMs": null,
     "releaseTime": 4.339999999999744,
     "acquisitionAfterRelease": null,
-    "landerEnergyWh": 0.07649753792021871,
+    "landerEnergyWh": 0.08910257993702447,
     "heaterEnergyWh": 0,
     "commandLatencyBoundMs": 20
   }
@@ -276,4 +276,4 @@ Lander geometry is reconstructed conceptually from the photograph. Hull LOS/cont
 
 ## 2U assembly and host bus screening
 3 concept PCBs, no local battery, and a host-powered local payload/gimbal heater. Assembly grid step 5 deg; sampled pass 100.00%; minimum signed clearance 3.08 mm. This is not continuous CAD clearance or mission reliability. Plate-only solver limits remain separate.
-Worst functional/heater/total branch 5.31 / 30.00 / 35.31 W; minimum terminal 21.17 V; entered inrush 0.8 A; current allocation pass false; ideal capacitor hold-up 0.83 ms; outage pass false. No circuit transient validation.
+Worst functional/heater/total branch 22.11 / 30.00 / 52.11 W; minimum terminal 20.74 V; entered inrush 0.8 A; current allocation pass false; ideal capacitor hold-up 0.48 ms; outage pass false. No circuit transient validation.

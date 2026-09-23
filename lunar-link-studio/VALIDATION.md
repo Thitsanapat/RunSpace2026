@@ -1,6 +1,6 @@
-# Validation — v1.5.1 — 2026-09-23
+# Validation — v1.5.2 — 2026-09-23
 
-v1.5.1 ใช้ proposed compact stacked CP patch target และเก็บ ANSER เป็น research benchmark. Thermal model ย้าย heater ไป payload/gimbal node โดย lander เป็นแหล่งจ่ายไฟ และ power screening รวม heater 30 W ใน worst case. `npm.cmd test` ผ่าน 44/44 กรณี รวม heater-node energy balance, lander-bus heater sizing, explicit RF-evidence reset, compact 2U sampled sweep pass และ ANSER sweep fail. ค่า baseline ที่ทำซ้ำได้: on-axis raw margin 7.2566 dB, excess above 3 dB reserve 4.2566 dB, compact 60 mm assembly 100% ของ sampled 5° grid และ minimum concept clearance 3.075 mm. ANSER assembly sampled passประมาณ3.05% และ minimum signed clearance −10.68 mm.
+v1.5.2 ใช้ proposed compact stacked CP patch target และเก็บ ANSER เป็น research benchmark. Lander ให้ DC power เท่านั้น; transceiver/PA และ heater อยู่บน payload/gimbal. Power screening จึงรวม onboard PA, functional load และ heater 30 W ใน worst case. ค่า RF baseline ที่ทำซ้ำได้ยังเป็น on-axis raw margin 7.2566 dB และ excess above 3 dB reserve 4.2566 dB เพราะกำลัง RF output ยังคง 5 W. Compact 60 mm assembly ผ่าน 100% ของ sampled 5° grid และ minimum concept clearance 3.075 mm. ANSER assembly sampled passประมาณ3.05% และ minimum signed clearance −10.68 mm.
 
 ข้อจำกัดของผลผ่าน: 60 × 60 × 7 mm, 5.2 dBic, HPBW 90° และ S11 −10 dB เป็น design targets. Geometry เป็น bounding boxes ไม่ใช่ exact CAD และ pattern เป็น analytical cosine model ไม่ใช่ mounted 3D measurement.
 

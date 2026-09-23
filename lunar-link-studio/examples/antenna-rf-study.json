@@ -1,6 +1,6 @@
 {
-  "modelVersion": "1.5.1",
-  "createdAt": "2026-09-23T16:10:24.511Z",
+  "modelVersion": "1.5.2",
+  "createdAt": "2026-09-23T16:43:30.253Z",
   "source": "ASSUMED COSINE MODEL",
   "provenance": {},
   "config": {
@@ -117,7 +117,7 @@
     "landerBatteryWh": 300,
     "heaterConnected": 1,
     "hostPower": 1,
-    "hostRadio": 1,
+    "hostRadio": 0,
     "busVoltage": 28,
     "regulatorEfficiency": 0.85,
     "dust": 0,

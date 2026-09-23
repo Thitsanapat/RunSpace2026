@@ -2,13 +2,14 @@ import {readFile,writeFile} from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
 import path from 'node:path';
 import {chromium} from '@playwright/test';
-import {DEFAULTS,linkBudget} from '../src/engine.js';
+import {DEFAULTS,linkBudget,runSimulation} from '../src/engine.js';
+import {electricalStudy} from '../src/payload-design.js';
 
 const root=process.cwd();
 const out=path.join(root,'slide-assets');
 const antenna=await readFile(path.join(out,'p14-anser-reference-antenna-figure5d.png'));
 const antennaData=`data:image/png;base64,${antenna.toString('base64')}`;
-const c=DEFAULTS,on=linkBudget(0,c),fixed65=linkBudget(65,c);
+const c=DEFAULTS,on=linkBudget(0,c),fixed65=linkBudget(65,c),electrical=electricalStudy(c,runSimulation(c));
 const onHead=on.rawMargin-c.reserveDb,fixedHead=fixed65.rawMargin-c.reserveDb;
 const signed=(v,d=2)=>`${v>=0?'+':''}${v.toFixed(d)}`;
 const rows=[];
@@ -65,6 +66,8 @@ ${grid}
 <text x="700" y="735" class="small">Fixed antenna: boresight rotates with lander</text><text x="1125" y="735" class="small">Gimballed antenna: aperture remains Earth-pointed</text>
 <rect x="650" y="759" width="882" height="54" rx="10" fill="#fff4e6" stroke="#ffa94d"/>
 <text x="671" y="783" class="label orange">INSTALLED-GEOMETRY LIMIT</text><text x="671" y="804" class="small">Current 65° green-zone case is hull-blocked. Gimbal restores pointing gain; mount/FOV optimization is still required.</text>
+
+<text x="650" y="831" class="tiny">Power: lander DC only; transceiver/PA + heater onboard. 5 W RF assumes ${(c.txPowerW/c.rfEfficiency).toFixed(2)} W PA DC; worst-case branch incl. 30 W heater = ${electrical.peakLoadW.toFixed(2)} W.</text>
 
 <text x="42" y="868" class="tiny">[1] Sánchez-Sevilleja et al., Sensors 25(4), 1237, 2025, Fig. 5(d), doi:10.3390/s25041237. Image adapted from the cited work.</text>
 <text x="1558" y="868" class="tiny" text-anchor="end">Team result: reduced-order link model · antenna EM/VNA/chamber validation pending</text>

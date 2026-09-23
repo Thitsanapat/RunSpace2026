@@ -1,6 +1,6 @@
 # Earth link, lander power and high-temperature RF plan
 
-อัปเดต 23 กันยายน 2026 สำหรับ Lunar Link Studio v1.5.1
+อัปเดต 23 กันยายน 2026 สำหรับ Lunar Link Studio v1.5.2
 
 ## คำตอบเรื่องส่งถึงโลก
 
@@ -21,7 +21,7 @@
 - Earth อยู่เหนือ local horizon
 - antenna มี clear line of sight
 - gimbal ไม่ติดขัดและ target อยู่ใน travel/packaging envelope
-- lander power, radio/modem/PA และ RF port ยังทำงาน
+- lander DC bus ยังทำงาน และ transceiver/modem/PA บน payload ยังอยู่ในอุณหภูมิใช้งาน
 - ground station มี G/T ใกล้ค่าที่สมมติและรองรับ waveform/frequency assignment
 - mounted antenna ยังให้ gain, S11 และ axial ratio ใกล้ค่าที่ใช้
 
@@ -51,32 +51,31 @@ Reference ANSER มี dual-frequency ports แถว 2.03/2.205 GHz จึง�
 
 | Operating item | Current model | Interpretation |
 |---|---:|---|
-| Controller/electronics idle | 0.79 W load / 0.85 efficiency = **0.93 W bus** | ไม่รวม host receiver/modem |
-| Payload branch worst simulated | **5.31 W bus** | controller + motor electrical/mechanical losses |
+| Controller/electronics idle | 0.79 W load / 0.85 efficiency = **0.93 W bus** | ไม่รวม onboard receiver/modem/PA |
+| Payload functional peak | **22.11 W bus** | onboard RF/PA + controller + motor electrical/mechanical losses |
 | Entered inrush | **0.8 A for 20 ms** | เกิน current allocation 0.5 A; FAIL |
-| Downlink RF output | **5.00 W RF** | กำลังออกจาก host PA ไม่ใช่ DC input |
-| Host PA DC input | **≈14.29 W DC** | ใช้ assumed PA efficiency 35%; ยังไม่รวม modem/baseband/standby overhead |
+| Downlink RF output | **5.00 W RF** | กำลังออกจาก onboard payload PA ไม่ใช่ DC input |
+| Onboard PA DC input | **≈14.29 W DC** | ใช้ assumed PA efficiency 35%; ก่อน payload converter loss และยังไม่รวม modem/baseband overhead |
 | Local payload/gimbal heater peak | **30 W** | ติดบน payload/gimbal, thermostat อ่าน payload temperature และรับไฟจาก lander |
-| Payload service worst case | **≈35.31 W** | functional peak 5.31 W + heater 30 W; ก่อน host PA |
+| Payload service worst case | **≈52.11 W** | functional peak 22.11 W + heater 30 W |
 | Cold-study heater energy | **164.7 Wh / 24 h** | average heater power ≈6.86 W ใน reduced-order cold case |
 | Cold-study total modeled lander energy | **187.0 Wh / 24 h** | payload electronics + local heater; RF/motors OFF |
 
 Current modeled sums:
 
-- **Receive/standby, no motion:** อย่างน้อยประมาณ 0.93 W สำหรับ payload controller บวก host receiver/LNA/modem ที่ยังไม่มีสเปก
-- **Acquisition/motion:** สูงสุดประมาณ 5.31 W จาก payload branch
-- **Transmit:** ประมาณ 5.31 + 14.29 = **19.60 W DC** ใน conservative simultaneous peak บวก host radio/modem overhead
-- **Cold simultaneous heater + transmit peak:** อาจแตะประมาณ **49.6 W DC** บวก radio overhead; ควรจัด operating modes ไม่ให้ heater peak, full-speed gimbal และ TX peakเกิดพร้อมกันถ้า bus ไม่รองรับ
+- **Receive/standby, no motion:** อย่างน้อยประมาณ 0.93 W สำหรับ controller ก่อน receiver/LNA/modem ที่ยังไม่มีสเปก
+- **Acquisition/TX functional peak:** **22.11 W bus** ใน trajectory ปัจจุบัน ซึ่งรวม onboard PA จากสมมติฐาน 5 W RF / efficiency 35%
+- **Cold simultaneous heater + TX/motion peak:** **52.11 W bus**; ควรจัด operating modes ไม่ให้ heater, full-speed gimbal และ TX peak เกิดพร้อมกันถ้า bus ไม่รองรับ
 - **Cold survival:** thermal study ปิด RF/motors และใช้ประมาณ 30.93 W เมื่อ heater ON; heater cycle ทำให้ค่าเฉลี่ยต่ำลง
-- **Payload power interface sizing:** functional peak + heater = **35.31 W**, หรือประมาณ **1.67 A** ที่ terminal ≈21.17 V จึงไม่ผ่านสมมติฐาน 0.5 A ปัจจุบัน
+- **Payload power interface sizing:** functional peak + heater = **52.11 W**, หรือประมาณ **2.51 A** ที่ terminal ≈20.74 V จึงไม่ผ่านสมมติฐาน 0.5 A ปัจจุบัน; 470 µF ให้ ideal hold-up เพียง ≈0.48 ms ก่อน 18 V
 
 ตัวเลขที่ควรขอใน host ICD:
 
 1. 22–32 V payload rail และ allowed steady/peak current
 2. inrush envelope และ protection behavior
-3. host radio/PA 5 W RF service พร้อม DC/duty-cycle allocation
+3. payload branch รองรับ onboard transceiver/PA 5 W RF พร้อม DC/duty-cycle allocation
 4. local heater peak/energy allocation, thermostat/control authority และ parasitic thermal interface
-5. RF connector, cable loss, allowable bend/twist และ receive/transmit switching
+5. data connector, onboard RF cable loss, allowable bend/twist และ receive/transmit switching
 6. temperature telemetry และ permission สำหรับ TX inhibit/safe mode
 
 ## ผล hot case ปัจจุบัน
@@ -95,9 +94,7 @@ Current modeled sums:
 
 ### แยกแหล่งความร้อน
 
-ให้เก็บ transceiver, modem, LNA และโดยเฉพาะ PA ไว้ใน thermal bay ของ lander หาก host interface อนุญาต ส่วนโมดูล 2U มี passive patch, gimbal, encoder และ controller เท่าที่จำเป็น การทำเช่นนี้ย้ายความร้อน PA ประมาณ 14.29 W DC ออกจากกล่อง 2U
-
-ข้อแลกเปลี่ยนคือ coax จาก antenna ไป lander เพิ่ม feed loss โดยเฉพาะ receive path ต้องกำหนด cable length/loss และตัดสินใจว่าจะวาง LNA ใกล้ feed หรือเก็บไว้ใน lander หากวาง LNA ใกล้ feed จะลด receive noise penalty แต่เพิ่ม power/thermal/component exposure บน gimbal
+Baseline ล่าสุดวาง transceiver, modem, LNA และ PA บน payload 2U; lander ให้เฉพาะ DC bus และ data interface. จึงต้องระบายความร้อน PA ภายใน payload และคิด peak bus load ของ PA รวมกับกิมบอลและฮีตเตอร์. สาย RF เป็น service loop ภายใน payload จาก PA/LNA ไปยัง patch ไม่ใช่ RF coax จาก lander
 
 ### ลดความร้อนขาเข้าและเพิ่มทางระบาย
 
@@ -158,7 +155,7 @@ P_average = duty_cycle × P_PA,DC
 - **Downlink clear-path:** feasible ภายใต้สมมติฐานปัจจุบัน
 - **Installed 65° bad-landing case:** not feasible ที่ mount ปัจจุบันเพราะ hull blockage
 - **Uplink reception:** not yet demonstrated; separate budget required
-- **Payload/motor power:** 5.31 W peak in current model, but inrush fails present 0.5 A allocation
-- **Host TX power:** at least 14.29 W DC for the assumed 5 W RF PA, plus radio overhead
+- **Payload functional power:** 22.11 W peak in current model with onboard PA; present 0.5 A allocation fails
+- **Worst-case payload branch:** 52.11 W with 30 W local heater; about 2.51 A at the modeled 20.74 V loaded terminal
 - **Cold thermal:** model passesใน 24 h ด้วย lander-powered local heater แต่ใช้พลังงานมากและยังต้องยืนยัน heater placement/spreading
 - **Hot thermal:** fails current +80°C limit; passive design, thermal isolation/radiation and TX duty control are required before claiming operation

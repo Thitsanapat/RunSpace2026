@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-23T15:29:46.625Z",
-  "modelVersion": "1.5.1",
+  "generatedAt": "2026-09-23T16:40:03.947Z",
+  "modelVersion": "1.5.2",
   "thermal": {
     "cold": {
       "config": {
@@ -117,7 +117,7 @@
         "landerBatteryWh": 300,
         "heaterConnected": 1,
         "hostPower": 1,
-        "hostRadio": 1,
+        "hostRadio": 0,
         "busVoltage": 28,
         "regulatorEfficiency": 0.85,
         "dust": 0.8,
@@ -263,7 +263,7 @@
         "landerBatteryWh": 300,
         "heaterConnected": 1,
         "hostPower": 1,
-        "hostRadio": 1,
+        "hostRadio": 0,
         "busVoltage": 28,
         "regulatorEfficiency": 0.85,
         "dust": 0,
@@ -18741,30 +18741,30 @@
     ]
   },
   "electrical": {
-    "peakLoadW": 35.30593794545839,
-    "peakFunctionalLoadW": 5.305937945458392,
+    "peakLoadW": 52.11266063453402,
+    "peakFunctionalLoadW": 22.112660634534024,
     "heaterLoadW": 30,
-    "loadedV": 21.16597417994315,
-    "steadyA": 1.6680516401136998,
-    "peakBusDemandA": 1.6680516401136998,
+    "loadedV": 20.743904232017726,
+    "steadyA": 2.5121915359645444,
+    "peakBusDemandA": 2.5121915359645444,
     "currentPass": false,
     "voltagePass": true,
-    "holdUpMs": 0.8253466837994915,
+    "holdUpMs": 0.4793988054107974,
     "outagePass": false,
     "inrushA": 0.8,
     "inrushMs": 20,
     "rows": [
       {
         "x": 0,
-        "y": 21.16597417994315
+        "y": 20.743904232017726
       },
       {
         "x": 1,
-        "y": 17.255736123838904
+        "y": 14.44138359323573
       },
       {
         "x": 2,
-        "y": 12.145879769086207
+        "y": 0
       },
       {
         "x": 3,
@@ -19265,7 +19265,7 @@
       "mech": true,
       "host": false,
       "link": false,
-      "reason": "HOST POWER / RF"
+      "reason": "LANDER DC / PAYLOAD RF"
     }
   ]
 }
